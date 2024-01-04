@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Edit Data Admin </h1>
+            <h1>Add new Class </h1>
           </div>
           
         </div>
@@ -30,26 +30,21 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Name</label>
-                    <input type="text" value="{{  old('name',$getRecord->name)  }}" class="form-control" name="name" required placeholder="Enter name">
+                    <label >Class Name</label>
+                    <input type="text" class="form-control"  name="name" required placeholder="Enter name">
                   </div>
                   <div class="form-group">
-                    <label >Email</label>
-                    <input type="email" value="{{ old('email',$getRecord->email)  }}" class="form-control" name="email" required placeholder="Enter email">
-                    <div style="color:red;">
-                        {{ $errors->first('email') }}
-                    
-                    </div>                  </div>
-                  <div class="form-group">
-                    <label >Password</label>
-                    <input type="text" class="form-control" name="password"  placeholder="Password">
-                    <p>please add new password if you want change password</p>
+                    <label >Status</label>
+                    <select name="status" class="form-control" id="">
+                      <option value="0">Active</option>
+                      <option value="1">Inactive</option>
+                    </select>
                   </div>
-                </div>
+                 
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Update</button>
+                  <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
               </form>
             </div>

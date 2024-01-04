@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Edit Data Admin </h1>
+            <h1>Edit Data Class </h1>
           </div>
           
         </div>
@@ -30,21 +30,27 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Name</label>
+                    <label >Name Class</label>
                     <input type="text" value="{{  old('name',$getRecord->name)  }}" class="form-control" name="name" required placeholder="Enter name">
                   </div>
                   <div class="form-group">
-                    <label >Email</label>
-                    <input type="email" value="{{ old('email',$getRecord->email)  }}" class="form-control" name="email" required placeholder="Enter email">
-                    <div style="color:red;">
-                        {{ $errors->first('email') }}
+                    <label >Status</label>
+                    <select name="status" class="form-control" id="">
+                      <option value="0"{{ ($getRecord->status ==0) ? 'selected' :'' }}>Active </option>
+                      <option value="1"{{ ($getRecord->status ==1) ? 'selected' :'' }}>Inactive </option>
+                    </select>
+                  </div>
+                    
+                  <div class="form-group">
+                    <label >type</label>
+                    <select name="type" class="form-control" id="">
+                      <option value="Teori"{{ ($getRecord->type =='Teori') ? 'selected' :'' }}>Teori </option>
+                      <option value="Praktikum"{{ ($getRecord->type =='Praktikum') ? 'selected' :'' }}>Praktikum </option>
+                    </select>
+                  
                     
                     </div>                  </div>
-                  <div class="form-group">
-                    <label >Password</label>
-                    <input type="text" class="form-control" name="password"  placeholder="Password">
-                    <p>please add new password if you want change password</p>
-                  </div>
+               
                 </div>
                 <!-- /.card-body -->
 

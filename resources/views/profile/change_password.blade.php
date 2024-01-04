@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Edit Data Admin </h1>
+            <h1> Change Password </h1>
           </div>
           
         </div>
@@ -19,6 +19,7 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
+            @include('_message');
           <!-- left column -->
           <div class="col-md-12">
             <!-- general form elements -->
@@ -30,26 +31,23 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Name</label>
-                    <input type="text" value="{{  old('name',$getRecord->name)  }}" class="form-control" name="name" required placeholder="Enter name">
+                    <label >Old Password</label>
+                    <input type="password" class="form-control"  name="old_password" required placeholder="Old Password">
                   </div>
                   <div class="form-group">
-                    <label >Email</label>
-                    <input type="email" value="{{ old('email',$getRecord->email)  }}" class="form-control" name="email" required placeholder="Enter email">
-                    <div style="color:red;">
-                        {{ $errors->first('email') }}
-                    
-                    </div>                  </div>
-                  <div class="form-group">
-                    <label >Password</label>
-                    <input type="text" class="form-control" name="password"  placeholder="Password">
-                    <p>please add new password if you want change password</p>
+                    <label >New Password</label>
+                    <input type="password" class="form-control"  name="new_password" required placeholder="New Password">
                   </div>
-                </div>
+                  <div class="form-group">
+                    <label >Confirm Password</label>
+                    <input type="password" class="form-control"  name="confirm_password" required placeholder="Confirm Password">
+                  </div>
+                  
+                 
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Update</button>
+                  <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
               </form>
             </div>

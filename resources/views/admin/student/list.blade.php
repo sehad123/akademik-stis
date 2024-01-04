@@ -10,10 +10,10 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Admin List ( Total : {{ $getRecord->total() }})</h1>
+            <h1>Student List ( Total : {{ $getRecord->total() }})</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('admin/class/add') }}" class="btn btn-primary">add new Class</a>
+            <a href="{{ url('admin/student/add') }}" class="btn btn-primary">add new Student</a>
           </div>
         
         </div>
@@ -32,46 +32,18 @@
           <!-- /.col -->
           <div class="col-md-12">
             
-                <!-- general form elements -->
-                <div class="card ">
-                  <div class="card-header">
-                    <h3 class="card-title">Search Admin </h3>
-                  </div>
-                  <form method="get" action="">
-                    <div class="card-body">
-                      <div class="row">
-
-                      <div class="form-group col-md-3">
-                        <label >Name</label>
-                        <input type="text" class="form-control" value="{{ Request::get('name') }}" name="name" placeholder="Enter name">
-                      </div>
-                      <div class="form-group col-md-3">
-                        <label >Email</label>
-                        <input type="text" class="form-control"  value="{{ Request::get('email') }}" name="email" placeholder="Enter email">
-                      </div>
-                      <div class="form-group col-md-3">
-                        <label >Date</label>
-                        <input type="date" class="form-control"  value="{{ Request::get('date') }}" name="date" placeholder="Enter date">
-                      </div>
-                      <div class="form-group col-md-3">
-                        <button class="btn btn-primary mt-4" type="submit">Search</button>
-                        <a href="{{ url('admin/admin/list') }}" class="btn btn-success mt-4" type="submit">clear</a>
-                      </div>
-                    </div>
-
-                    </div>
-                  </form>
-                </div>
+               
               
              
             </div>
             
+            @include('_message');
             <!-- /.card -->
             <div class="col-md-12">
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Admin List </h3>
+                <h3 class="card-title">Student List </h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
@@ -93,8 +65,8 @@
                         <td>{{ $value->email }}</td>
                         <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
                         <td>
-                          <a href="{{ url('admin/admin/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
-                          <a href="{{ url('admin/admin/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
+                          <a href="{{ url('admin/student/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
+                          <a href="{{ url('admin/student/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
                         </td>
                        </tr>
                    @endforeach
