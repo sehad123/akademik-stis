@@ -78,7 +78,8 @@ class User extends Authenticatable
 
     static public function getStudent()
     {
-        $return =  self::select('users.*')
+        $return =  self::select('users.*', 'class.name as class_name')
+            ->join('class', 'class.id', '=', 'users.class_id', 'left')
             ->where('users.user_type', '=', 3)
             ->where('users.is_delete', '=', 0);
         // if (!empty(Request::get('name'))) {
@@ -93,5 +94,13 @@ class User extends Authenticatable
         $return =  $return->orderBy('users.id', 'desc')
             ->paginate(10);
         return $return;
+    }
+
+    public function getProfile()
+    {
+        if (!empty($this->profile_pic) && file_exists('upload/profile/' . $this->profile_pic)) {
+            return url('upload/profile/' . $this->profile_pic);
+        } else {
+        }
     }
 }

@@ -28,9 +28,9 @@ class StudentController extends Controller
         $data['getRecord'] = User::getSingle($id);
 
         if (!empty($data['getRecord'])) {
-
+            $data['getClass'] = ClassModel::getClass();
             $data['header_title'] = 'Edit Admin';
-            return view('admin.admin.edit', $data);
+            return view('admin.student.edit', $data);
         } else {
             abort(404);
         }
@@ -39,7 +39,15 @@ class StudentController extends Controller
     public function insert(Request $request)
     {
         request()->validate([
-            'email' => 'required|email|unique:users'
+            'email' => 'required|email|unique:users',
+            'height' => 'max:10',
+            'weight' => 'max:10',
+            'blood_group' => 'max:10',
+            'mobile_number' => 'max:12|min:8',
+            'religion' => 'max:10',
+            'caste' => 'max:15',
+            'admission_number' => 'max:15',
+            'roll_number' => 'max:10',
         ]);
         $student = new User;
         $student->name = trim($request->name);
@@ -82,19 +90,59 @@ class StudentController extends Controller
     public function update($id, Request $request)
     {
         request()->validate([
-            'email' => 'required|email|unique:users,email,' . $id
+            'email' => 'required|email|unique:users,email,' . $id,
+            'height' => 'max:10',
+            'weight' => 'max:10',
+            'blood_group' => 'max:10',
+            'mobile_number' => 'max:12|min:8',
+            'religion' => 'max:10',
+            'caste' => 'max:15',
+            'admission_number' => 'max:15',
+            'roll_number' => 'max:10',
         ]);
-        $user = User::getSingle($id);
-        $user->name = trim($request->name);
-        $user->email = trim($request->email);
-        if (!empty($request->password)) {
-            $user->password = Hash::make($request->password);
+        $student =  User::getSingle($id);
+        $student->name = trim($request->name);
+        $student->last_name = trim($request->last_name);
+        $student->email = trim($request->email);
+        $student->status = trim($request->status);
+        $student->gender = trim($request->gender);
+        $student->weight = trim($request->weight);
+        $student->height = trim($request->height);
+        $student->blood_group = trim($request->blood_group);
+        $student->religion = trim($request->religion);
+        $student->caste = trim($request->caste);
+        $student->mobile_number = trim($request->mobile_number);
+        if (!empty($request->profile_pic)) {
+
+            $student->admission_date = trim($request->admission_date);
         }
+        if (!empty($request->date_of_birth)) {
+            $student->date_of_birth = trim($request->date_of_birth);
+        }
+        if (!empty($request->file('profile_pic'))) {
+            if (!empty($student->getProfile())) {
+                unlink('upload/profile/' . $student->profile_pic);
+            }
+            $ext = $request->file('profile_pic')->getClientOriginalExtension();
+            $file =  $request->file('profile_pic');
+            $randomStr = date('Ymdhis') . Str::random(20);
+            $filename = strtolower($randomStr) . '.' . $ext;
+            $file->move('upload/profile/', $filename);
 
-        $user->save();
+            $student->profile_pic = $filename;
+        }
+        $student->admission_number = trim($request->admission_number);
+        $student->class_id = trim($request->class_id);
+        $student->roll_number = trim($request->roll_number);
+        if (!empty($request->password)) {
+            $student->password = Hash::make($request->password);
+        }
+        $student->save();
 
-        return redirect('admin/admin/list')->with('success', "Admin Berhasil diupdate");
+        return redirect('admin/student/list')->with('success', "Mahasiswa Berhasil Diupdate");
     }
+
+
 
     public function delete($id)
     {
@@ -102,6 +150,6 @@ class StudentController extends Controller
         $user->is_delete = 1;
         $user->save();
 
-        return redirect('admin/admin/list')->with('success', "Admin Berhasil dihapus");
+        return redirect('admin/student/list')->with('success', "Mahasiswa Berhasil dihapus");
     }
 }
