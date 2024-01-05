@@ -154,10 +154,26 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ url('admin/student/list') }}" class="nav-link @if(Request::segment(2) == 'admin') active @endif">
+            <a href="{{ url('admin/student/list') }}" class="nav-link @if(Request::segment(2) == 'student') active @endif">
               <i class="nav-icon fas fa-user"></i>
               <p>
                 Student
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('admin/parent/list') }}" class="nav-link @if(Request::segment(2) == 'parent') active @endif">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                Parent
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('admin/dosen/list') }}" class="nav-link @if(Request::segment(2) == 'dosen') active @endif">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                Dosen
               </p>
             </a>
           </li>
@@ -186,6 +202,14 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="{{ url('admin/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                My Account
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{ url('admin/change_password') }}" class="nav-link @if(Request::segment(2) == 'change_password') active @endif">
               <i class="nav-icon fas fa-key"></i>
               <p>
@@ -199,6 +223,14 @@
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 dashboard
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('dosen/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                My Account
               </p>
             </a>
           </li>
@@ -221,6 +253,14 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="{{ url('student/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                My Account
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{ url('student/change_password') }}" class="nav-link @if(Request::segment(2) == 'change_password') active @endif">
               <i class="nav-icon fas fa-key"></i>
               <p>
@@ -234,6 +274,14 @@
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 dashboard
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('ortu/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                My Account
               </p>
             </a>
           </li>

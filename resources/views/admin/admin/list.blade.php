@@ -86,9 +86,12 @@
                     </tr>
                   </thead>
                   <tbody>
-                   @foreach ($getRecord as $value)
-                       <tr>
-                        <td>{{ $value->id }}</td>
+                    @php
+                    $nomer = 1;
+                @endphp
+               @foreach ($getRecord as $value)
+                   <tr>
+                    <td>{{ $nomer++ }}</td>
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->email }}</td>
                         <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
