@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClassModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
@@ -21,10 +22,10 @@ class UserController extends Controller
         $data['header_title'] = "MY Account";
         if (Auth::user()->user_type == 2)
             return view('dosen.my_account', $data);
-        else if (Auth::user()->user_type == 3)
+        else if (Auth::user()->user_type == 3) {
+            $data['getClass'] = ClassModel::getClass();
             return view('student.my_account', $data);
-
-        else if (Auth::user()->user_type == 4)
+        } else if (Auth::user()->user_type == 4)
             return view('ortu.my_account', $data);
 
         else if (Auth::user()->user_type == 1)

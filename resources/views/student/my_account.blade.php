@@ -119,6 +119,19 @@
                     
                     </div>
                     </div>
+                     <div class="form-group col-md-6">
+                      <label >Class<span style="color:red;">*</span></label>
+                      <select name="class_id" required class="form-control" id="" >
+                        <option value="">Select Class</option>
+                        @foreach ($getClass as $item)
+                            <option {{ (old('class_id',$getRecord->class_id) ==$item->id)?'selected':'' }} value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                      </select>
+                      <div style="color:red;">
+                        {{ $errors->first('class_id') }}
+                    
+                    </div>
+                    </div>
                     <div class="form-group col-md-6">
                       <label >Tinggi Badan (cm)<span style="color:red;">*</span></label>
                       <input type="number" class="form-control" required value="{{ old('height',$getRecord->height) }}" name="height" required placeholder="Enter Tinggi badan">

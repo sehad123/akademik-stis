@@ -152,4 +152,11 @@ class StudentController extends Controller
 
         return redirect('admin/student/list')->with('success', "Mahasiswa Berhasil dihapus");
     }
+
+    public function myStudentList()
+    {
+        $data['getRecord'] = User::getDosenStudent(Auth::user()->id);
+        $data['header_title'] = 'My Student List';
+        return view('dosen.my_student_list', $data);
+    }
 }

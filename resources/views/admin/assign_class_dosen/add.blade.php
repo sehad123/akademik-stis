@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add New Assign Matkul  </h1>
+            <h1>Add New Dosen Matkul  </h1>
           </div>
           
         </div>
@@ -30,21 +30,21 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Class Name</label>
-                    <select name="class_id" class="form-control" id="">
-                      <option value="">Select Class</option>
-                      @foreach ($getClass as $class)
-                      <option value="{{ $class->id }}">{{ $class->name }}</option>
+                    <label >Matkul Name</label>
+                    <select name="matkul_id" class="form-control" id="">
+                      <option value="">Select Matkul</option>
+                      @foreach ($getSubject as $subject)
+                      <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                       @endforeach
                     </select>
                   </div>
 
                   <div class="form-group">
-                    <label >Matkul Name</label>
-                    @foreach ($getSubject as $subject)
+                    <label >Dosen Name</label>
+                    @foreach ($getDosen as $dosen)
                     <div>
                       <label style="font-weight: normal">
-                        <input  type="radio" value="{{ $subject->id }}" name="matkul_id[]">{{ $subject->name }}
+                        <input  type="radio" value="{{ $dosen->id }}" name="dosen_id[]">{{ $dosen->name }} {{ $dosen->name }} {{ $dosen->last_name }}
                       </label>
                     </div>
                       @endforeach

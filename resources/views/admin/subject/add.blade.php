@@ -45,7 +45,7 @@
                     <select name="type" class="form-control" id="">
                       <option value="">Select Type</option>
                       <option value="Teori">Teori</option>
-                      <option value="Praktikum">Praktikum</option>
+                      <option value="Praktikum">Teori & Praktikum</option>
                     </select>
                   </div>
                  

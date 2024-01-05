@@ -36,6 +36,18 @@ class ClassMatkulModel extends Model
 
         return $return;
     }
+    static public function MySubject($class_id)
+    {
+        return self::select('matkul_class.*',  'matkul.name as matkul_name', 'matkul.type as matkul_type')
+            ->join('matkul', 'matkul.id', 'matkul_class.matkul_id')
+            ->join('class', 'class.id', 'matkul_class.class_id')
+            ->join('users', 'users.id', 'matkul_class.created_by')
+            ->where('matkul_class.class_id', '=', $class_id)
+            ->where('matkul_class.is_delete', '=', 0)
+            ->where('matkul_class.status', '=', 0)
+            ->orderBy('matkul_class.id', 'desc')
+            ->get();
+    }
 
     static public function getSingle($id)
     {

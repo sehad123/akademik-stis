@@ -18,6 +18,14 @@ class ParentController extends Controller
         $data['header_title'] = 'parent List';
         return view('admin.parent.list', $data);
     }
+    public function myStudentParent()
+    {
+        $id = Auth::user()->id;
+        $data['getRecord'] = User::getMyStudent($id);
+
+        $data['header_title'] = 'My Children';
+        return view('ortu.my_student', $data);
+    }
     public function add()
     {
         // $data['getClass'] = ClassModel::getClass();

@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add New Assign Matkul  </h1>
+            <h1>Edit Dosen Matkul  </h1>
           </div>
           
         </div>
@@ -30,30 +30,40 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Class Name</label>
-                    <select name="class_id" class="form-control" id="">
-                      <option value="">Select Class</option>
-                      @foreach ($getClass as $class)
-                      <option value="{{ $class->id }}">{{ $class->name }}</option>
+                    <label >Matkul Name</label>
+                    <select name="matkul_id" class="form-control" id="">
+                      <option value="">Select Matkul</option>
+                      @foreach ($getSubject as $matkul)
+                      <option {{ ($getRecord->matkul_id == $matkul->id)? 'selected':'' }}  value="{{ $matkul->id }}">{{ $matkul->name }}</option>
                       @endforeach
                     </select>
                   </div>
 
                   <div class="form-group">
-                    <label >Matkul Name</label>
-                    @foreach ($getSubject as $subject)
-                    <div>
-                      <label style="font-weight: normal">
-                        <input  type="radio" value="{{ $subject->id }}" name="matkul_id[]">{{ $subject->name }}
-                      </label>
-                    </div>
+                    <label >Dosen Name</label>
+                      @foreach ($getDosen as $dosen)
+                      @php
+                          $checked = "";
+                      @endphp
+                      @foreach ($getAssignDosenID as $dosenAssign)
+                          @if ($dosenAssign->dosen_id == $dosen->id)
+                          @php
+                          $checked = "checked";
+                      @endphp
+                          @endif
                       @endforeach
+                      <div>
+                        <label style="font-weight: normal">
+                          <input {{ $checked }}  type="checkbox" value="{{ $dosen->id }}" name="dosen_id[]">{{ $dosen->name }}
+                        </label>
+                      </div>
+                        @endforeach
                   </div>
                   <div class="form-group">
                     <label >Status</label>
                     <select name="status" class="form-control" id="">
-                      <option value="0">Active</option>
-                      <option value="1">Inactive</option>
+                      <option value="0"{{ ($getRecord->status ==0) ? 'selected' :'' }}>Active </option>
+                      <option value="1"{{ ($getRecord->status ==1) ? 'selected' :'' }}>Inactive </option>
                     </select>
                   </div>
                   

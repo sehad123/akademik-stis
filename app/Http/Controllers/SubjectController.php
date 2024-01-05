@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClassMatkulModel;
 use App\Models\SubjectModel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -13,6 +15,20 @@ class SubjectController extends Controller
         $data['getRecord'] = SubjectModel::getRecord();
         $data['header_title'] = 'subject List';
         return view('admin.subject.list', $data);
+    }
+    public function mySubjectStudent()
+    {
+        $data['getRecord'] = ClassMatkulModel::MySubject(Auth::user()->class_id);
+        $data['header_title'] = 'My Subject';
+        return view('student.my_subject', $data);
+    }
+    public function ParentSubjectStudent($student_id)
+    {
+        $user = User::getSingle($student_id);
+        $data['getUser'] = $user;
+        $data['getRecord'] = ClassMatkulModel::MySubject($user->class_id);
+        $data['header_title'] = 'My Parent Subject';
+        return view('ortu.my_student_subject', $data);
     }
     public function add()
     {

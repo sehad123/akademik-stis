@@ -45,7 +45,7 @@
                     <label >type</label>
                     <select name="type" class="form-control" id="">
                       <option value="Teori"{{ ($getRecord->type =='Teori') ? 'selected' :'' }}>Teori </option>
-                      <option value="Praktikum"{{ ($getRecord->type =='Praktikum') ? 'selected' :'' }}>Praktikum </option>
+                      <option value="Praktikum"{{ ($getRecord->type =='Praktikum') ? 'selected' :'' }}>Teori & Praktikum </option>
                     </select>
                   
                     
