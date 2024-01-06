@@ -131,7 +131,6 @@ class AssignClassController extends Controller
     public function MySubjectStudent()
     {
         $data['getRecord'] = MatkulDosenModel::getMyClass(Auth::user()->id);
-
         $data['header_title'] = 'My Class Matkul';
         return view('dosen.my_matkul', $data);
     }

@@ -43,7 +43,9 @@
                                     <th>Class Name</th>
                                     <th>Matkul Name</th>
                                     <th>Matkul Type</th>
+                                    {{-- <th>My Class Timetable</th> --}}
                                     <th>Created Date</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,12 +58,19 @@
                                     <td>{{ $value->class_name }}</td>
                                     <td>{{ $value->matkul_name }}</td>
                                     <td>{{ $value->matkul_type }}</td>
+                                    {{-- <td>
+                                        @php
+                                            $C = $value->getTimeTable($value->class_id,$value->matkul_id)
+                                        @endphp
+                                        @if (!empty($C))
+                                        {{ $C->start_time }} to{{ $C->end_time }}
+                                            
+                                        @endif
+                                    </td> --}}
                                     <td>{{ date('d-m-Y H:i A', strtotime($value->created_at)) }}</td>
-                                        {{-- <td>
-                                            <a href="{{ url('admin/assign_class_dosen/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
-                                            <a href="{{ url('admin/assign_class_dosen/edit_single/'. $value->id) }}" class="btn btn-warning">Edit Single</a>
-                                            <a href="{{ url('admin/assign_class_dosen/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
-                                          </td> --}}
+                                        <td>
+                                            <a href="{{ url('dosen/my_class_subject/class_timetable/'. $value->class_id.'/'.$value->matkul_id) }}" class="btn btn-primary">My Class Time</a>
+                                          </td>
                                     </td>
                                 </tr>
                                 @endforeach

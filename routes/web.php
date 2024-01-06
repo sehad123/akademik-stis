@@ -5,8 +5,10 @@ use App\Http\Controllers\AssignClassController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\ClassSubjectController;
+use App\Http\Controllers\ClassTimeTableController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DosenController;
+use App\Http\Controllers\ExaminationController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
@@ -25,6 +27,7 @@ Route::get('admin/dashboard', function () {
 
 Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/dashboard', [DashboardController::class, 'dashboard']);
+
     Route::get('admin/admin/list', [AdminController::class, 'list']);
     Route::get('admin/admin/add', [AdminController::class, 'add']);
     Route::post('admin/admin/add', [AdminController::class, 'insert']);
@@ -87,6 +90,11 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/assign_subject/edit_single/{id}', [ClassSubjectController::class, 'edit_single']);
     Route::post('admin/assign_subject/edit_single/{id}', [ClassSubjectController::class, 'update_single']);
 
+    // TimeTable
+    Route::get('admin/class_timetable/list', [ClassTimeTableController::class, 'list']);
+    Route::post('admin/class_timetable/get_subject', [ClassTimeTableController::class, 'get_subject']);
+    Route::post('admin/class_timetable/add', [ClassTimeTableController::class, 'insert_update']);
+
 
     // assign dosen class
     Route::get('admin/assign_class_dosen/list', [AssignClassController::class, 'list']);
@@ -98,13 +106,23 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/assign_class_dosen/edit_single/{id}', [AssignClassController::class, 'edit_single']);
     Route::post('admin/assign_class_dosen/edit_single/{id}', [AssignClassController::class, 'update_single']);
 
+    //  Ujian
+    Route::get('admin/examinations/exam/list', [ExaminationController::class, 'exam_list']);
+    Route::get('admin/examinations/exam/add', [ExaminationController::class, 'exam_add']);
+    Route::post('admin/examinations/exam/add', [ExaminationController::class, 'exam_insert']);
+    Route::get('admin/examinations/exam/edit/{id}', [ExaminationController::class, 'exam_edit']);
+    Route::post('admin/examinations/exam/edit/{id}', [ExaminationController::class, 'exam_update']);
+    Route::get('admin/examinations/exam/delete/{id}', [ExaminationController::class, 'exam_delete']);
 
 
+    Route::get('admin/examinations/exam_schedule', [ExaminationController::class, 'exam_schedule']);
+    Route::post('admin/examinations/exam_schedule_insert', [ExaminationController::class, 'exam_schedule_insert']);
+
+    // change password
     Route::get('admin/change_password', [UserController::class, 'change_password']);
     Route::post('admin/change_password', [UserController::class, 'update_change_password']);
     Route::get('admin/account', [UserController::class, 'MyAccount']);
     Route::post('admin/account', [UserController::class, 'UpdateMyAccountAdmin']);
-    // change password
 });
 Route::group(['middleware' => 'dosen'], function () {
     Route::get('dosen/dashboard', [DashboardController::class, 'dashboard']);
@@ -115,6 +133,8 @@ Route::group(['middleware' => 'dosen'], function () {
     Route::post('dosen/my_class_matkul', [UserController::class, 'MyClassMatkul']);
     Route::get('dosen/my_matkul', [AssignClassController::class, 'MySubjectStudent']);
     Route::get('dosen/my_student_list', [StudentController::class, 'MyStudentList']);
+    Route::get('dosen/my_exam_timetable', [ExaminationController::class, 'MyExamDosen']);
+    Route::get('dosen/my_class_subject/class_timetable/{class_id}/{matkul_id}', [ClassTimeTableController::class, 'myClassDosen']);
 });
 Route::group(['middleware' => 'student'], function () {
     Route::get('student/dashboard', [DashboardController::class, 'dashboard']);
@@ -122,6 +142,8 @@ Route::group(['middleware' => 'student'], function () {
     Route::post('student/change_password', [UserController::class, 'update_change_password']);
     Route::get('student/account', [UserController::class, 'MyAccount']);
     Route::post('student/account', [UserController::class, 'UpdateMyAccountStudent']);
+    Route::get('student/my_class', [ClassTimeTableController::class, 'myClassStudent']);
+    Route::get('student/my_exam', [ExaminationController::class, 'ExamStudent']);
 });
 Route::group(['middleware' => 'ortu'], function () {
     Route::get('ortu/dashboard', [DashboardController::class, 'dashboard']);
@@ -131,4 +153,6 @@ Route::group(['middleware' => 'ortu'], function () {
     Route::post('ortu/account', [UserController::class, 'UpdateMyAccountOrtu']);
     Route::get('ortu/my_student', [ParentController::class, 'myStudentParent']);
     Route::get('ortu/my_student/subject/{student_id}', [SubjectController::class, 'ParentSubjectStudent']);
+    Route::get('ortu/my_student/exam_student/{student_id}', [ExaminationController::class, 'ExamMyChildren']);
+    Route::get('ortu/my_student/subject/class_timetable/{class_id}/{matkul_id}/{student_id}', [ClassTimeTableController::class, 'myClassChild']);
 });

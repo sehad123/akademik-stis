@@ -121,17 +121,7 @@
         </div>
       </div>
 
-      <!-- SidebarSearch Form -->
-      <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fas fa-search fa-fw"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+    
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -169,8 +159,8 @@
               </p>
             </a>
           </li>
-          <li class="nav-item @if(Request::segment(2) == 'class' || Request::segment(2) == 'subject' || Request::segment(2) == 'assign_subject' || Request::segment(2) == 'assign_class_dosen') menu-is-opening menu-open @endif ">
-            <a href="#" class="nav-link @if(Request::segment(2) == 'class' ||Request::segment(2) == 'subject' || Request::segment(2) == 'assign_subject' || Request::segment(2) == 'assign_class_dosen') active @endif">
+          <li class="nav-item @if(Request::segment(2) == 'class' || Request::segment(2) == 'subject' || Request::segment(2) == 'assign_subject' || Request::segment(2) == 'assign_class_dosen' || Request::segment(2) == 'class_timetable') menu-is-opening menu-open @endif ">
+            <a href="#" class="nav-link @if(Request::segment(2) == 'class' ||Request::segment(2) == 'subject' || Request::segment(2) == 'assign_subject' || Request::segment(2) == 'assign_class_dosen'|| Request::segment(2) == 'class_timetable') active @endif">
               <i class="nav-icon fas fa-table"></i>
               <p>
                 Academics
@@ -197,9 +187,38 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{{ url('admin/class_timetable/list') }}" class="nav-link @if(Request::segment(2) == 'class_timetable') active @endif">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>CLass Timetable</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ url('admin/assign_class_dosen/list') }}" class="nav-link @if(Request::segment(2) == 'assign_class_dosen') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Assign Class Dosen</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item @if(Request::segment(2) == 'examinations' ||Request::segment(2) == 'examinations/exam_schedule') menu-is-opening menu-open @endif ">
+            <a href="#" class="nav-link @if(Request::segment(2) == 'examinations'||Request::segment(2) == 'examinations/exam_schedule') active @endif">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Ujian
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item ">
+                <a href="{{ url('admin/examinations/exam/list') }}" class="nav-link @if(Request::segment(2) == 'examinations') active @endif" >
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Daftar Ujian</p>
+                </a>
+              </li>
+              <li class="nav-item ">
+                <a href="{{ url('admin/examinations/exam_schedule') }}" class="nav-link @if(Request::segment(2) == 'examinations/exam_schedule') active @endif" >
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Jadwal Ujian</p>
                 </a>
               </li>
             </ul>
@@ -246,6 +265,22 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ url('dosen/my_exam_timetable') }}" class="nav-link @if(Request::segment(2) == 'my_exam_timetable') active @endif">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                My Jadwal Ujian
+              </p>
+            </a>
+          </li>
+          {{-- <li class="nav-item">
+            <a href="{{ url('student/my_class_timetable') }}" class="nav-link @if(Request::segment(2) == 'my_class_timetable') active @endif">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                My Class TimeTable
+              </p>
+            </a>
+          </li> --}}
           {{-- <li class="nav-item">
             <a href="{{ url('dosen/my_student_list') }}" class="nav-link @if(Request::segment(2) == 'my_student_list') active @endif">
               <i class="nav-icon fas fa-user"></i>
@@ -281,6 +316,14 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="{{ url('student/my_class') }}" class="nav-link @if(Request::segment(2) == 'my_class') active @endif">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                My Class
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{ url('student/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
               <i class="nav-icon fas fa-user"></i>
               <p>
@@ -300,7 +343,15 @@
             <a href="{{ url('student/my_subject') }}" class="nav-link @if(Request::segment(2) == 'my_subject') active @endif">
               <i class="nav-icon fas fa-book"></i>
               <p>
-                My Subject
+                Daftar Matkul
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('student/my_exam') }}" class="nav-link @if(Request::segment(2) == 'my_exam') active @endif">
+              <i class="nav-icon fas fa-book"></i>
+              <p>
+                Jadwal Ujian
               </p>
             </a>
           </li>

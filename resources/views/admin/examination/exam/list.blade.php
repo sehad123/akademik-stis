@@ -10,10 +10,10 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Admin List ( Total : {{ $getRecord->total() }})</h1>
+            <h1>Exam List ( Total : {{ $getRecord->total() }})</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('admin/class/add') }}" class="btn btn-primary">add new Class</a>
+            <a href="{{ url('admin/examinations/exam/add') }}" class="btn btn-primary">add new Exam</a>
           </div>
         
         </div>
@@ -35,27 +35,24 @@
                 <!-- general form elements -->
                 <div class="card ">
                   <div class="card-header">
-                    <h3 class="card-title">Search Admin </h3>
+                    <h3 class="card-title">Search Exam </h3>
                   </div>
                   <form method="get" action="">
                     <div class="card-body">
                       <div class="row">
 
                       <div class="form-group col-md-3">
-                        <label >Name</label>
+                        <label >Exam Name</label>
                         <input type="text" class="form-control" value="{{ Request::get('name') }}" name="name" placeholder="Enter name">
                       </div>
-                      <div class="form-group col-md-3">
-                        <label >Email</label>
-                        <input type="text" class="form-control"  value="{{ Request::get('email') }}" name="email" placeholder="Enter email">
-                      </div>
+                      
                       <div class="form-group col-md-3">
                         <label >Date</label>
                         <input type="date" class="form-control"  value="{{ Request::get('date') }}" name="date" placeholder="Enter date">
                       </div>
                       <div class="form-group col-md-3">
                         <button class="btn btn-primary mt-4" type="submit">Search</button>
-                        <a href="{{ url('admin/admin/list') }}" class="btn btn-success mt-4" type="submit">clear</a>
+                        <a href="{{ url('admin/examinations/exam/list') }}" class="btn btn-success mt-4" type="submit">clear</a>
                       </div>
                     </div>
 
@@ -67,13 +64,12 @@
             </div>
             
 
-            @include('_message');
             <!-- /.card -->
             <div class="col-md-12">
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Admin List </h3>
+                <h3 class="card-title">Ujian List </h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
@@ -82,7 +78,8 @@
                     <tr>
                       <th>#</th>
                       <th>Name</th>
-                      <th>Email</th>
+                      <th>Note</th>
+                      <th>Created By</th>
                       <th>Created Date</th>
                       <th>Action</th>
                     </tr>
@@ -95,11 +92,12 @@
                    <tr>
                     <td>{{ $nomer++ }}</td>
                         <td>{{ $value->name }}</td>
-                        <td>{{ $value->email }}</td>
+                        <td>{{ $value->note }}</td>
+                        <td>{{ $value->created_name }}</td>
                         <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
                         <td>
-                          <a href="{{ url('admin/admin/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
-                          <a href="{{ url('admin/admin/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
+                          <a href="{{ url('admin/examinations/exam/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
+                          <a href="{{ url('admin/examinations/exam/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
                         </td>
                        </tr>
                    @endforeach

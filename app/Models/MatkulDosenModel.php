@@ -37,7 +37,7 @@ class MatkulDosenModel extends Model
 
     static public function getMyClass($dosen_id)
     {
-        return MatkulDosenModel::select('matkul_dosen.*', 'matkul.name as matkul_name', 'class.name as class_name', 'matkul.type as matkul_type')
+        return MatkulDosenModel::select('matkul_dosen.*', 'matkul.name as matkul_name', 'class.name as class_name', 'matkul.type as matkul_type', 'class.id as class_id', 'matkul.id as matkul_id')
             ->join('matkul', 'matkul.id', '=', 'matkul_dosen.matkul_id')
             ->join('matkul_class', 'matkul_class.matkul_id', '=', 'matkul.id')
             ->join('class', 'class.id', '=', 'matkul_class.class_id')
@@ -48,6 +48,16 @@ class MatkulDosenModel extends Model
             ->where('matkul_class.status', '=', 0)
             ->where('matkul_class.is_delete', '=', 0)
             ->where('matkul_dosen.dosen_id', '=', $dosen_id)
+            ->get();
+    }
+    static public function getMyClassSubjectGroup($dosen_id)
+    {
+        return MatkulDosenModel::select('matkul_dosen.*', 'matkul.name as matkul_name', 'matkul.id as matkul_id')
+            ->join('matkul', 'matkul.id', '=', 'matkul_dosen.matkul_id')
+            ->where('matkul_dosen.is_delete', '=', 0)
+            ->where('matkul_dosen.status', '=', 0)
+            ->where('matkul_dosen.dosen_id', '=', $dosen_id)
+            ->groupBy('matkul_dosen.matkul_id')
             ->get();
     }
     static public function MySubject($class_id)
@@ -82,5 +92,11 @@ class MatkulDosenModel extends Model
         return
             self::where('matkul_id', '=', $matkul_id)
             ->where('dosen_id', '=', $dosen_id)->first();
+    }
+    static public function getTimeTable($class_id, $matkul_id)
+    {
+        $getWeek = WeekModel::getWeekByName(date('l'));
+        return ClassTimeTableModel::getRecordClassMatkul($class_id, $matkul_id, $getWeek->id);
+        // return date('');
     }
 }

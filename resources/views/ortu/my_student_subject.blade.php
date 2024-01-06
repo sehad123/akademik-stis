@@ -34,6 +34,7 @@
                                     <th>#</th>
                                     <th>Matkul Name</th>
                                     <th>Matkul Type</th>
+                                    <th>Action </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -45,6 +46,10 @@
                                         <td>{{ $nomor++ }}</td>
                                         <td>{{ $item->matkul_name }}</td>
                                         <td>{{ $item->matkul_type }}</td>
+                                        <td>
+                                            <a href="{{ url('ortu/my_student/subject/class_timetable/'. $item->class_id.'/'.$item->matkul_id.'/'.$getUser->id) }}" class="btn btn-primary">My Children Jadwal</a>
+                                            
+                                        </td>
                                     </tr>
                                 @endforeach
 
