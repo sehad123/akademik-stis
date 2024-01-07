@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssignClassController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\ClassSubjectController;
 use App\Http\Controllers\ClassTimeTableController;
@@ -144,6 +145,7 @@ Route::group(['middleware' => 'student'], function () {
     Route::post('student/account', [UserController::class, 'UpdateMyAccountStudent']);
     Route::get('student/my_class', [ClassTimeTableController::class, 'myClassStudent']);
     Route::get('student/my_exam', [ExaminationController::class, 'ExamStudent']);
+    Route::get('student/my_calendar', [CalendarController::class, 'CalendarStudent']);
 });
 Route::group(['middleware' => 'ortu'], function () {
     Route::get('ortu/dashboard', [DashboardController::class, 'dashboard']);

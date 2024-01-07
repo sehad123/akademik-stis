@@ -324,6 +324,14 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="{{ url('student/my_calendar') }}" class="nav-link @if(Request::segment(2) == 'my_calendar') active @endif">
+              <i class="nav-icon fas fa-calendar"></i>
+              <p>
+                My Calendar
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{ url('student/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
               <i class="nav-icon fas fa-user"></i>
               <p>
