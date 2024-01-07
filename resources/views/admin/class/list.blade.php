@@ -81,9 +81,12 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $i = 1;
+                                @endphp
                                 @foreach ($getRecord as $value)
                                 <tr>
-                                    <td>{{ $value->id }}</td>
+                                    <td>{{ $i++ }}</td>
                                     <td>{{ $value->name }}</td>
                                     <td>
                                         @if( $value->status == 0)
@@ -95,10 +98,8 @@
                                     <td>{{ $value->created_by_name }}</td>
                                     <td>{{ date('d-m-Y H:i A', strtotime($value->created_at)) }}</td>
                                     <td>
-                                        <td>
                                             <a href="{{ url('admin/class/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
                                             <a href="{{ url('admin/class/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
-                                          </td>
                                     </td>
                                 </tr>
                                 @endforeach

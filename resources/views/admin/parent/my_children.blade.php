@@ -12,10 +12,6 @@
           <div class="col-sm-6">
             <h1 class="card-title"> Parent children List ({{ $getParent->name }} {{ $getParent->last_name }}) </h1>
           </div>
-          <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('admin/parent/add') }}" class="btn btn-primary">add new Parent</a>
-          </div>
-        
         </div>
       </div><!-- /.container-fluid -->
     </section>

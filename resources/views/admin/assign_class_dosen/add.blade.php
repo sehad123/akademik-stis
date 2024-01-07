@@ -40,6 +40,16 @@
                   </div>
 
                   <div class="form-group">
+                    <label >Class Name</label>
+                    <select name="class_id" class="form-control" id="">
+                      <option value="">Select Class</option>
+                      @foreach ($getClass as $class)
+                      <option value="{{ $class->id }}">{{ $class->name }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+
+                  <div class="form-group">
                     <label >Dosen Name</label>
                     @foreach ($getDosen as $dosen)
                     <div>

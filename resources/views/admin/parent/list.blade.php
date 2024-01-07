@@ -111,7 +111,7 @@
                       <th>Phone</th>
                       <th>Pekerjaan</th>
                       <th>Alamat</th>
-                      <th>Status</th>
+                      {{-- <th>Status</th> --}}
                       <th>Created Date</th>
                       <th>Action</th>
                     </tr>
@@ -134,12 +134,12 @@
                         <td>{{ $value->mobile_number }}</td>
                         <td>{{ $value->occupation }}</td>
                         <td>{{ $value->address }}</td>
-                        <td>{{ ($value->status == 0)? 'Active' :"Inactive" }}</td>
+                        {{-- <td>{{ ($value->status == 0)? 'Active' :"Inactive" }}</td> --}}
                         <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
                         <td style="min-width: 150px;">
                           <a href="{{ url('admin/parent/edit/'. $value->id) }}" class="btn btn-primary btn-sm">Edit</a>
                           <a href="{{ url('admin/parent/delete/'. $value->id) }}" class="btn btn-danger btn-sm">Delete</a>
-                          <a href="{{ url('admin/parent/my-children/'. $value->id) }}" class="btn btn-warning btn-sm">Student List</a>
+                          <a href="{{ url('admin/parent/my-children/'. $value->id) }}" class="btn btn-warning btn-sm">Children List</a>
                         </td>
                        </tr>
                    @endforeach

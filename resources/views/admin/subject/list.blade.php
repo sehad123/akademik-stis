@@ -46,7 +46,7 @@
                                         <select name="type" class="form-control" id="">
                                             <option value="">Select Type</option>
                                           <option value="Teori" {{ (Request::get('type') == 'Teori')? 'selected':'' }}>Teori </option>
-                                          <option value="Praktikum" {{ (Request::get('type') == 'Praktikum')? 'selected':'' }}>Praktikum </option>
+                                          <option value="Teori & Praktikum" {{ (Request::get('type') == 'Teori & Praktikum')? 'selected':'' }}>Teori & Praktikum </option>
                                         </select>
                                     </div>
                                       
@@ -91,9 +91,12 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                $i = 1;
+                            @endphp
                                 @foreach ($getRecord as $value)
                                 <tr>
-                                    <td>{{ $value->id }}</td>
+                                    <td>{{ $i++ }}</td>
                                     <td>{{ $value->name }}</td>
                                     <td>
                                         @if( $value->status == 0)

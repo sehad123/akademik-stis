@@ -75,7 +75,7 @@
                       <input type="text" class="form-control"  value="{{ Request::get('email') }}" name="email" placeholder="Enter email">
                     </div>
                     <div class="form-group col-md-2">
-                      <label >Asal Provinsi</label>
+                      <label >Asal</label>
                       <input type="text" class="form-control"  value="{{ Request::get('caste') }}" name="caste" placeholder="Enter asal provinsi">
                     </div>
                     <div class="form-group col-md-2">
@@ -90,10 +90,11 @@
                       <option {{ (Request::get('status') ==1)?'selected':'' }} value="1">Inactive</option>
                     </select>
                     </div> --}}
-                    <div class="form-group col-md-2">
+
+                    {{-- <div class="form-group col-md-2">
                       <label >Date</label>
                       <input type="date" class="form-control"  value="{{ Request::get('date') }}" name="date" placeholder="Enter date">
-                    </div>
+                    </div> --}}
                     <div class="form-group col-md-3">
                       <button class="btn btn-primary mt-4" type="submit">Search</button>
                       <a href="{{ url('admin/student/list') }}" class="btn btn-success mt-4" type="submit">clear</a>
@@ -120,21 +121,22 @@
                       <th>#</th>
                       <th>profile_pic</th>
                       <th>Student Name</th>
-                      <th>Parent Name</th>
+                      {{-- <th>Parent Name</th> --}}
                       <th>Email</th>
                       <th>NIM</th>
                       {{-- <th>Roll Number</th> --}}
                       <th>Class</th>
                       <th>Gender</th>
+                      <th>Asal</th>
                       <th>Tanggal Lahir</th>
-                      <th>Religion</th>
+                      <th>Agama</th>
                       <th>Nomer Hp</th>
                       {{-- <th>Admission Date</th> --}}
                       {{-- <th>Golongan Darah</th> --}}
-                      <th>Tinggi Badan</th>
-                      <th>Berat Badan</th>
+                      {{-- <th>Tinggi Badan</th> --}}
+                      {{-- <th>Berat Badan</th> --}}
                       <th>Status</th>
-                      <th>Created Date</th>
+                      {{-- <th>Created Date</th> --}}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -151,12 +153,13 @@
                           @endif
                         </td>
                         <td>{{ $value->name }} {{ $value->last_name }}</td>
-                        <td>{{ $value->parent_name }} {{ $value->parent_last_name }}</td>
+                        {{-- <td>{{ $value->parent_name }} {{ $value->parent_last_name }}</td> --}}
                         <td>{{ $value->email }}</td>
                         <td>{{ $value->admission_number }}</td>
                         {{-- <td>{{ $value->roll_number }}</td> --}}
                         <td>{{ $value->class_name }}</td>
                         <td>{{ $value->gender }}</td>
+                        <td>{{ $value->caste }}</td>
                         <td>
                            
                           @if(!empty($value->date_of_birth ))
@@ -173,10 +176,10 @@
                           @endif
                         </td> --}}
                         {{-- <td>{{ $value->blood_group }}</td> --}}
-                        <td>{{ $value->height }}</td>
-                        <td>{{ $value->weight }}</td>
+                        {{-- <td>{{ $value->height }}</td> --}}
+                        {{-- <td>{{ $value->weight }}</td> --}}
                         <td>{{ ($value->status == 0)? 'Active' :"Inactive" }}</td>
-                        <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
+                        {{-- <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td> --}}
                         <td style="min-width: 150px;">
                           <a href="{{ url('admin/student/edit/'. $value->id) }}" class="btn btn-primary btn-sm">Edit</a>
                           <a href="{{ url('admin/student/delete/'. $value->id) }}" class="btn btn-danger btn-sm">Delete</a>

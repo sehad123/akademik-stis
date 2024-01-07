@@ -136,6 +136,7 @@ Route::group(['middleware' => 'dosen'], function () {
     Route::get('dosen/my_student_list', [StudentController::class, 'MyStudentList']);
     Route::get('dosen/my_exam_timetable', [ExaminationController::class, 'MyExamDosen']);
     Route::get('dosen/my_class_subject/class_timetable/{class_id}/{matkul_id}', [ClassTimeTableController::class, 'myClassDosen']);
+    Route::get('dosen/my_calendar', [CalendarController::class, 'CalendarDosen']);
 });
 Route::group(['middleware' => 'student'], function () {
     Route::get('student/dashboard', [DashboardController::class, 'dashboard']);
@@ -144,6 +145,7 @@ Route::group(['middleware' => 'student'], function () {
     Route::get('student/account', [UserController::class, 'MyAccount']);
     Route::post('student/account', [UserController::class, 'UpdateMyAccountStudent']);
     Route::get('student/my_class', [ClassTimeTableController::class, 'myClassStudent']);
+    Route::get('student/my_subject', [SubjectController::class, 'mySubjectStudent']);
     Route::get('student/my_exam', [ExaminationController::class, 'ExamStudent']);
     Route::get('student/my_calendar', [CalendarController::class, 'CalendarStudent']);
 });
@@ -155,6 +157,7 @@ Route::group(['middleware' => 'ortu'], function () {
     Route::post('ortu/account', [UserController::class, 'UpdateMyAccountOrtu']);
     Route::get('ortu/my_student', [ParentController::class, 'myStudentParent']);
     Route::get('ortu/my_student/subject/{student_id}', [SubjectController::class, 'ParentSubjectStudent']);
+    Route::get('ortu/my_student/calendar/{student_id}', [CalendarController::class, 'ChildrenCalendar']);
     Route::get('ortu/my_student/exam_student/{student_id}', [ExaminationController::class, 'ExamMyChildren']);
     Route::get('ortu/my_student/subject/class_timetable/{class_id}/{matkul_id}/{student_id}', [ClassTimeTableController::class, 'myClassChild']);
 });

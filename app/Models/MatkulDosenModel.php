@@ -13,9 +13,10 @@ class MatkulDosenModel extends Model
 
     static public function getRecord()
     {
-        $return = self::select('matkul_dosen.*', 'matkul.name as matkul_name', 'dosen.name as dosen_name', 'users.name as created_by_name')
+        $return = self::select('matkul_dosen.*', 'matkul.name as matkul_name', 'class.name as class_name', 'dosen.last_name as dosen_last_name', 'dosen.name as dosen_name', 'users.name as created_by_name')
             ->join('users as dosen', 'dosen.id', 'matkul_dosen.dosen_id')
             ->join('matkul', 'matkul.id', 'matkul_dosen.matkul_id')
+            ->join('class', 'class.id', 'matkul_dosen.class_id')
             ->join('users', 'users.id', 'matkul_dosen.created_by')
             ->where('matkul_dosen.is_delete', '=', 0);
         if (!empty(Request::get('dosen_name'))) {
@@ -23,6 +24,9 @@ class MatkulDosenModel extends Model
         }
         if (!empty(Request::get('matkul_name'))) {
             $return = $return->where('matkul.name', 'like', '%' . Request::get('matkul_name') . '%');
+        }
+        if (!empty(Request::get('class_name'))) {
+            $return = $return->where('class.name', 'like', '%' . Request::get('class_name') . '%');
         }
 
         if (!empty(Request::get('date'))) {
@@ -76,6 +80,21 @@ class MatkulDosenModel extends Model
     static public function getSingle($id)
     {
         return self::find($id);
+    }
+
+    static public function getCalendarDosen($dosen_id)
+    {
+        return
+            MatkulDosenModel::select('class_timetable.*', 'class.name as class_name', 'matkul.name as matkul_name', 'week.name as week_name', 'week.fullcalendar_day')
+            ->join('class', 'class.id', '=', 'matkul_dosen.class_id')
+            ->join('matkul_class', 'matkul_class.class_id', '=', 'class.id')
+            ->join('class_timetable', 'class_timetable.matkul_id', '=', 'matkul_class.matkul_id')
+            ->join('matkul', 'matkul.id', '=', 'class_timetable.matkul_id')
+            ->join('week', 'week.id', '=', 'class_timetable.week_id')
+            ->where('matkul_dosen.dosen_id', '=', $dosen_id)
+            ->where('matkul_dosen.status', '=', 0)
+            ->where('matkul_dosen.is_delete', '=', 0)
+            ->get();
     }
 
     static public function getAssignDosenID($matkul_id)

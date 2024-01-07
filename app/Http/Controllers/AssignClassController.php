@@ -36,6 +36,7 @@ class AssignClassController extends Controller
                 } else {
                     $save = new MatkulDosenModel;
                     $save->matkul_id = $request->matkul_id;
+                    $save->class_id = $request->class_id;
                     $save->dosen_id = $dosen_id;
                     $save->status = $request->status;
                     $save->created_by = Auth::user()->id;
@@ -56,6 +57,7 @@ class AssignClassController extends Controller
             $data['getAssignDosenID'] =  MatkulDosenModel::getAssignDosenID($getRecord->matkul_id);
             $data['getDosen'] = User::getDosenMatkul();
             $data['getSubject'] = SubjectModel::getSubject();
+            $data['getClass'] = ClassModel::getClass();
             $data['header_title'] = 'Edit Dosen Matkul ';
             return view('admin.assign_class_dosen.edit', $data);
         } else {
@@ -77,6 +79,7 @@ class AssignClassController extends Controller
                 } else {
                     $save = new MatkulDosenModel;
                     $save->matkul_id = $request->matkul_id;
+                    $save->class_id = $request->class_id;
                     $save->dosen_id = $dosen_id;
                     $save->status = $request->status;
                     $save->created_by = Auth::user()->id;
@@ -103,6 +106,7 @@ class AssignClassController extends Controller
         if (!empty($getRecord)) {
             $data['getRecord'] = $getRecord;
             $data['getDosen'] = User::getDosenMatkul();
+            $data['getClass'] = ClassModel::getClass();
             $data['getSubject'] = SubjectModel::getSubject();
             $data['header_title'] = 'Edit Dosen Matkul ';
             return view('admin.assign_class_dosen.edit_single', $data);
@@ -122,6 +126,7 @@ class AssignClassController extends Controller
             $subject = MatkulDosenModel::getSingle($id);
             $subject->matkul_id = $request->matkul_id;
             $subject->dosen_id = $request->dosen_id;
+            $subject->class_id = $request->class_id;
             $subject->status = $request->status;
             $subject->save();
             return redirect('admin/assign_class_dosen/list')->with('success', "Matkul Dosen Berhasil diupdate");

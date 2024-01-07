@@ -87,9 +87,12 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                $i = 1;
+                            @endphp
                                 @foreach ($getRecord as $value)
                                 <tr>
-                                    <td>{{ $value->id }}</td>
+                                    <td>{{ $i++ }}</td>
                                     <td>{{ $value->class_name }}</td>
                                     <td>{{ $value->matkul_name }}</td>
                                     <td>

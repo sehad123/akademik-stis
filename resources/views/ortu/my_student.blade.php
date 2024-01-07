@@ -81,6 +81,7 @@
                         <td style="width: 300px;">
                           <a href="{{ url('ortu/my_student/subject/'.$value->id) }}" class="btn btn-success btn-sm">Matkul</a>
                           <a href="{{ url('ortu/my_student/exam_student/'.$value->id) }}" class="btn btn-primary btn-sm">Jadwal Ujian</a>
+                          <a href="{{ url('ortu/my_student/calendar/'.$value->id) }}" class="btn btn-warning btn-sm">Calendar</a>
                         </td>
                    @endforeach
                       

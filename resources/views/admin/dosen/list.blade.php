@@ -125,9 +125,9 @@
                       <th>Material Status</th>
                       <th>Current Address</th>
                       <th>Permanent Address</th>
-                      <th>Qualification</th>
-                      <th>Pengalaman Kerja</th>
-                      <th>Note</th>
+                      {{-- <th>Qualification</th> --}}
+                      {{-- <th>Pengalaman Kerja</th> --}}
+                      {{-- <th>Note</th> --}}
                       <th>Status</th>
                       <th>Created Date</th>
                       <th>Action</th>
@@ -154,9 +154,9 @@
                         <td>{{ $value->material_status }}</td>
                         <td>{{ $value->address }}</td>
                         <td>{{ $value->permanent_address }}</td>
-                        <td>{{ $value->qualification }}</td>
-                        <td>{{ $value->work_experience }}</td>
-                        <td>{{ $value->note }}</td>
+                        {{-- <td>{{ $value->qualification }}</td> --}}
+                        {{-- <td>{{ $value->work_experience }}</td> --}}
+                        {{-- <td>{{ $value->note }}</td> --}}
                         <td>{{ ($value->status == 0)? 'Active' :"Inactive" }}</td>
                         <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
                         <td style="min-width: 150px;">

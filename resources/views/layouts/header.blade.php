@@ -159,6 +159,14 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ url('admin/dosen/list') }}" class="nav-link @if(Request::segment(2) == 'dosen') active @endif">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                Dosen
+              </p>
+            </a>
+          </li>
           <li class="nav-item @if(Request::segment(2) == 'class' || Request::segment(2) == 'subject' || Request::segment(2) == 'assign_subject' || Request::segment(2) == 'assign_class_dosen' || Request::segment(2) == 'class_timetable') menu-is-opening menu-open @endif ">
             <a href="#" class="nav-link @if(Request::segment(2) == 'class' ||Request::segment(2) == 'subject' || Request::segment(2) == 'assign_subject' || Request::segment(2) == 'assign_class_dosen'|| Request::segment(2) == 'class_timetable') active @endif">
               <i class="nav-icon fas fa-table"></i>
@@ -189,7 +197,7 @@
               <li class="nav-item">
                 <a href="{{ url('admin/class_timetable/list') }}" class="nav-link @if(Request::segment(2) == 'class_timetable') active @endif">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>CLass Timetable</p>
+                  <p>Jadwal Class</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -222,14 +230,6 @@
                 </a>
               </li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <a href="{{ url('admin/dosen/list') }}" class="nav-link @if(Request::segment(2) == 'dosen') active @endif">
-              <i class="nav-icon fas fa-user"></i>
-              <p>
-                Dosen
-              </p>
-            </a>
           </li>
         
           <li class="nav-item">
@@ -265,11 +265,19 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <a href="{{ url('dosen/my_exam_timetable') }}" class="nav-link @if(Request::segment(2) == 'my_exam_timetable') active @endif">
               <i class="nav-icon fas fa-user"></i>
               <p>
                 My Jadwal Ujian
+              </p>
+            </a>
+          </li> --}}
+          <li class="nav-item">
+            <a href="{{ url('dosen/my_calendar') }}" class="nav-link @if(Request::segment(2) == 'my_calendar') active @endif">
+              <i class="nav-icon fas fa-calendar"></i>
+              <p>
+                My Calendar
               </p>
             </a>
           </li>

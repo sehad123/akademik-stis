@@ -16,7 +16,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>My Calendar</h1>
+            <h1>My Calendar ( {{ $getStudent->name }}  {{ $getStudent->last_name }} )</h1>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -48,19 +48,6 @@
                 daysOfWeek: [{{$week['fullcalendar_day']  }}], // Adjust as needed
                 startTime: '{{ $week['start_time'] }}', // Adjust as needed
                 endTime: '{{ $week['end_time'] }}', // Adjust as needed
-            });
-        @endforeach
-    @endforeach
-
-    // jadwal ujian
-    @foreach($getJadwalUjian as $valueE)
-        @foreach($valueE['exam'] as $exam)
-            events.push({
-                title: '{{ $valueE['name'] }} - {{ $exam['matkul_name'] }} ({{ date('h:i A', strtotime($exam['start_time'])) }} to {{ date('h:i A', strtotime($exam['end_time'])) }})',
-                start: {{ $exam['exam_date'] }},
-                end: {{ $exam['exam_date'] }},
-                color: 'red',
-                url:"{{ url('http://localhost:85/akademik.stis/student/my_exam') }}",
             });
         @endforeach
     @endforeach

@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\ClassMatkulModel;
 use App\Models\ClassModel;
 use App\Models\ClassTimeTableModel;
+use App\Models\ExamScheduleModel;
+use App\Models\MatkulDosenModel;
 use App\Models\SubjectModel;
+use App\Models\User;
 use App\Models\WeekModel;
 use Illuminate\Http\Request;
 use Auth;
@@ -14,8 +17,18 @@ class CalendarController extends Controller
 {
     public function CalendarStudent()
     {
+        $data['getMyJadwal'] = $this->getJadwalStudent(Auth::user()->class_id);
+        $data['getJadwalUjian'] = $this->jadwalUjian(Auth::user()->class_id);
+        // dd($data['getJadwalUjian']);
+        $data['header_title'] = "My Class";
+        return view('student.my_calendar', $data);
+    }
+
+    public function getJadwalStudent($class_id)
+    {
+        // jadwal
         $result = array();
-        $getRecord = ClassMatkulModel::MySubject(Auth::user()->class_id);
+        $getRecord = ClassMatkulModel::MySubject($class_id);
         foreach ($getRecord as $value) {
             $dataS['name'] = $value->matkul_name;
 
@@ -37,9 +50,51 @@ class CalendarController extends Controller
             $dataS['week'] = $week;
             $result[] = $dataS;
         }
-        $data['getMyJadwal'] = $result;
-        // $data['getRecord'] = $result;
-        $data['header_title'] = "My Class";
-        return view('student.my_calendar', $data);
+        return $result;
+    }
+
+    public function jadwalUjian($class_id)
+    {
+        $getExam =  ExamScheduleModel::getExam($class_id);
+        $result = array();
+        foreach ($getExam as $value) {
+            $dataE = array();
+            $dataE['name'] = $value->exam_name;
+            $getExamTime = ExamScheduleModel::getExamTimeTable($value->exam_id, $class_id);
+            $resultS = array();
+            foreach ($getExamTime as $valueS) {
+                $dataS = array();
+                $dataS['matkul_name'] = $valueS->matkul_name;
+                $dataS['exam_date'] = $valueS->exam_date;
+                $dataS['start_time'] = $valueS->start_time;
+                $dataS['end_time'] = $valueS->end_time;
+                $dataS['room_number'] = $valueS->room_number;
+                $dataS['full_mark'] = $valueS->full_mark;
+                $dataS['passing_mark'] = $valueS->passing_mark;
+                $resultS[] = $dataS;
+            }
+            $dataE['exam'] = $resultS;
+            $result[] = $dataE;
+        }
+        return $result;
+    }
+
+
+    public function ChildrenCalendar($student_id)
+    {
+        $getStudent = User::getSingle($student_id);
+        $data['getMyJadwal'] = $this->getJadwalStudent($getStudent->class_id);
+        $data['getStudent'] = $getStudent;
+        $data['header_title'] = "My Children Calendar";
+        return view('ortu.student_calendar', $data);
+    }
+
+    public function CalendarDosen()
+    {
+        // jadwal
+        $dosen_id = Auth::user()->id;
+        $data['getMyJadwal'] = MatkulDosenModel::getCalendarDosen($dosen_id);
+        $data['header_title'] = "My Jadwal";
+        return view('dosen.my_calendar', $data);
     }
 }

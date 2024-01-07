@@ -51,6 +51,12 @@
                                     </div>
                                    
                                     <div class="form-group col-md-3">
+                                        <label>Class Name</label>
+                                        <input type="text" class="form-control" value="{{ Request::get('class_name') }}"
+                                            name="class_name" placeholder="class name">
+                                    </div>
+                                   
+                                    <div class="form-group col-md-3">
                                         <label>Date</label>
                                         <input type="date" class="form-control" value="{{ Request::get('date') }}"
                                             name="date" placeholder="Enter Date">
@@ -81,8 +87,9 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Matkul Name</th>
                                     <th>Dosen Name</th>
+                                    <th>Class Name</th>
+                                    <th>Matkul Name</th>
                                     <th>Status</th>
                                     <th>Created By</th>
                                     <th>Created Date</th>
@@ -96,8 +103,9 @@
                                 @foreach ($getRecord as $value)
                                 <tr>
                                     <td>{{ $nomor++ }}</td>
+                                    <td>{{ $value->dosen_name }} {{ $value->dosen_last_name }}</td>
+                                    <td>{{ $value->class_name }}</td>
                                     <td>{{ $value->matkul_name }}</td>
-                                    <td>{{ $value->dosen_name }} </td>
                                     <td>
                                         @if( $value->status == 0)
                                         Active

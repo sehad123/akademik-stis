@@ -42,27 +42,12 @@
 
     // jadwal harian
     @foreach($getMyJadwal as $value)
-        @foreach($value['week'] as $week)
             events.push({
-                title: '{{ $value['name'] }}',
-                daysOfWeek: [{{$week['fullcalendar_day']  }}], // Adjust as needed
-                startTime: '{{ $week['start_time'] }}', // Adjust as needed
-                endTime: '{{ $week['end_time'] }}', // Adjust as needed
+                title: '{{ $value->class_name }} - {{ $value->matkul_name }}',
+                daysOfWeek: [{{$value->fullcalendar_day  }}], // Adjust as needed
+                startTime: '{{ $value->start_time }}', // Adjust as needed
+                endTime: '{{ $value->end_time }}', // Adjust as needed
             });
-        @endforeach
-    @endforeach
-
-    // jadwal ujian
-    @foreach($getJadwalUjian as $valueE)
-        @foreach($valueE['exam'] as $exam)
-            events.push({
-                title: '{{ $valueE['name'] }} - {{ $exam['matkul_name'] }} ({{ date('h:i A', strtotime($exam['start_time'])) }} to {{ date('h:i A', strtotime($exam['end_time'])) }})',
-                start: {{ $exam['exam_date'] }},
-                end: {{ $exam['exam_date'] }},
-                color: 'red',
-                url:"{{ url('http://localhost:85/akademik.stis/student/my_exam') }}",
-            });
-        @endforeach
     @endforeach
 
     var calendarEl = document.getElementById('calendar');

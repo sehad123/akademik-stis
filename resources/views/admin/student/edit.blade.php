@@ -47,8 +47,8 @@
                     </div>
                     </div>
                     <div class="form-group col-md-6">
-                      <label >Addmision Number<span style="color:red;">*</span></label>
-                      <input type="number" class="form-control" required value="{{ old('admission_number',$getRecord->admission_number) }}" name="admission_number" required placeholder="Enter admission number">
+                      <label >NIM<span style="color:red;">*</span></label>
+                      <input type="number" class="form-control" required value="{{ old('admission_number',$getRecord->admission_number) }}" name="admission_number" required placeholder="Enter NIM">
                       <div style="color:red;">
                         {{ $errors->first('admission_number') }}
                     
