@@ -244,6 +244,23 @@
             </ul>
           </li>
             
+          <li class="nav-item @if(Request::segment(2) == 'komunikasi') menu-is-opening menu-open @endif ">
+            <a href="#" class="nav-link @if(Request::segment(2) == 'komunikasi') active @endif">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Komunikasi
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item ">
+                <a href="{{ url('admin/komunikasi/pengumuman') }}" class="nav-link @if(Request::segment(3) == 'pengumuman') active @endif" >
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Papan Pengumuman</p>
+                </a>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item @if(Request::segment(2) == 'presensi') menu-is-opening menu-open @endif ">
             <a href="#" class="nav-link @if(Request::segment(2) == 'presensi') active @endif">
               <i class="nav-icon fas fa-table"></i>
@@ -322,6 +339,14 @@
               <i class="nav-icon fas fa-calendar"></i>
               <p>
                 Pengelolaan Nilai
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('dosen/pengumuman') }}" class="nav-link @if(Request::segment(2) == 'pengumuman') active @endif">
+              <i class="nav-icon fas fa-list"></i>
+              <p>
+               Pengumuman
               </p>
             </a>
           </li>
@@ -417,6 +442,14 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="{{ url('student/pengumuman') }}" class="nav-link @if(Request::segment(2) == 'pengumuman') active @endif">
+              <i class="nav-icon fas fa-list"></i>
+              <p>
+               Pengumuman
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{ url('student/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
               <i class="nav-icon fas fa-user"></i>
               <p>
@@ -489,6 +522,15 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ url('ortu/pengumuman') }}" class="nav-link @if(Request::segment(2) == 'pengumuman') active @endif">
+              <i class="nav-icon fas fa-list"></i>
+              <p>
+               Pengumuman
+              </p>
+            </a>
+          </li>
+
           @endif
           
           <li class="nav-item">

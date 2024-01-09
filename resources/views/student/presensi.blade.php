@@ -29,7 +29,7 @@
           @endphp
       @endforeach
       @endforeach
-<p>Hari : {{ $getDay->name }} / {{$h  }} </p>
+<p>Hari : {{ $getDay->name }} / {{date('d-m-Y',strtotime($h))  }} </p>
       <p>jam : {{ date('h:i A',strtotime($w)) }} - {{ date('h:i A',strtotime($e)) }} </p>
       <p>Ruangan : {{ $r }} </p>
 
@@ -63,7 +63,7 @@
                         $getPresensi = $value->getPresensi($getMahasiswa->id, $getClass->id, now()->toDateString(), $getMatkul->id,$getDay->id);
                             if(!empty($getPresensi->presensi_type) && !empty($getPresensi->created_at && $getDay->id == (now()->dayOfWeek + 1) % 7))
                             {
-                              echo '<script>alert("Anda sudah melakukan presensi");</script>';
+                              // echo '<script>alert("Anda sudah melakukan presensi");</script>';
                                 $presensi_type = $getPresensi->presensi_type;
                                 $created_at = $getPresensi->created_at;
                             }
@@ -93,7 +93,7 @@
                                   </label> --}}
                               </td>
                                 @endif
-                                <td class="text-center">
+                                <td class="text-center ">
                                   @if (!empty($getPresensi->presensi_type))
                                   @if ($presensi_type == 1)
                                       Hadir

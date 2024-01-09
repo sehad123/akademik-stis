@@ -11,6 +11,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\ExaminationController;
 use App\Http\Controllers\ParentController;
+use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
@@ -130,9 +131,15 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/presensi/student/save', [PresensiController::class, 'presensi_mahasiswa_save']);
     Route::post('admin/presensi/get_subject', [ClassTimeTableController::class, 'get_subject']);
 
+    // Komunikasi
+    Route::get('admin/komunikasi/pengumuman', [PengumumanController::class, 'Pengumuman']);
+    Route::get('admin/komunikasi/pengumuman/add', [PengumumanController::class, 'AddPengumuman']);
+    Route::post('admin/komunikasi/pengumuman/add', [PengumumanController::class, 'InsertPengumuman']);
+    Route::get('admin/komunikasi/pengumuman/edit/{id}', [PengumumanController::class, 'EditPengumuman']);
+    Route::post('admin/komunikasi/pengumuman/edit/{id}', [PengumumanController::class, 'UpdatePengumuman']);
+    Route::get('admin/komunikasi/pengumuman/delete/{id}', [PengumumanController::class, 'DeletePengumuman']);
 
     // Mark Grade
-
     Route::get('admin/examinations/mark_grade', [ExaminationController::class, 'mark_grade']);
     Route::get('admin/examinations/mark_grade_add', [ExaminationController::class, 'mark_grade_add']);
     Route::post('admin/examinations/mark_grade_add', [ExaminationController::class, 'mark_grade_insert']);
@@ -171,6 +178,8 @@ Route::group(['middleware' => 'dosen'], function () {
     Route::post('dosen/presensi/student/save', [PresensiController::class, 'presensi_mahasiswa_save']);
     Route::get('dosen/presensi/{class_id}/{matkul_id}/{student_id}/{week_id}', [PresensiController::class, 'PresensiDosen']);
     Route::post('dosen/presensi/save', [PresensiController::class, 'PresensiStudentSave']);
+
+    Route::get('dosen/pengumuman', [PengumumanController::class, 'pengumuman_dosen']);
 });
 Route::group(['middleware' => 'student'], function () {
     Route::get('student/dashboard', [DashboardController::class, 'dashboard']);
@@ -187,6 +196,7 @@ Route::group(['middleware' => 'student'], function () {
     Route::get('student/my_presensi', [PresensiController::class, 'MyPresensiStudent']);
     Route::get('student/presensi/{class_id}/{matkul_id}/{student_id}/{week_id}', [PresensiController::class, 'PresensiStudent']);
     Route::post('student/presensi/save', [PresensiController::class, 'PresensiStudentSave']);
+    Route::get('student/pengumuman', [PengumumanController::class, 'pengumuman_student']);
 });
 Route::group(['middleware' => 'ortu'], function () {
     Route::get('ortu/dashboard', [DashboardController::class, 'dashboard']);
@@ -200,4 +210,6 @@ Route::group(['middleware' => 'ortu'], function () {
     Route::get('ortu/my_student/exam_student/{student_id}', [ExaminationController::class, 'ExamMyChildren']);
     Route::get('ortu/my_student/exam_result/{student_id}', [ExaminationController::class, 'ExamResultChildren']);
     Route::get('ortu/my_student/subject/class_timetable/{class_id}/{matkul_id}/{student_id}', [ClassTimeTableController::class, 'myClassChild']);
+
+    Route::get('ortu/pengumuman', [PengumumanController::class, 'pengumuman_ortu']);
 });

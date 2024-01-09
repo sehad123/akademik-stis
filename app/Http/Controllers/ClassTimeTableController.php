@@ -32,16 +32,31 @@ class ClassTimeTableController extends Controller
                     $dataW['start_time'] = $classSubject->start_time;
                     $dataW['end_time'] = $classSubject->end_time;
                     $dataW['room_number'] = $classSubject->room_number;
+                    $dataW['tanggal'] = $classSubject->tanggal;
+                    $dataW['jam_mulai'] = $classSubject->jam_mulai;
+                    $dataW['menit_mulai'] = $classSubject->menit_mulai;
+                    $dataW['jam_akhir'] = $classSubject->jam_akhir;
+                    $dataW['menit_akhir'] = $classSubject->menit_akhir;
                 } else {
                     $dataW['start_time'] = '';
                     $dataW['end_time'] = '';
                     $dataW['room_number'] = '';
+                    $dataW['tanggal'] = '';
+                    $dataW['jam_mulai'] = '';
+                    $dataW['menit_mulai'] = '';
+                    $dataW['jam_akhir'] = '';
+                    $dataW['menit_akhir'] = '';
                 }
             } else {
 
                 $dataW['start_time'] = '';
                 $dataW['end_time'] = '';
                 $dataW['room_number'] = '';
+                $dataW['tanggal'] = '';
+                $dataW['jam_mulai'] = '';
+                $dataW['menit_mulai'] = '';
+                $dataW['jam_akhir'] = '';
+                $dataW['menit_akhir'] = '';
             }
             $week[] = $dataW;
         }
@@ -65,7 +80,7 @@ class ClassTimeTableController extends Controller
     {
         ClassTimeTableModel::where('class_id', '=', $request->class_id)->where('matkul_id', '=', $request->matkul_id)->delete();
         foreach ($request->timetable as $timetable) {
-            if (!empty($timetable['week_id']) && !empty($timetable['start_time']) && !empty($timetable['end_time']) && !empty($timetable['room_number'])) {
+            if (!empty($timetable['week_id']) && !empty($timetable['start_time']) && !empty($timetable['end_time']) && !empty($timetable['room_number']) && !empty($timetable['tanggal']) && !empty($timetable['jam_mulai']) && !empty($timetable['menit_mulai']) && !empty($timetable['jam_akhir']) && !empty($timetable['menit_akhir'])) {
                 $save = new ClassTimeTableModel;
                 $save->class_id = $request->class_id;
                 $save->matkul_id = $request->matkul_id;
@@ -73,6 +88,11 @@ class ClassTimeTableController extends Controller
                 $save->start_time = $timetable['start_time'];
                 $save->end_time = $timetable['end_time'];
                 $save->room_number = $timetable['room_number'];
+                $save->tanggal = $timetable['tanggal'];
+                $save->jam_mulai = $timetable['jam_mulai'];
+                $save->menit_mulai = $timetable['menit_mulai'];
+                $save->jam_akhir = $timetable['jam_akhir'];
+                $save->menit_akhir = $timetable['menit_akhir'];
                 $save->save();
             }
         }
