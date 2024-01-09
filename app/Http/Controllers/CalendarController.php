@@ -17,7 +17,19 @@ class CalendarController extends Controller
 {
     public function CalendarStudent()
     {
+        // $user = Auth::user()->id;
+        // $data['getUser'] = $user;
+        // $data['getRecord'] = ClassMatkulModel::MySubject($user->class_id);
         $data['getMyJadwal'] = $this->getJadwalStudent(Auth::user()->class_id);
+        $data['getJadwalUjian'] = $this->jadwalUjian(Auth::user()->class_id);
+        // dd($data['getJadwalUjian']);
+        $data['header_title'] = "My Class";
+        return view('student.my_calendar', $data);
+    }
+
+    public function CalendarStudenGet()
+    {
+        // $data['getMyJadwal'] = $this->getJadwalStudentID(Auth::user()->class_id);
         $data['getJadwalUjian'] = $this->jadwalUjian(Auth::user()->class_id);
         // dd($data['getJadwalUjian']);
         $data['header_title'] = "My Class";
@@ -44,6 +56,10 @@ class CalendarController extends Controller
                     $dataW['start_time'] = $classSubject->start_time;
                     $dataW['end_time'] = $classSubject->end_time;
                     $dataW['room_number'] = $classSubject->room_number;
+                    $dataW['student_id'] = Auth::user()->id;
+                    $dataW['class_id'] = $classSubject->class_id;
+                    $dataW['matkul_id'] = $classSubject->matkul_id;
+                    $dataW['week_id'] = $classSubject->week_id;
                     $week[] = $dataW;
                 }
             }
@@ -52,7 +68,6 @@ class CalendarController extends Controller
         }
         return $result;
     }
-
     public function jadwalUjian($class_id)
     {
         $getExam =  ExamScheduleModel::getExam($class_id);

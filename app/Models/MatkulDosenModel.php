@@ -56,12 +56,12 @@ class MatkulDosenModel extends Model
     }
     static public function getMyClassSubjectGroup($dosen_id)
     {
-        return MatkulDosenModel::select('matkul_dosen.*', 'matkul.name as matkul_name', 'matkul.id as matkul_id')
-            ->join('matkul', 'matkul.id', '=', 'matkul_dosen.matkul_id')
+        return MatkulDosenModel::select('matkul_dosen.*', 'class.name as class_name', 'class.id as class_id')
+            ->join('class', 'class.id', '=', 'matkul_dosen.class_id')
             ->where('matkul_dosen.is_delete', '=', 0)
             ->where('matkul_dosen.status', '=', 0)
             ->where('matkul_dosen.dosen_id', '=', $dosen_id)
-            ->groupBy('matkul_dosen.matkul_id')
+            ->groupBy('matkul_dosen.class_id')
             ->get();
     }
     static public function MySubject($class_id)
@@ -85,7 +85,7 @@ class MatkulDosenModel extends Model
     static public function getCalendarDosen($dosen_id)
     {
         return
-            MatkulDosenModel::select('class_timetable.*', 'class.name as class_name', 'matkul.name as matkul_name', 'week.name as week_name', 'week.fullcalendar_day')
+            MatkulDosenModel::select('class_timetable.*', 'class.name as class_name', 'matkul.name as matkul_name', 'class.id as class_id', 'matkul.id as matkul_id', 'week.name as week_name', 'week.id as week_id', 'week.fullcalendar_day')
             ->join('class', 'class.id', '=', 'matkul_dosen.class_id')
             ->join('matkul_class', 'matkul_class.class_id', '=', 'class.id')
             ->join('class_timetable', 'class_timetable.matkul_id', '=', 'matkul_class.matkul_id')

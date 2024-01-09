@@ -20,4 +20,8 @@ class WeekModel extends Model
     {
         return WeekModel::where('name', '=', $weekname)->first();
     }
+    static public function getSingle($id)
+    {
+        return self::find($id);
+    }
 }

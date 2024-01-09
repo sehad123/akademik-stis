@@ -31,6 +31,16 @@ class ExamScheduleModel extends Model
             ->orderBy('jadwal_ujian.id', 'desc')
             ->get();
     }
+    static public function getExamDosen($dosen_id)
+    {
+        return ExamScheduleModel::select('jadwal_ujian.*', 'exam.name as exam_name')
+            ->join('exam', 'exam.id', '=', 'jadwal_ujian.exam_id')
+            ->join('matkul_dosen', 'matkul_dosen.class_id', '=', 'jadwal_ujian.class_id')
+            ->where('matkul_dosen.dosen_id', '=', $dosen_id)
+            ->groupBy('jadwal_ujian.exam_id')
+            ->orderBy('jadwal_ujian.id', 'desc')
+            ->get();
+    }
 
     static public function getExamTimeTable($exam_id, $class_id)
     {
@@ -38,7 +48,22 @@ class ExamScheduleModel extends Model
             ->join('matkul', 'matkul.id', '=', 'jadwal_ujian.matkul_id')
             ->where('jadwal_ujian.exam_id', '=', $exam_id)
             ->where('jadwal_ujian.class_id', '=', $class_id)
-            ->groupBy('exam_id')
             ->get();
+    }
+    static public function getSubject($exam_id, $class_id)
+    {
+        return ExamScheduleModel::select('jadwal_ujian.*', 'matkul.name as matkul_name', 'matkul.type as matkul_type', 'matkul.id as matkul_id')
+            ->join('matkul', 'matkul.id', '=', 'jadwal_ujian.matkul_id')
+            ->where('jadwal_ujian.exam_id', '=', $exam_id)
+            ->where('jadwal_ujian.class_id', '=', $class_id)
+            ->get();
+    }
+    static public function getMark($student_id, $exam_id, $class_id, $matkul_id)
+    {
+        return NilaiModel::CheckAlreadyMark($student_id, $exam_id, $class_id, $matkul_id);
+    }
+    static public function getSingle($id)
+    {
+        return self::find($id);
     }
 }

@@ -47,6 +47,9 @@
                 daysOfWeek: [{{$value->fullcalendar_day  }}], // Adjust as needed
                 startTime: '{{ $value->start_time }}', // Adjust as needed
                 endTime: '{{ $value->end_time }}', // Adjust as needed
+                // url: "{{ url('http://localhost:85/akademik.stis/dosen/presensi') }}" + '/' + {{ $value['class_id'] }} + '/' + {{ $value['matkul_id'] }} + '/' + {{ $value['dosen_id'] }} + '/' + {{ $value['week_id'] }},
+                url: "{{ url('http://localhost:85/akademik.stis/dosen/presensi') }}" + '/' + {{ $value['class_id'] }} + '/' + {{ $value['matkul_id'] }} + '/' + {{ Auth::user()->id }} + '/' + {{ $value['week_id'] }},
+
             });
     @endforeach
 

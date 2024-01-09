@@ -29,6 +29,7 @@
           <div class="col-md-12">
             <div id="calendar"></div>
           </div>
+          
         </div>
       </div>
     </section>
@@ -48,6 +49,8 @@
                 daysOfWeek: [{{$week['fullcalendar_day']  }}], // Adjust as needed
                 startTime: '{{ $week['start_time'] }}', // Adjust as needed
                 endTime: '{{ $week['end_time'] }}', // Adjust as needed
+                // url:"{{ url('http://localhost:85/akademik.stis/student/my_class') }}",
+                url: "{{ url('http://localhost:85/akademik.stis/student/presensi') }}" + '/' + {{ $week['class_id'] }} + '/' + {{ $week['matkul_id'] }} + '/' + {{ $week['student_id'] }} + '/' + {{ $week['week_id'] }},
             });
         @endforeach
     @endforeach
@@ -60,24 +63,36 @@
                 start: {{ $exam['exam_date'] }},
                 end: {{ $exam['exam_date'] }},
                 color: 'red',
-                url:"{{ url('http://localhost:85/akademik.stis/student/my_exam') }}",
+                url:"{{ url('http://localhost:85/akademik.stis/student/my_class') }}",
             });
         @endforeach
     @endforeach
 
     var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-        },
-        initialDate: new Date(),
-        navLinks: true,
-        editable: false,
-        events: events,
-        initialView:'timeGridWeek',
-    });
+var calendar = new FullCalendar.Calendar(calendarEl, {
+    headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+    },
+    initialDate: new Date(),
+    navLinks: true,
+    editable: false,
+    events: events,
+    initialView: 'timeGridWeek',
+    eventClick: function (info) {
+        // Ambil URL dari properti event
+        var url = info.event.extendedProps.url;
+
+        // Jika URL ada, lakukan pengalihan ke halaman tersebut
+        if (url) {
+            window.location.href = url;
+        }
+    }
+});
+
+calendar.render();
+
 
     calendar.render();
 </script>

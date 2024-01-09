@@ -11,6 +11,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\ExaminationController;
 use App\Http\Controllers\ParentController;
+use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
@@ -112,12 +113,33 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/examinations/exam/add', [ExaminationController::class, 'exam_add']);
     Route::post('admin/examinations/exam/add', [ExaminationController::class, 'exam_insert']);
     Route::get('admin/examinations/exam/edit/{id}', [ExaminationController::class, 'exam_edit']);
+    Route::post('admin/examinations/exam/add', [ExaminationController::class, 'exam_insert']);
     Route::post('admin/examinations/exam/edit/{id}', [ExaminationController::class, 'exam_update']);
     Route::get('admin/examinations/exam/delete/{id}', [ExaminationController::class, 'exam_delete']);
+    Route::get('admin/examinations/mark_register', [ExaminationController::class, 'mark_register']);
 
-
+    // jadwal ujian
     Route::get('admin/examinations/exam_schedule', [ExaminationController::class, 'exam_schedule']);
     Route::post('admin/examinations/exam_schedule_insert', [ExaminationController::class, 'exam_schedule_insert']);
+    Route::post('admin/examinations/submit_mark', [ExaminationController::class, 'submit_mark']);
+    Route::post('admin/examinations/single_submit_mark', [ExaminationController::class, 'single_submit_mark']);
+
+    // presensi
+    Route::get('admin/presensi/student', [PresensiController::class, 'presensi_mahasiswa']);
+    Route::get('admin/presensi/report', [PresensiController::class, 'laporan_presensi']);
+    Route::post('admin/presensi/student/save', [PresensiController::class, 'presensi_mahasiswa_save']);
+    Route::post('admin/presensi/get_subject', [ClassTimeTableController::class, 'get_subject']);
+
+
+    // Mark Grade
+
+    Route::get('admin/examinations/mark_grade', [ExaminationController::class, 'mark_grade']);
+    Route::get('admin/examinations/mark_grade_add', [ExaminationController::class, 'mark_grade_add']);
+    Route::post('admin/examinations/mark_grade_add', [ExaminationController::class, 'mark_grade_insert']);
+    Route::get('admin/examinations/mark_grade/edit/{id}', [ExaminationController::class, 'mark_grade_edit']);
+    Route::post('admin/examinations/mark_grade/edit/{id}', [ExaminationController::class, 'mark_grade_update']);
+    Route::get('admin/examinations/mark_grade/delete/{id}', [ExaminationController::class, 'mark_grade_delete']);
+
 
     // change password
     Route::get('admin/change_password', [UserController::class, 'change_password']);
@@ -131,12 +153,24 @@ Route::group(['middleware' => 'dosen'], function () {
     Route::post('dosen/change_password', [UserController::class, 'update_change_password']);
     Route::get('dosen/account', [UserController::class, 'MyAccount']);
     Route::post('dosen/account', [UserController::class, 'UpdateMyAccountDosen']);
+
     Route::post('dosen/my_class_matkul', [UserController::class, 'MyClassMatkul']);
     Route::get('dosen/my_matkul', [AssignClassController::class, 'MySubjectStudent']);
     Route::get('dosen/my_student_list', [StudentController::class, 'MyStudentList']);
     Route::get('dosen/my_exam_timetable', [ExaminationController::class, 'MyExamDosen']);
     Route::get('dosen/my_class_subject/class_timetable/{class_id}/{matkul_id}', [ClassTimeTableController::class, 'myClassDosen']);
     Route::get('dosen/my_calendar', [CalendarController::class, 'CalendarDosen']);
+
+    Route::get('dosen/mark_register', [ExaminationController::class, 'mark_register_dosen']);
+    Route::post('dosen/submit_mark', [ExaminationController::class, 'submit_mark']);
+    Route::post('dosen/single_submit_mark', [ExaminationController::class, 'single_submit_mark']);
+
+    // presensi 
+    Route::get('dosen/presensi/student', [PresensiController::class, 'presensi_mahasiswa_dosen']);
+    Route::get('dosen/presensi/report', [PresensiController::class, 'laporan_presensi_dosen']);
+    Route::post('dosen/presensi/student/save', [PresensiController::class, 'presensi_mahasiswa_save']);
+    Route::get('dosen/presensi/{class_id}/{matkul_id}/{student_id}/{week_id}', [PresensiController::class, 'PresensiDosen']);
+    Route::post('dosen/presensi/save', [PresensiController::class, 'PresensiStudentSave']);
 });
 Route::group(['middleware' => 'student'], function () {
     Route::get('student/dashboard', [DashboardController::class, 'dashboard']);
@@ -148,6 +182,11 @@ Route::group(['middleware' => 'student'], function () {
     Route::get('student/my_subject', [SubjectController::class, 'mySubjectStudent']);
     Route::get('student/my_exam', [ExaminationController::class, 'ExamStudent']);
     Route::get('student/my_calendar', [CalendarController::class, 'CalendarStudent']);
+    Route::get('student/my_calendar/{id}', [CalendarController::class, 'CalendarStudentGet']);
+    Route::get('student/my_exam_result', [ExaminationController::class, 'ExamResultStudent']);
+    Route::get('student/my_presensi', [PresensiController::class, 'MyPresensiStudent']);
+    Route::get('student/presensi/{class_id}/{matkul_id}/{student_id}/{week_id}', [PresensiController::class, 'PresensiStudent']);
+    Route::post('student/presensi/save', [PresensiController::class, 'PresensiStudentSave']);
 });
 Route::group(['middleware' => 'ortu'], function () {
     Route::get('ortu/dashboard', [DashboardController::class, 'dashboard']);
@@ -159,5 +198,6 @@ Route::group(['middleware' => 'ortu'], function () {
     Route::get('ortu/my_student/subject/{student_id}', [SubjectController::class, 'ParentSubjectStudent']);
     Route::get('ortu/my_student/calendar/{student_id}', [CalendarController::class, 'ChildrenCalendar']);
     Route::get('ortu/my_student/exam_student/{student_id}', [ExaminationController::class, 'ExamMyChildren']);
+    Route::get('ortu/my_student/exam_result/{student_id}', [ExaminationController::class, 'ExamResultChildren']);
     Route::get('ortu/my_student/subject/class_timetable/{class_id}/{matkul_id}/{student_id}', [ClassTimeTableController::class, 'myClassChild']);
 });

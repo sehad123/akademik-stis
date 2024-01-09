@@ -199,6 +199,7 @@ class User extends Authenticatable
         return $return;
     }
 
+
     public function getProfile()
     {
         if (!empty($this->profile_pic) && file_exists('upload/profile/' . $this->profile_pic)) {
@@ -270,5 +271,22 @@ class User extends Authenticatable
             ->groupBy('users.id')
             ->paginate(20);
         return $return;
+    }
+
+
+    static public function getStudentClass($class_id)
+    {
+        $return =  self::select('users.*', 'users.name', 'users.last_name')
+            ->where('users.user_type', '=', 3)
+            ->where('users.is_delete', '=', 0)
+            ->where('users.class_id', '=', $class_id)
+            ->orderBy('users.id', 'desc')
+            ->get();
+        return $return;
+    }
+
+    static public function getPresensi($student_id, $class_id, $tgl_presensi, $matkul_id)
+    {
+        return presensiModel::where('student_id', '=', $student_id)->where('class_id', '=', $class_id)->where('tgl_presensi', '=', $tgl_presensi)->where('matkul_id', '=', $matkul_id)->first();
     }
 }
