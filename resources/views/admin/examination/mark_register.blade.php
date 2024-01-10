@@ -276,7 +276,7 @@
         dataType: "json",
         success: function(data) {
             alert(data.message);
-            location.reload();
+            // location.reload();
         },
         error: function(xhr, status, error) {
             console.error(xhr.responseText);

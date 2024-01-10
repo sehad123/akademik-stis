@@ -36,16 +36,16 @@
                       <th>#</th>
                       <th>profile_pic</th>
                       <th>Student Name</th>
-                      <th>Parent Name</th>
+                      {{-- <th>Parent Name</th> --}}
                       <th>Email</th>
                       <th>NIM</th>
                       <th>Class</th>
                       <th>Gender</th>
                       <th>Tanggal Lahir</th>
-                      <th>Religion</th>
+                      <th>Agama</th>
                       <th>Nomer Hp</th>
-                      <th>Tinggi Badan (cm)</th>
-                      <th>Berat Badan (kg)</th>
+                      {{-- <th>Tinggi Badan (cm)</th>
+                      <th>Berat Badan (kg)</th> --}}
                       <th>Created Date</th>
                       <th>Action</th>
                     </tr>
@@ -63,7 +63,7 @@
                           @endif
                         </td>
                         <td>{{ $value->name }} {{ $value->last_name }}</td>
-                        <td>{{ $value->parent_name }} {{ $value->parent_last_name }}</td>
+                        {{-- <td>{{ $value->parent_name }} {{ $value->parent_last_name }}</td> --}}
                         <td>{{ $value->email }}</td>
                         <td>{{ $value->admission_number }}</td>
                         <td>{{ $value->class_name }}</td>
@@ -75,8 +75,8 @@
                         </td>
                         <td>{{ $value->religion }}</td>
                         <td>{{ $value->mobile_number }}</td>
-                        <td>{{ $value->height }}</td>
-                        <td>{{ $value->weight }}</td>
+                        {{-- <td>{{ $value->height }}</td>
+                        <td>{{ $value->weight }}</td> --}}
                         <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
                         <td style="width: 250px;">
                           <a href="{{ url('ortu/my_student/subject/'.$value->id) }}" class="btn btn-success btn-sm mb-1">Matkul</a>

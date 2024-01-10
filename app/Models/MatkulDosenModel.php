@@ -86,16 +86,17 @@ class MatkulDosenModel extends Model
     {
         return
             MatkulDosenModel::select('class_timetable.*', 'class.name as class_name', 'matkul.name as matkul_name', 'class.id as class_id', 'matkul.id as matkul_id', 'week.name as week_name', 'week.id as week_id', 'week.fullcalendar_day')
-            ->join('class', 'class.id', '=', 'matkul_dosen.class_id')
-            ->join('matkul_class', 'matkul_class.class_id', '=', 'class.id')
+            ->join('matkul', 'matkul.id', '=', 'matkul_dosen.matkul_id')
+            ->join('matkul_class', 'matkul_class.matkul_id', '=', 'matkul.id')
+            ->join('class', 'class.id', '=', 'matkul_class.class_id')
             ->join('class_timetable', 'class_timetable.matkul_id', '=', 'matkul_class.matkul_id')
-            ->join('matkul', 'matkul.id', '=', 'class_timetable.matkul_id')
             ->join('week', 'week.id', '=', 'class_timetable.week_id')
             ->where('matkul_dosen.dosen_id', '=', $dosen_id)
             ->where('matkul_dosen.status', '=', 0)
             ->where('matkul_dosen.is_delete', '=', 0)
             ->get();
     }
+
 
     static public function getAssignDosenID($matkul_id)
     {

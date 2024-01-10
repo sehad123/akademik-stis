@@ -107,7 +107,6 @@
                 </table>
                 <div style="padding: 10px; float:right;"></div>
                 {!! $getRecord->appends(Illuminate\Support\Facades\Request::except('page'))->links() !!}
-                {{-- {!! $getRecord->append() !!} --}}
               </div>
               <!-- /.card-body -->
             </div>
