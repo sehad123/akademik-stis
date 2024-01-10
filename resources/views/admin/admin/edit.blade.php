@@ -46,6 +46,20 @@
                     <p>please add new password if you want change password</p>
                   </div>
                 </div>
+                
+                <div class="form-group">
+                  <label >Profile picture<span style="color:red;">*</span></label>
+                  <input type="file" class="form-control" name="profile_pic" >
+                  <div style="color:red;">
+
+                    {{ $errors->first('profile_pic') }}
+                
+                </div>
+                @if (!empty($getRecord->getProfile()))
+                <img src="{{ $getRecord->getProfile() }}" style="width: 100px" alt="">
+                    
+                @endif
+                </div>
                 <!-- /.card-body -->
 
                 <div class="card-footer">

@@ -76,4 +76,14 @@ class PengumumanModel extends Model
         $return = $return->orderBy('pengumuman.id', 'desc')->paginate(5);
         return $return;
     }
+
+    static public function getTotalPengumumanDosen($pesan_to)
+    {
+        $return =  PengumumanModel::select('pengumuman.id*')
+            ->join('users', 'users.id', '=', 'pengumuman.created_by');
+        $return = $return->join('pesan_pengumuman', 'pesan_pengumuman.pengumuman_id', '=', 'pengumuman.id');
+        $return = $return->where('pesan_pengumuman.pesan_to', '=', $pesan_to);
+        $return = $return->orderBy('pengumuman.id', 'desc')->count();
+        return $return;
+    }
 }

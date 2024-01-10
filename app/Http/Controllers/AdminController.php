@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
+use Str;
 
 class AdminController extends Controller
 {
@@ -42,6 +43,15 @@ class AdminController extends Controller
         $user->email = trim($request->email);
         $user->password = Hash::make($request->password);
         $user->user_type = 1;
+        if (!empty($request->file('profile_pic'))) {
+            $ext = $request->file('profile_pic')->getClientOriginalExtension();
+            $file =  $request->file('profile_pic');
+            $randomStr = date('Ymdhis') . Str::random(20);
+            $filename = strtolower($randomStr) . '.' . $ext;
+            $file->move('upload/profile/', $filename);
+
+            $user->profile_pic = $filename;
+        }
 
         $user->save();
 
@@ -57,6 +67,18 @@ class AdminController extends Controller
         $user->email = trim($request->email);
         if (!empty($request->password)) {
             $user->password = Hash::make($request->password);
+        }
+        if (!empty($request->file('profile_pic'))) {
+            if (!empty($user->getProfile())) {
+                unlink('upload/profile/' . $user->profile_pic);
+            }
+            $ext = $request->file('profile_pic')->getClientOriginalExtension();
+            $file =  $request->file('profile_pic');
+            $randomStr = date('Ymdhis') . Str::random(20);
+            $filename = strtolower($randomStr) . '.' . $ext;
+            $file->move('upload/profile/', $filename);
+
+            $user->profile_pic = $filename;
         }
 
         $user->save();

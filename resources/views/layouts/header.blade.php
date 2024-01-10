@@ -67,11 +67,11 @@
             <!-- Message End -->
           </a>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+          <a href="{{ url('chat') }}" class="dropdown-item dropdown-footer">See All Messages</a>
         </div>
       </li>
       <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
+      {{-- <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
           <span class="badge badge-warning navbar-badge">15</span>
@@ -98,7 +98,7 @@
         </div>
       </li>
    
-     
+      --}}
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -112,9 +112,9 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="user-panel mt-3 pb-3 mb-3 ml-3 d-flex">
         <div class="image">
-          <img src="{{ url('public/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ Auth::user()->getProfileDirect()}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->name }}</a>
@@ -244,23 +244,6 @@
             </ul>
           </li>
             
-          <li class="nav-item @if(Request::segment(2) == 'komunikasi') menu-is-opening menu-open @endif ">
-            <a href="#" class="nav-link @if(Request::segment(2) == 'komunikasi') active @endif">
-              <i class=" nav-icon fa-regular fa-comment"></i>
-                            <p>
-                Komunikasi
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item ">
-                <a href="{{ url('admin/komunikasi/pengumuman') }}" class="nav-link @if(Request::segment(3) == 'pengumuman') active @endif" >
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Papan Pengumuman</p>
-                </a>
-              </li>
-            </ul>
-          </li>
           <li class="nav-item @if(Request::segment(2) == 'tugas') menu-is-opening menu-open @endif ">
             <a href="#" class="nav-link @if(Request::segment(2) == 'tugas') active @endif">
               <i class=" nav-icon fa-regular fa-book"></i>
@@ -307,7 +290,13 @@
               </li>
             </ul>
           </li>
-            
+          <li class="nav-item ">
+            <a href="{{ url('admin/komunikasi/pengumuman') }}" class="nav-link @if(Request::segment(3) == 'pengumuman') active @endif" >
+              <i class="nav-icon fa-regular fa-comment"></i>
+              <p>Papan Pengumuman</p>
+            </a>
+          </li>
+
           <li class="nav-item">
             <a href="{{ url('admin/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
               <i class="nav-icon fa-solid fa-gear"></i>
@@ -547,14 +536,14 @@
             </a>
           </li>
           @elseif (Auth::user()->user_type == 4)
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <a href="{{ url('ortu/dashboard') }}" class="nav-link @if(Request::segment(2) == 'dashboard') active @endif">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 dashboard
               </p>
             </a>
-          </li>
+          </li> --}}
          
           <li class="nav-item">
             <a href="{{ url('ortu/my_student') }}" class="nav-link @if(Request::segment(2) == 'my_student') active @endif">

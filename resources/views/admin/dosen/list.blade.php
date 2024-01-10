@@ -162,7 +162,7 @@
                         <td style="min-width: 150px;">
                           <a href="{{ url('admin/dosen/edit/'. $value->id) }}" class="btn btn-primary btn-sm">Edit</a>
                           <a href="{{ url('admin/dosen/delete/'. $value->id) }}" class="btn btn-danger btn-sm">Delete</a>
-                          {{-- <a href="{{ url('admin/dosen/my-children/'. $value->id) }}" class="btn btn-warning btn-sm">Student List</a> --}}
+                          <a href="{{ url('chat?receiver_id=' .base64_encode($value->id)) }}" class="btn btn-success">Chat</a>
                         </td>
                        </tr>
                    @endforeach

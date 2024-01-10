@@ -50,6 +50,14 @@ class User extends Authenticatable
     {
         return self::find($id);
     }
+
+    static public function getTotalUser($user_type)
+    {
+        return self::select('users.id')->where('user_type', '=', $user_type)->where('is_delete', '=', 0)->count();
+    }
+
+
+
     // method forget password
     static public function getEmailSingle($email)
     {
@@ -205,6 +213,16 @@ class User extends Authenticatable
         if (!empty($this->profile_pic) && file_exists('upload/profile/' . $this->profile_pic)) {
             return url('upload/profile/' . $this->profile_pic);
         } else {
+            return '';
+        }
+    }
+
+    public function getProfileDirect()
+    {
+        if (!empty($this->profile_pic) && file_exists('upload/profile/' . $this->profile_pic)) {
+            return url('upload/profile/' . $this->profile_pic);
+        } else {
+            return url('upload/profile/user.png');
         }
     }
     static public function getSearchStudent()

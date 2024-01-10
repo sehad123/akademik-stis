@@ -54,6 +54,22 @@ class MatkulDosenModel extends Model
             ->where('matkul_dosen.dosen_id', '=', $dosen_id)
             ->get();
     }
+
+    static public function getTotalMatkulDosen($dosen_id)
+    {
+        return MatkulDosenModel::select('matkul_dosen.id*')
+            ->join('matkul', 'matkul.id', '=', 'matkul_dosen.matkul_id')
+            ->join('matkul_class', 'matkul_class.matkul_id', '=', 'matkul.id')
+            ->join('class', 'class.id', '=', 'matkul_class.class_id')
+            ->where('matkul_dosen.is_delete', '=', 0)
+            ->where('matkul_dosen.status', '=', 0)
+            ->where('class.status', '=', 0)
+            ->where('class.is_delete', '=', 0)
+            ->where('matkul_class.status', '=', 0)
+            ->where('matkul_class.is_delete', '=', 0)
+            ->where('matkul_dosen.dosen_id', '=', $dosen_id)
+            ->count();
+    }
     static public function getMyClassSubjectGroup($dosen_id)
     {
         return MatkulDosenModel::select('matkul_dosen.*', 'class.name as class_name', 'class.id as class_id')
@@ -64,6 +80,18 @@ class MatkulDosenModel extends Model
             ->groupBy('matkul_dosen.class_id')
             ->get();
     }
+
+    static public function getTotalClassDosen($dosen_id)
+    {
+        return MatkulDosenModel::select('matkul_dosen.id*')
+            ->join('class', 'class.id', '=', 'matkul_dosen.class_id')
+            ->where('matkul_dosen.is_delete', '=', 0)
+            ->where('matkul_dosen.status', '=', 0)
+            ->where('matkul_dosen.dosen_id', '=', $dosen_id)
+            ->count();
+    }
+
+
     static public function MySubject($class_id)
     {
         return self::select('matkul_class.*',  'matkul.name as matkul_name', 'matkul.type as matkul_type')
@@ -73,9 +101,10 @@ class MatkulDosenModel extends Model
             ->where('matkul_class.class_id', '=', $class_id)
             ->where('matkul_class.is_delete', '=', 0)
             ->where('matkul_class.status', '=', 0)
-            ->orderBy('matkul_class.id', 'desc')
             ->get();
     }
+
+
 
     static public function getSingle($id)
     {

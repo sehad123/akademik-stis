@@ -51,6 +51,17 @@ class SubmitTugasModel extends Model
         return $return;
     }
 
+    static public function getTotalSubmittedStudent($student_id)
+    {
+        $return = SubmitTugasModel::select('submit_tugas.id*')
+            ->join('tugas', 'tugas.id', '=', 'submit_tugas.tugas_id')
+            ->join('class', 'class.id', '=', 'tugas.class_id')
+            ->join('matkul', 'matkul.id', '=', 'tugas.matkul_id');
+        $return = $return->where('submit_tugas.student_id', '=', $student_id)
+            ->count();
+        return $return;
+    }
+
     static public function getRecordTugas()
     {
         $return = SubmitTugasModel::select('submit_tugas.*', 'matkul.name as matkul_name', 'class.name as class_name', 'users.name as first_name', 'users.last_name as last_name', 'tugas.tanggal as tanggal')

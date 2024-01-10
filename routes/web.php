@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssignClassController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\ClassSubjectController;
 use App\Http\Controllers\ClassTimeTableController;
@@ -24,6 +25,11 @@ Route::post('/login', [AuthController::class, 'AuthLogin']);
 Route::get('/logout', [AuthController::class, 'logout']);
 Route::get('/forgot-password', [AuthController::class, 'forgotpassword']);
 Route::post('/forgot-password', [AuthController::class, 'PostForgotPassword']);
+
+Route::group(['middleware' => 'common'], function () {
+    Route::get('chat', [ChatController::class, 'chat']);
+    Route::post('submit_message', [ChatController::class, 'submit_message']);
+});
 
 Route::get('admin/dashboard', function () {
     return view('admin.dashboard');

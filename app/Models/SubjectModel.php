@@ -50,4 +50,14 @@ class SubjectModel extends Model
 
         return $return;
     }
+    static public function getTotalMatkul()
+    {
+        $return = SubjectModel::select('matkul.*')
+            ->join('users', 'users.id', 'matkul.created_by')
+            ->where('matkul.is_delete', '=', 0)
+            ->where('matkul.status', '=', 0)
+            ->count();
+
+        return $return;
+    }
 }

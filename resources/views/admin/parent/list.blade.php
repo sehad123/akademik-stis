@@ -140,6 +140,7 @@
                           <a href="{{ url('admin/parent/edit/'. $value->id) }}" class="btn btn-primary btn-sm">Edit</a>
                           <a href="{{ url('admin/parent/delete/'. $value->id) }}" class="btn btn-danger btn-sm">Delete</a>
                           <a href="{{ url('admin/parent/my-children/'. $value->id) }}" class="btn btn-warning btn-sm">Children List</a>
+                          <a href="{{ url('chat?receiver_id=' .base64_encode($value->id)) }}" class="btn btn-success">Chat</a>
                         </td>
                        </tr>
                    @endforeach

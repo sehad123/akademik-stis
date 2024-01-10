@@ -13,7 +13,7 @@
             <h1>Admin List ( Total : {{ $getRecord->total() }})</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('admin/class/add') }}" class="btn btn-primary">add new Class</a>
+            <a href="{{ url('admin/admin/add') }}" class="btn btn-primary">add new Admin</a>
           </div>
         
         </div>
@@ -81,6 +81,7 @@
                   <thead>
                     <tr>
                       <th>#</th>
+                      <th>Profile</th>
                       <th>Name</th>
                       <th>Email</th>
                       <th>Created Date</th>
@@ -94,12 +95,18 @@
                @foreach ($getRecord as $value)
                    <tr>
                     <td>{{ $nomer++ }}</td>
+                    <td>
+                      @if (!empty($value->getProfileDirect()))
+                      <img src="{{  $value->getProfileDirect()}}" style="width: 50px; height:50px; border-radius:50px;" alt="">
+                      @endif
+                    </td>
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->email }}</td>
                         <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
                         <td>
                           <a href="{{ url('admin/admin/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
                           <a href="{{ url('admin/admin/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
+                          <a href="{{ url('chat?receiver_id=' .base64_encode($value->id)) }}" class="btn btn-success">Chat</a>
                         </td>
                        </tr>
                    @endforeach

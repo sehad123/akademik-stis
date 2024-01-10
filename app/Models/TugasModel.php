@@ -89,6 +89,22 @@ class TugasModel extends Model
         return $return;
     }
 
+    static public function getTotalTugasStudent($class_id, $student_id)
+    {
+        $return = TugasModel::select('tugas.id*')
+            ->join('users', 'users.id', '=', 'tugas.created_by')
+            ->join('class', 'class.id', '=', 'tugas.class_id')
+            ->join('matkul', 'matkul.id', '=', 'tugas.matkul_id')
+            ->where('tugas.class_id', '=', $class_id)
+            ->whereNotIn('tugas.id', function ($query) use ($student_id) {
+                $query->select('submit_tugas.tugas_id')->from('submit_tugas')->where('submit_tugas.student_id', '=', $student_id);
+            });
+        $return = $return->where('tugas.is_delete', '=', 0)
+            ->count();
+
+        return $return;
+    }
+
     static public function getSingle($id)
     {
         return self::find($id);
@@ -98,7 +114,7 @@ class TugasModel extends Model
     public function getDocument()
     {
         if (!empty($this->document) && file_exists('upload/tugas/' . $this->document)) {
-            return ('upload/tugas/' . $this->document);
+            return url('upload/tugas/' . $this->document);
         } else {
             return "";
         }
