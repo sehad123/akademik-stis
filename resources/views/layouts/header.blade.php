@@ -197,7 +197,7 @@
             
           <li class="nav-item @if(Request::segment(2) == 'tugas') menu-is-opening menu-open @endif ">
             <a href="#" class="nav-link @if(Request::segment(2) == 'tugas') active @endif">
-              <i class=" nav-icon fa-regular fa-book"></i>
+              <i class=" nav-icon fa fa-book"></i>
                             <p>
                 Penugasan
                 <i class="fas fa-angle-left right"></i>
@@ -314,47 +314,14 @@
             </a>
           </li>
 
-          <li class="nav-item @if(Request::segment(2) == 'presensi') menu-is-opening menu-open @endif ">
-            <a href="#" class="nav-link @if(Request::segment(2) == 'presensi') active @endif">
+       
+          <li class="nav-item ">
+            <a href="{{ url('dosen/presensi/report') }}" class="nav-link @if(Request::segment(3) == 'report') active @endif" >
               <i class="nav-icon fas fa-table"></i>
-              <p>
-                Presensi
-                <i class="fas fa-angle-left right"></i>
-              </p>
+              <p>Presensi</p>
             </a>
-            <ul class="nav nav-treeview">
-              {{-- <li class="nav-item ">
-                <a href="{{ url('dosen/presensi/student') }}" class="nav-link @if(Request::segment(3) == 'student') active @endif" >
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Presensi Mahasiswa</p>
-                </a>
-              </li> --}}
-              <li class="nav-item ">
-                <a href="{{ url('dosen/presensi/report') }}" class="nav-link @if(Request::segment(3) == 'report') active @endif" >
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Laporan Presensi</p>
-                </a>
-              </li>
-            </ul>
           </li>
 
-          <li class="nav-item @if(Request::segment(2) == 'tugas') menu-is-opening menu-open @endif ">
-            <a href="#" class="nav-link @if(Request::segment(2) == 'tugas') active @endif">
-              <i class=" nav-icon fa-regular fa-book"></i>
-                            <p>
-                Penugasan
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item ">
-                <a href="{{ url('dosen/tugas/penugasan') }}" class="nav-link @if(Request::segment(3) == 'penugasan') active @endif" >
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tugas</p>
-                </a>
-              </li>
-            </ul>
-          </li>
           {{-- <li class="nav-item">
             <a href="{{ url('student/my_class_timetable') }}" class="nav-link @if(Request::segment(2) == 'my_class_timetable') active @endif">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -371,6 +338,12 @@
               </p>
             </a>
           </li> --}}
+          <li class="nav-item ">
+            <a href="{{ url('dosen/tugas/penugasan') }}" class="nav-link @if(Request::segment(3) == 'penugasan') active @endif" >
+              <i class=" nav-icon fa fa-book"></i>
+              <p>Penugasan Mahasiswa</p>
+            </a>
+          </li>
           <li class="nav-item">
             <a href="{{ url('dosen/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
               <i class="nav-icon fa-solid fa-gear"></i>
@@ -416,8 +389,8 @@
           <li class="nav-item">
           <li class="nav-item">
             <a href="{{ url('student/my_exam_result') }}" class="nav-link @if(Request::segment(2) == 'my_exam_result') active @endif">
-              <i class="nav-icon fas fa-book"></i>
-              <p>
+              <i class="nav-icon fa-solid fa-bars-progress"></i>
+                            <p>
                Nilai
               </p>
             </a>
@@ -440,16 +413,16 @@
           </li>
           <li class="nav-item">
             <a href="{{ url('student/my_tugas') }}" class="nav-link @if(Request::segment(2) == 'my_tugas') active @endif">
-              <i class="nav-icon fas fa-list"></i>
-              <p>
+              <i class=" nav-icon fa-solid fa-book-open"></i>
+                            <p>
                 Penugasan
               </p>
             </a>
           </li>
           <li class="nav-item">
             <a href="{{ url('student/my_submited_tugas') }}" class="nav-link @if(Request::segment(2) == 'my_submited_tugas') active @endif">
-              <i class="nav-icon fas fa-list"></i>
-              <p>
+              <i class="nav-icon fa-solid fa-book-atlas"></i>
+                                          <p>
                 My Submited Tugas
               </p>
             </a>

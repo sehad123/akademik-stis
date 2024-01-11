@@ -86,11 +86,11 @@
                         <a href="{{ $item->getDocument() }}" download="" class="btn btn-warning">Download</a>
                     @endif
                   </td>
-                <td>{{ date('d-m-Y',strtotime($item->created_at)) }}</td>
-                @if (empty($getRecord->description) || ($getRecord->description == null))
-                    <td>Tidak ada</td>
-                    @else
-                    <td>{!! $item->description !!}</td>
+                <td>{{ date('d-m-Y / h:i A',strtotime($item->created_at)) }}</td>
+                @if (!empty($item->description))
+                <td>{!! $item->description !!}</td>
+                @else
+                <td>Tidak ada</td>
                     @endif
               </tr>
               @endforeach

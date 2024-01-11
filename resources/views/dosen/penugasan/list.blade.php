@@ -47,7 +47,7 @@
               </div>
                   <div class="form-group col-md-3">
                     <button class="btn btn-primary mt-4" type="submit">Search</button>
-                    <a href="{{ url('admin/tugas/penugasan') }}" class="btn btn-success mt-4" type="submit">clear</a>
+                    <a href="{{ url('dosen/tugas/penugasan') }}" class="btn btn-success mt-4" type="submit">clear</a>
                   </div>
                 </div>
 

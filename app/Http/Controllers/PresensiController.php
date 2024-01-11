@@ -315,7 +315,7 @@ class PresensiController extends Controller
                 if ($classSchedule['jam_mulai'] >= now()->hour && $classSchedule['jam_akhir'] <= now()->hour) {
                     $json['message'] = "Anda hanya bisa melakukan presensi pada jam {$classSchedule['jam_mulai']}";
                     return response()->json($json);
-                } else if ($classSchedule['jam_mulai'] <= now()->hour &&  $classSchedule['jam_akhir'] >= now()->hour && $classSchedule['menit_mulai'] < (now()->minute + 10) % 60) {
+                } else if ($classSchedule['jam_mulai'] <= now()->hour &&  $classSchedule['jam_akhir'] >= now()->hour && ($classSchedule['menit_mulai'] + 20) < (now()->minute) % 60) {
                     $presensi = new presensiModel;
                     $presensi->student_id = $getMahasiswa->id;
                     $presensi->matkul_id = $getMatkul->id;
@@ -334,7 +334,7 @@ class PresensiController extends Controller
 
                     $json['message'] = 'Berhasil Melakukan Presensi';
                     return response()->json($json);
-                } else if ($classSchedule['jam_mulai'] <= now()->hour &&  $classSchedule['jam_akhir'] >= now()->hour && $classSchedule['menit_mulai'] < (now()->minute + 20) % 60) {
+                } else if ($classSchedule['jam_mulai'] <= now()->hour &&  $classSchedule['jam_akhir'] >= now()->hour && ($classSchedule['menit_mulai'] + 30) < (now()->minute) % 60) {
                     $presensi = new presensiModel;
                     $presensi->student_id = $getMahasiswa->id;
                     $presensi->matkul_id = $getMatkul->id;

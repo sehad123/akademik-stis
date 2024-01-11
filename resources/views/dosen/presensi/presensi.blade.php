@@ -63,13 +63,13 @@
                         $getPresensi = $value->getPresensi($getMahasiswa->id, $getClass->id, now()->toDateString(), $getMatkul->id,$getDay->id);
                             if(!empty($getPresensi->presensi_type) && !empty($getPresensi->created_at && $getDay->id == (now()->dayOfWeek + 1) % 7))
                             {
-                              echo '<script>alert("Anda sudah melakukan presensi");</script>';
+                              // echo '<script>alert("Anda sudah melakukan presensi");</script>';
                                 $presensi_type = $getPresensi->presensi_type;
                                 $created_at = $getPresensi->created_at;
                             }
                         @endphp
                         @endforeach
-                            <tr>
+                        <tr>
                               @if ($getDay->id != (now()->dayOfWeek + 1) % 7)
                               <td></td>
                               @elseif (!empty($getPresensi->presensi_type))

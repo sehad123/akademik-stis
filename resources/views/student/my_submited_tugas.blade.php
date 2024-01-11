@@ -88,7 +88,7 @@
                 </td>
                 <td>{!! $item->description !!}</td>
 
-                <td>{{ date('d-m-Y',strtotime($item->created_at)) }}</td>
+                <td>{{ date('d-m-Y / h:i A',strtotime($item->created_at)) }}</td>
               </tr>
               @empty
               <tr>

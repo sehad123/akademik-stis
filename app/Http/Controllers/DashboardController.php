@@ -23,6 +23,7 @@ class DashboardController extends Controller
         if (Auth::user()->user_type == 1) {
             $data['totalAdmin'] = User::getTotalUser(1);
             $data['totalOrtu'] = User::getTotalUser(4);
+            $data['totalPengumuman'] = PengumumanModel::getTotalPengumumanDosen(Auth::user()->user_type);
             $data['totalDosen'] = User::getTotalUser(2);
             $data['totalStudent'] = User::getTotalUser(3);
             $data['totalExam'] = ExamModel::getTotalUjian();
