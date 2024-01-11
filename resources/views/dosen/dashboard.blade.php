@@ -22,7 +22,7 @@
         <div class="col-lg-4 col-6">
           <div class="small-box bg-info">
             <div class="inner">
-              <h2 class="text-center">{{ $totalClass-1 }}</h2>
+              <h2 class="text-center">{{ $totalClass }}</h2>
 
               <p>Total Class</p>
             </div>

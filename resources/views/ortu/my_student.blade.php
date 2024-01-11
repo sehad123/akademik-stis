@@ -83,6 +83,7 @@
                           <a href="{{ url('ortu/my_student/exam_student/'.$value->id) }}" class="btn btn-primary btn-sm mb-1">Jadwal Ujian</a>
                           <a href="{{ url('ortu/my_student/calendar/'.$value->id) }}" class="btn btn-warning btn-sm">Calendar</a>
                           <a href="{{ url('ortu/my_student/exam_result/'.$value->id) }}" class="btn btn-danger btn-sm">Hasil Ujian</a>
+                          <a href="{{ url('chat?receiver_id=' .base64_encode($value->id)) }}" class="btn btn-success btn-sm">Chat</a>
                         </td>
                    @endforeach
                       

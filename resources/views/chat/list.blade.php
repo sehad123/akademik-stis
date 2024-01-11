@@ -179,7 +179,7 @@
 
 .chat .chat-history .other-message:after {
     border-bottom-color: #e8f1f3;
-    left: 93%
+    left: 85%
 }
 
 .chat .chat-message {
@@ -296,9 +296,9 @@
                 <div id="plist" class="people-list">
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="getSearchUser"><i class="fa fa-search"></i></span>
+                            {{-- <span class="input-group-text"  id="getSearchUser"><i class="fa fa-search"></i></span> --}}
                         </div>
-                        <input type="text" id="getSearch" name="search" class="form-control" placeholder="Search...">
+                        {{-- <input type="text" id="getSearch" name="search" class="form-control" placeholder="Search..."> --}}
                         <input type="hidden" id="getReceiverIDDynamic" value="{{ $receiver_id }}" name="search">
                     </div>
                     <ul class="list-unstyled chat-list mt-2 mb-0" id="getSearchUserDynamic" name="search">
@@ -352,7 +352,7 @@
         });
 
         $('body').delegate('#getSearchUser', 'click', function (e) {
-    var search = $('#getSearch').val();
+            var search = $('#getSearchUser').val(); // Ganti $('#getSearch') menjadi $('#getSearchUser')
     var receiver_id = $('#getReceiverIDDynamic').val();
 
     $.ajax({
@@ -389,6 +389,8 @@
                 success: function (data) {
                     $('#AppendMessage').append(data.success);
                     $('#clearMessage').val('');
+                    $('#file_name').val('');
+                    $('#getFileName').html('');
                     srolldown();
                     console.log(data);
                 },
@@ -399,11 +401,29 @@
         });
     });
 
+    function sendMessage(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault(); // Mencegah newline pada textarea
+            $('#submit_message').submit(); // Mengirim pesan saat menekan Enter
+        }
+    }
+
     function srolldown()
     {
         $('.chat-history').animate({scrollTop: $('.chat-history').prop("scrollHeight")+1000},500);
     }
     srolldown();
+
+
+    $('body').delegate('#OpenFile', 'click', function (e) {
+        $('#file_name').trigger('click');
+    });
+
+    $('body').delegate('#file_name', 'change', function (e) {
+        var filename = this.files[0].name;
+        $('#getFileName').html(filename);
+
+    });
 </script>
 
     

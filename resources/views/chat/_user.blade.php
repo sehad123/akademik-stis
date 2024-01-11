@@ -7,10 +7,21 @@
             <div class="name">{{ $user['name'] }} @if (!empty($user['messagecount']))
                 <span id="ClearMessage{{ $user['user_id'] }}" style="background: red;color:#fff; border-radius:25px; padding:1px 7px;"> {{ $user['messagecount'] }}</span></div>
             @endif
-            <div class="status"> <i class="fa fa-circle offline"></i> 
-                Last seen {{ Carbon\Carbon::parse($user['created_date'])->diffForHumans() }}
-            
-            </div>                                            
+            <div class="status"> 
+                @if (!empty($user['is_online']))
+                    <i style="color: blue" class="fa-solid fa-check-double"></i>
+                @else
+                    <i style="color: grey;" class="fa-solid fa-check-double "></i>
+                @endif
+                @php
+                    $messageWords = str_word_count($user['message']);
+                    $displayMessage = $messageWords > 2 ? $user['message']." ..." : $user['message'];
+                @endphp
+                
+                {{ $displayMessage }}
+            </div>
+                                          
         </div>
-</li>
-@endforeach
+    </li>
+    @endforeach
+    {{-- {{ Carbon\Carbon::parse($user['created_date'])->diffForHumans() }} --}}
