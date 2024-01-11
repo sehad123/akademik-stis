@@ -321,6 +321,7 @@ class ExaminationController extends Controller
         foreach ($getExam as $exam) {
             $dataE = array();
             $dataE['exam_name'] = $exam->exam_name;
+            $dataE['exam_id'] = $exam->exam_id;
             $getExamMatkul = NilaiModel::getExamMatkul($exam->exam_id, Auth::user()->id);
             $dataSubjet = array();
             foreach ($getExamMatkul as $value) {
@@ -431,6 +432,38 @@ class ExaminationController extends Controller
 
         return redirect('admin/examinations/mark_grade')->with('success', "Grade Berhasil Di Edit");
     }
+    public function ExamResultStudentPrint(Request $request)
+    {
+        $exam_id = $request->exam_id;
+        $student_id = $request->student_id;
+
+        $data['getExam'] = ExamModel::getSingle($exam_id);
+        $data['getStudent'] = User::getSingle($student_id);
+
+        $data['getClass'] = NilaiModel::getClassStudent($exam_id, $student_id);
+        $getExamMatkul = NilaiModel::getExamMatkul($exam_id, $student_id);
+        $dataSubjet = array();
+        foreach ($getExamMatkul as $value) {
+            $total_score = ($value['tugas'] + $value['praktikum'] + $value['uts'] + $value['uas']);
+
+            $dataS = array();
+            $dataS['matkul_name'] = $value['matkul_name'];
+            $dataS['matkul_type'] = $value['matkul_type'];
+            $dataS['tugas'] = $value['tugas'];
+            $dataS['praktikum'] = $value['praktikum'];
+            $dataS['uts'] = $value['uts'];
+            $dataS['uas'] = $value['uas'];
+            $dataS['total_score'] = $total_score;
+            $dataS['passing_mark'] = $value['passing_mark'];
+            $dataS['full_mark'] = $value['full_mark'];
+            $dataSubjet[] = $dataS;
+        }
+
+        $data['getNilai'] = $dataSubjet;
+        // $result[]  = $dataE;
+        return view('exam_result_print', $data);
+    }
+}
 
 
     // public function submit_mark(Request $request)
@@ -478,4 +511,3 @@ class ExaminationController extends Controller
     //         $json['message'] = "Nilai total > nilai full";
     //     echo json_encode($json);
     // }
-}

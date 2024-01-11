@@ -31,4 +31,15 @@ class NilaiModel extends Model
             ->where('nilai.student_id', '=', $student_id)
             ->get();
     }
+
+    static public function getClassStudent($exam_id, $student_id)
+    {
+        return NilaiModel::select('class.name as class_name')
+            ->join('exam', 'exam.id', '=', 'nilai.exam_id')
+            ->join('matkul', 'matkul.id', '=', 'nilai.matkul_id')
+            ->join('class', 'class.id', '=', 'nilai.class_id')
+            ->where('nilai.exam_id', '=', $exam_id)
+            ->where('nilai.student_id', '=', $student_id)
+            ->first();
+    }
 }

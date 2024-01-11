@@ -229,6 +229,7 @@ Route::group(['middleware' => 'student'], function () {
     Route::get('student/my_calendar/{id}', [CalendarController::class, 'CalendarStudentGet']);
 
     Route::get('student/my_exam_result', [ExaminationController::class, 'ExamResultStudent']);
+    Route::get('student/my_exam_result/print', [ExaminationController::class, 'ExamResultStudentPrint']);
     Route::get('student/my_presensi', [PresensiController::class, 'MyPresensiStudent']);
     Route::get('student/presensi/{class_id}/{matkul_id}/{student_id}/{week_id}', [PresensiController::class, 'PresensiStudent']);
     Route::post('student/presensi/save', [PresensiController::class, 'PresensiStudentSave']);
