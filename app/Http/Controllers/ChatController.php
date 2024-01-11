@@ -18,8 +18,14 @@ class ChatController extends Controller
             if ($receiver_id == $sender_id) {
                 return redirect()->back()->with('error', 'Due to some error please try again');
             }
+            ChatModel::updateCount($sender_id, $receiver_id);
+            $data['receiver_id'] = $receiver_id;
             $data['getReceiver'] = User::getSingle($receiver_id);
+            $data['getChat'] = ChatModel::getChatting($receiver_id, $sender_id);
+        } else {
+            $data['receiver_id'] = '';
         }
+        $data['getChatUser'] = ChatModel::getChatUsers($sender_id);
         return view('chat.list', $data);
     }
     public function submit_message(Request $request)
@@ -31,12 +37,52 @@ class ChatController extends Controller
             $chat->message = $request->message;
             $chat->created_date = time();
             $chat->save();
+            $getChat = ChatModel::where('id', '=', $chat->id)->get();
 
-            $json['success'] = true;
-            return response()->json($json);
+            return response()->json([
+                "status" => true,
+                "success" => view('chat._single', [
+                    "getChat" => $getChat
+                ])->render(),
+            ], 200);
         } else {
             // Tindakan lain jika bukan request AJAX
             return redirect()->back();
         }
+    }
+
+    public function get_chat_windows(Request $request)
+    {
+        $receiver_id = $request->receiver_id;
+        $sender_id = Auth::user()->id;
+
+        ChatModel::updateCount($sender_id, $receiver_id);
+
+        $getReceiver = User::getSingle($receiver_id);
+        $getChat = ChatModel::getChatting($receiver_id, $sender_id);
+
+        return response()->json([
+            "status" => true,
+            "receiver_id" => base64_encode($receiver_id),
+            "success" => view('chat._message', [
+                "getReceiver" => $getReceiver,
+                "getChat" => $getChat
+            ])->render(),
+        ], 200);
+    }
+
+    public function get_chat_search_user(Request $request)
+    {
+        $sender_id = Auth::user()->id;
+        $receiver_id = $request->receiver_id;
+        $getChatUser = ChatModel::getChatUsers($sender_id);
+
+        return response()->json([
+            "status" => true,
+            "success" => view('chat._user', [
+                "getReceiver" => $getChatUser,
+                "receiver_id" => $receiver_id,
+            ])->render(),
+        ], 200);
     }
 }

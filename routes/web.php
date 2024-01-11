@@ -29,6 +29,8 @@ Route::post('/forgot-password', [AuthController::class, 'PostForgotPassword']);
 Route::group(['middleware' => 'common'], function () {
     Route::get('chat', [ChatController::class, 'chat']);
     Route::post('submit_message', [ChatController::class, 'submit_message']);
+    Route::post('get_chat_windows', [ChatController::class, 'get_chat_windows']);
+    Route::post('get_chat_search_user', [ChatController::class, 'get_chat_search_user']);
 });
 
 Route::get('admin/dashboard', function () {

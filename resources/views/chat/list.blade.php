@@ -296,15 +296,16 @@
                 <div id="plist" class="people-list">
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                            <span class="input-group-text" id="getSearchUser"><i class="fa fa-search"></i></span>
                         </div>
-                        <input type="text" class="form-control" placeholder="Search...">
+                        <input type="text" id="getSearch" name="search" class="form-control" placeholder="Search...">
+                        <input type="hidden" id="getReceiverIDDynamic" value="{{ $receiver_id }}" name="search">
                     </div>
-                    <ul class="list-unstyled chat-list mt-2 mb-0">
+                    <ul class="list-unstyled chat-list mt-2 mb-0" id="getSearchUserDynamic" name="search">
                         @include('chat._user')
                     </ul>
                 </div>
-                <div class="chat">
+                <div class="chat" id="getChatMessageAll">
                     @if (!empty($getReceiver))
                     @include('chat._message')
                     @else
@@ -322,6 +323,58 @@
 @section('script')
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $('body').delegate('.getChatWindows', 'click', function (e) {
+            e.preventDefault();
+            var receiver_id = $(this).attr('id');
+            $('#getReceiverIDDynamic').val(receiver_id);
+            $('.getChatWindows').removeClass('active');
+            $(this).addClass('active');
+            
+            $.ajax({
+                type: 'POST',
+                url: "{{ url('get_chat_windows') }}",
+                data: {
+                    'receiver_id':receiver_id,
+                    '_token':"{{ csrf_token() }}"
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('#ClearMessage'+receiver_id).hide();
+                    $('#getChatMessageAll').html(data.success);
+                    window.history.pushState("","","{{ url('chat?receiver_id=') }}"+data.receiver_id);
+                    srolldown();
+                },
+                error: function (data) {
+                    console.error(data.responseText);
+                },
+            });
+        });
+
+        $('body').delegate('#getSearchUser', 'click', function (e) {
+    var search = $('#getSearch').val();
+    var receiver_id = $('#getReceiverIDDynamic').val();
+
+    $.ajax({
+        type: 'POST',
+        url: "{{ url('get_chat_search_user') }}",
+        data: {
+            'search': search,
+            'receiver_id': receiver_id,
+            '_token': "{{ csrf_token() }}"
+        },
+        dataType: 'json',
+        success: function (data) {
+            $('#getSearchUserDynamic').html(data.success);
+        },
+        error: function (data) {
+            console.error(data.responseText);
+        },
+    });
+});
+
+
+
         $('body').on('submit', '#submit_message', function (e) {
             e.preventDefault();
             var form = $(this);
@@ -334,8 +387,10 @@
                 contentType: false,
                 dataType: 'json',
                 success: function (data) {
+                    $('#AppendMessage').append(data.success);
+                    $('#clearMessage').val('');
+                    srolldown();
                     console.log(data);
-                    // Lakukan sesuatu setelah pesan berhasil dikirim
                 },
                 error: function (data) {
                     console.error(data.responseText);
@@ -343,6 +398,12 @@
             });
         });
     });
+
+    function srolldown()
+    {
+        $('.chat-history').animate({scrollTop: $('.chat-history').prop("scrollHeight")+1000},500);
+    }
+    srolldown();
 </script>
 
     
