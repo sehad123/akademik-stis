@@ -87,10 +87,10 @@
                       <input type="date" class="form-control"  value="{{ Request::get('admission_date') }}" name="admission_date" placeholder="Enter Tanggal Gabung">
                     </div>
                   
-                    <div class="form-group col-md-2">
+                    {{-- <div class="form-group col-md-2">
                       <label >Created Date</label>
                       <input type="date" class="form-control"  value="{{ Request::get('date') }}" name="date" placeholder="Enter date">
-                    </div>
+                    </div> --}}
                     <div class="form-group col-md-3">
                       <button class="btn btn-primary mt-4" type="submit">Search</button>
                       <a href="{{ url('admin/dosen/list') }}" class="btn btn-success mt-4" type="submit">clear</a>
@@ -101,9 +101,6 @@
                 </form>
               </div>
             
-
-            @include('_message');
-            <!-- /.card -->
 
             <div class="card">
               <div class="card-header">
@@ -129,7 +126,7 @@
                       {{-- <th>Pengalaman Kerja</th> --}}
                       {{-- <th>Note</th> --}}
                       <th>Status</th>
-                      <th>Created Date</th>
+                      {{-- <th>Created Date</th> --}}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -158,11 +155,11 @@
                         {{-- <td>{{ $value->work_experience }}</td> --}}
                         {{-- <td>{{ $value->note }}</td> --}}
                         <td>{{ ($value->status == 0)? 'Active' :"Inactive" }}</td>
-                        <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
-                        <td style="min-width: 150px;">
+                        {{-- <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td> --}}
+                        <td style="min-width: 180px;">
                           <a href="{{ url('admin/dosen/edit/'. $value->id) }}" class="btn btn-primary btn-sm">Edit</a>
                           <a href="{{ url('admin/dosen/delete/'. $value->id) }}" class="btn btn-danger btn-sm">Delete</a>
-                          <a href="{{ url('chat?receiver_id=' .base64_encode($value->id)) }}" class="btn btn-success">Chat</a>
+                          <a href="{{ url('chat?receiver_id=' .base64_encode($value->id)) }}" class="btn btn-success btn-sm">Chat</a>
                         </td>
                        </tr>
                    @endforeach

@@ -6,12 +6,14 @@ use App\Models\ClassMatkulModel;
 use App\Models\ClassModel;
 use App\Models\ClassTimeTableModel;
 use App\Models\MatkulDosenModel;
+use App\Models\PerizinanModel;
 use App\Models\presensiModel;
 use App\Models\SubjectModel;
 use App\Models\User;
 use App\Models\WeekModel;
 use Illuminate\Http\Request;
 use Auth;
+use Excel;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class PresensiController extends Controller
@@ -90,6 +92,15 @@ class PresensiController extends Controller
         return view('admin.presensi.laporan', $data);
     }
 
+    public function laporan_presensi_excel(Request $request)
+    {
+        $data['getClass'] = ClassModel::getClass();
+        $data['getSubject'] = SubjectModel::getSubject();
+        $data['getRecord'] = presensiModel::getRecord();
+        $data['header_title'] = "Laporan Presensi Mahasiswa ";
+        return view('admin.presensi.laporan', $data);
+    }
+
     public function presensi_mahasiswa_dosen(Request $request)
     {
         $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(FacadesAuth::user()->id);
@@ -119,8 +130,8 @@ class PresensiController extends Controller
 
     public function MyPresensiStudent()
     {
+        $data['perizinan'] = PerizinanModel::getRecord(Auth::user()->id);
         $data['getRecord'] = presensiModel::getRecordStudent(Auth::user()->id);
-        // $data['getSubject'] = SubjectModel::getSubject();
         $data['header_title'] = "My Presensi ";
 
         return view('student.my_presensi', $data);
@@ -312,8 +323,11 @@ class PresensiController extends Controller
             } else {
                 $classSchedule = $getMyJadwal[0]['week'][0];
 
-                if ($classSchedule['jam_mulai'] >= now()->hour && $classSchedule['jam_akhir'] <= now()->hour) {
+                if ($classSchedule['jam_mulai'] > now()->hour) {
                     $json['message'] = "Anda hanya bisa melakukan presensi pada jam {$classSchedule['jam_mulai']}";
+                    return response()->json($json);
+                } else if ($classSchedule['jam_akhir'] < now()->hour) {
+                    $json['message'] = "Anda sudah tidak bisa melakukan presensi karana udah jam " + now()->hour;
                     return response()->json($json);
                 } else if ($classSchedule['jam_mulai'] <= now()->hour &&  $classSchedule['jam_akhir'] >= now()->hour && ($classSchedule['menit_mulai'] + 20) < (now()->minute) % 60) {
                     $presensi = new presensiModel;

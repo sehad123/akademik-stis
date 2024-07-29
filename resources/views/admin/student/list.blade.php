@@ -20,8 +20,6 @@
       </div><!-- /.container-fluid -->
     </section>
 
-    
-
     @include('_message')
     <!-- Main content -->
     <section class="content">
@@ -49,10 +47,10 @@
                       <label >Name</label>
                       <input type="text" class="form-control" value="{{ Request::get('name') }}" name="name" placeholder="Enter name">
                     </div>
-                    <div class="form-group col-md-2">
+                    {{-- <div class="form-group col-md-2">
                       <label >Last Name</label>
                       <input type="text" class="form-control" value="{{ Request::get('last_name') }}" name="last_name" placeholder="Enter Last name">
-                    </div>
+                    </div> --}}
                     <div class="form-group col-md-2">
                       <label >NIM</label>
                       <input type="text" class="form-control"  value="{{ Request::get('admission_number') }}" name="admission_number" placeholder="NIM">
@@ -78,10 +76,10 @@
                       <label >Asal</label>
                       <input type="text" class="form-control"  value="{{ Request::get('caste') }}" name="caste" placeholder="Enter asal provinsi">
                     </div>
-                    <div class="form-group col-md-2">
+                    {{-- <div class="form-group col-md-2">
                       <label >Agama</label>
                       <input type="text" class="form-control"  value="{{ Request::get('religion') }}" name="religion" placeholder="Enter Agama">
-                    </div>
+                    </div> --}}
                     {{-- <div class="form-group col-md-2">
                       <label >Status</label>
                       <select name="gender" class="form-control" id="">
@@ -105,10 +103,6 @@
                 </form>
               </div>
             
-
-            @include('_message');
-            <!-- /.card -->
-
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Student List </h3>
@@ -129,7 +123,7 @@
                       <th>Gender</th>
                       <th>Asal</th>
                       <th>Tanggal Lahir</th>
-                      <th>Agama</th>
+                      {{-- <th>Agama</th> --}}
                       <th>Nomer Hp</th>
                       {{-- <th>Admission Date</th> --}}
                       {{-- <th>Golongan Darah</th> --}}
@@ -166,7 +160,7 @@
                               {{ date('d-m-Y', strtotime($value->date_of_birth)) }}
                           @endif
                         </td>
-                        <td>{{ $value->religion }}</td>
+                        {{-- <td>{{ $value->religion }}</td> --}}
                         <td>{{ $value->mobile_number }}</td>
                         {{-- <td>{{ $value->admission_date }}</td> --}}
                         {{-- <td>
@@ -183,7 +177,7 @@
                         <td style="min-width: 150px;">
                           <a href="{{ url('admin/student/edit/'. $value->id) }}" class="btn btn-primary btn-sm">Edit</a>
                           <a href="{{ url('admin/student/delete/'. $value->id) }}" class="btn btn-danger btn-sm">Delete</a>
-                          <a href="{{ url('chat?receiver_id=' .base64_encode($value->id)) }}" class="btn btn-success">Chat</a>
+                          <a href="{{ url('chat?receiver_id=' .base64_encode($value->id)) }}" class="btn btn-success btn-sm">Chat</a>
                         </td>
                        </tr>
                    @endforeach

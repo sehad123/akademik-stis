@@ -66,7 +66,6 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-            @include('_message');
             <!-- /.card -->
             <div class="col-md-12">
 

@@ -187,7 +187,7 @@
                                 <tbody>
                                     <tr>
                                         <td >
-                                            <b> IP  : {{$percentage*0 +3.15 }} </b> 
+                                            <b> Persentasi Kelulusan  : {{ round($percentage,2) }}% </b> 
                                         </td>  </tr>
                                 </tbody>
                         </table>

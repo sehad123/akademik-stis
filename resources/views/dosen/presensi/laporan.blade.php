@@ -75,6 +75,7 @@
                             <th>Matkul Name</th>
                             <th>Status </th>
                             <th>Tgl Presensi</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                <tbody>

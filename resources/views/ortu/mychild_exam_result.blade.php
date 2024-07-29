@@ -90,7 +90,7 @@
                                     <b> Total Keseluruhan : {{ $total_score }} / {{ $full_mark }}</b> 
                                 </td>
                                 <td colspan="2">
-                                    <b> Percentage % : {{$percentage }} %</b> 
+                                    <b> Percentage % : {{round($percentage,2) }} %</b> 
                                 </td>
                                 <td colspan="2">
                                     <b> Grade  : {{$getGrade }} </b> 

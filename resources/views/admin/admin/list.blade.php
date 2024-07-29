@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    
-
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -15,12 +13,9 @@
           <div class="col-sm-6" style="text-align: right;">
             <a href="{{ url('admin/admin/add') }}" class="btn btn-primary">add new Admin</a>
           </div>
-        
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
-    
 
     @include('_message')
     <!-- Main content -->
@@ -49,10 +44,10 @@
                         <label >Email</label>
                         <input type="text" class="form-control"  value="{{ Request::get('email') }}" name="email" placeholder="Enter email">
                       </div>
-                      <div class="form-group col-md-3">
+                      {{-- <div class="form-group col-md-3">
                         <label >Date</label>
                         <input type="date" class="form-control"  value="{{ Request::get('date') }}" name="date" placeholder="Enter date">
-                      </div>
+                      </div> --}}
                       <div class="form-group col-md-3">
                         <button class="btn btn-primary mt-4" type="submit">Search</button>
                         <a href="{{ url('admin/admin/list') }}" class="btn btn-success mt-4" type="submit">clear</a>
@@ -62,12 +57,7 @@
                     </div>
                   </form>
                 </div>
-              
-             
             </div>
-            
-
-            @include('_message');
             <!-- /.card -->
             <div class="col-md-12">
 
@@ -84,7 +74,7 @@
                       <th>Profile</th>
                       <th>Name</th>
                       <th>Email</th>
-                      <th>Created Date</th>
+                      {{-- <th>Created Date</th> --}}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -102,7 +92,7 @@
                     </td>
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->email }}</td>
-                        <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
+                        {{-- <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td> --}}
                         <td>
                           <a href="{{ url('admin/admin/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
                           <a href="{{ url('admin/admin/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>

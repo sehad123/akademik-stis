@@ -27,7 +27,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="form-group col-md-3">
-                      <label >Exam </label>
+                      <label >Semester </label>
                       <select name="exam_id" required id="" class="form-control">
                           <option value="">Select</option>
                           @foreach ($getExam as $exam)
@@ -69,7 +69,12 @@
                         <th>Student Name</th>
                         @foreach ($getMatkul as $matkul)
                         <th>{{ $matkul->matkul_name }} 
-                                  ( {{ $matkul->matkul_type }} :  {{ $matkul->passing_mark }} / {{ $matkul->full_mark }} )
+                          @if  (  $matkul->matkul_type  == "Teori & Praktikum")
+                          ( {{ $matkul->matkul_type }} :  {{275 }} / {{ 400}} )
+                          @else
+                          ( {{ $matkul->matkul_type }} :  {{225 }} / {{ 300}} )
+
+                          @endif
                             
                         </th> 
                         @endforeach
@@ -276,7 +281,7 @@
         dataType: "json",
         success: function(data) {
             alert(data.message);
-            // location.reload();
+            location.reload();
         },
         error: function(xhr, status, error) {
             console.error(xhr.responseText);

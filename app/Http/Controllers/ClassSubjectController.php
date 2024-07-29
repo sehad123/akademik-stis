@@ -26,20 +26,30 @@ class ClassSubjectController extends Controller
     public function insert(Request $request)
     {
         if (!empty($request->matkul_id)) {
+            $classMatkuls = []; // Inisialisasi array untuk menyimpan array asosiatif
+
             foreach ($request->matkul_id as $matkul_id) {
-                $countAlready = ClassMatkulModel::getFirstAlready($request->class_id, $request->matkul_id);
+                $countAlready = ClassMatkulModel::getFirstAlready($request->class_id, $matkul_id);
+
                 if (!empty($countAlready)) {
                     $countAlready->status = $request->status;
                     $countAlready->save();
                 } else {
-                    $save = new ClassMatkulModel;
-                    $save->class_id = $request->class_id;
-                    $save->matkul_id = $matkul_id;
-                    $save->status = $request->status;
-                    $save->created_by = Auth::user()->id;
-                    $save->save();
+                    $save = [
+                        'class_id' => $request->class_id,
+                        'matkul_id' => $matkul_id,
+                        'status' => $request->status,
+                        'created_by' => Auth::user()->id,
+                    ];
+
+                    // Menambahkan array asosiatif ke dalam array
+                    $classMatkuls[] = $save;
                 }
             }
+
+            // Menggunakan createMany untuk menyimpan array asosiatif ke database
+            ClassMatkulModel::insert($classMatkuls);
+
             return redirect('admin/assign_subject/list')->with('success', 'Matkul berhasil ditambahkan');
         } else {
             return redirect()->back()->with('error', 'Matkul Kelas gagal ditambahkan');
@@ -63,28 +73,37 @@ class ClassSubjectController extends Controller
 
     public function update(Request $request)
     {
-
         ClassMatkulModel::deleteSubject($request->class_id);
 
         if (!empty($request->matkul_id)) {
+            $classMatkuls = []; // Inisialisasi array untuk menyimpan array asosiatif
+
             foreach ($request->matkul_id as $matkul_id) {
-                $countAlready = ClassMatkulModel::getFirstAlready($request->class_id, $request->matkul_id);
+                $countAlready = ClassMatkulModel::getFirstAlready($request->class_id, $matkul_id);
+
                 if (!empty($countAlready)) {
                     $countAlready->status = $request->status;
                     $countAlready->save();
                 } else {
-                    $subject = new ClassMatkulModel;
-                    $subject->class_id = $request->class_id;
-                    $subject->matkul_id = $matkul_id;
-                    $subject->status = $request->status;
-                    $subject->created_by = Auth::user()->id;
-                    $subject->save();
+                    $save = [
+                        'class_id' => $request->class_id,
+                        'matkul_id' => $matkul_id,
+                        'status' => $request->status,
+                        'created_by' => Auth::user()->id,
+                    ];
+
+                    // Menambahkan array asosiatif ke dalam array
+                    $classMatkuls[] = $save;
                 }
             }
+
+            // Menggunakan createMany untuk menyimpan array asosiatif ke database
+            ClassMatkulModel::insert($classMatkuls);
         }
 
         return redirect('admin/assign_subject/list')->with('success', "Matkul Berhasil diupdate");
     }
+
 
     public function delete($id)
     {

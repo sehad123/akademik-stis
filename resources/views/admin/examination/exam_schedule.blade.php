@@ -80,8 +80,6 @@
                         <th>Start Time</th>
                         <th>End Time</th>
                         <th>Ruangan</th>
-                        <th>Full Marks</th>
-                        <th>Passing Marks</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -104,12 +102,6 @@
                           </td>
                           <td>
                             <input type="text" name="schedule[{{ $i }}][room_number]"  value="{{ $item['room_number'] }}"class="form-control">
-                          </td>
-                          <td>
-                            <input type="text" name="schedule[{{ $i }}][full_mark]"  value="{{ $item['full_mark'] }}"class="form-control">
-                          </td>
-                          <td>
-                            <input type="text" name="schedule[{{ $i }}][passing_mark]"  value="{{ $item['passing_mark'] }}"class="form-control">
                           </td>
                         </tr>
                         @php

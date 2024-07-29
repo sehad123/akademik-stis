@@ -29,25 +29,21 @@ class AssignClassController extends Controller
     {
         if (!empty($request->dosen_id)) {
             foreach ($request->dosen_id as $dosen_id) {
-                $countAlready = MatkulDosenModel::getFirstAlready($request->matkul_id, $request->dosen_id);
-                if (!empty($countAlready)) {
-                    $countAlready->status = $request->status;
-                    $countAlready->save();
-                } else {
-                    $save = new MatkulDosenModel;
-                    $save->matkul_id = $request->matkul_id;
-                    $save->class_id = $request->class_id;
-                    $save->dosen_id = $dosen_id;
-                    $save->status = $request->status;
-                    $save->created_by = Auth::user()->id;
-                    $save->save();
-                }
+                // $countAlready = MatkulDosenModel::getFirstAlready($request->matkul_id, $dosen_id);
+                $save = new MatkulDosenModel;
+                $save->matkul_id = $request->matkul_id;
+                $save->class_id = $request->class_id;
+                $save->dosen_id = $dosen_id;
+                $save->status = $request->status;
+                $save->created_by = Auth::user()->id;
+                $save->save();
             }
             return redirect('admin/assign_class_dosen/list')->with('success', 'Matkul Dosen berhasil ditambahkan');
         } else {
             return redirect()->back()->with('error', 'Matkul Kelas gagal ditambahkan');
         }
     }
+
 
     public function edit($id)
     {
@@ -67,24 +63,29 @@ class AssignClassController extends Controller
 
     public function update(Request $request)
     {
-
+        // Hapus data lama berdasarkan class_id sebelum menambahkan yang baru
         MatkulDosenModel::deleteSubject($request->class_id);
 
         if (!empty($request->dosen_id)) {
             foreach ($request->dosen_id as $dosen_id) {
-                $countAlready = MatkulDosenModel::getFirstAlready($request->matkul_id, $request->dosen_id);
-                if (!empty($countAlready)) {
-                    $countAlready->status = $request->status;
-                    $countAlready->save();
-                } else {
-                    $save = new MatkulDosenModel;
-                    $save->matkul_id = $request->matkul_id;
-                    $save->class_id = $request->class_id;
-                    $save->dosen_id = $dosen_id;
-                    $save->status = $request->status;
-                    $save->created_by = Auth::user()->id;
-                    $save->save();
-                }
+                // Periksa apakah sudah ada entri untuk matkul_id dan dosen_id
+                $countAlready = MatkulDosenModel::getFirstAlready($request->matkul_id, $dosen_id);
+
+                // if (!empty($countAlready)) {
+                // Jika sudah ada, perbarui status
+                $countAlready->status = $request->status;
+                $countAlready->save();
+                // } 
+                // else {
+                // Jika belum ada, tambahkan entri baru
+                $save = new MatkulDosenModel;
+                $save->matkul_id = $request->matkul_id;
+                $save->class_id = $request->class_id;
+                $save->dosen_id = $dosen_id;
+                $save->status = $request->status;
+                $save->created_by = Auth::user()->id;
+                $save->save();
+                // }
             }
         }
 

@@ -34,8 +34,6 @@
                                                 <th>Start Time</th>
                                                 <th>End Time</th>
                                                 <th>Ruangan</th>
-                                                <th>Nilai KKM</th>
-                                                <th>Nilai Max</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -47,8 +45,6 @@
                                                 <td>{{ !empty($valueW['start_time'])? date('h:i A', strtotime($valueW['start_time'])):'' }}</td>
                                                 <td>{{ !empty($valueW['end_time'])? date('h:i A', strtotime($valueW['end_time'])):'' }}</td>
                                                 <td> {{ $valueW['room_number'] }}</td>
-                                                <td> {{ $valueW['passing_mark'] }}</td>
-                                                <td> {{ $valueW['full_mark'] }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>

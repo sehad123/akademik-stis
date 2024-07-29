@@ -43,14 +43,14 @@ class MatkulDosenModel extends Model
     {
         return MatkulDosenModel::select('matkul_dosen.*', 'matkul.name as matkul_name', 'class.name as class_name', 'matkul.type as matkul_type', 'class.id as class_id', 'matkul.id as matkul_id')
             ->join('matkul', 'matkul.id', '=', 'matkul_dosen.matkul_id')
-            ->join('matkul_class', 'matkul_class.matkul_id', '=', 'matkul.id')
-            ->join('class', 'class.id', '=', 'matkul_class.class_id')
-            ->where('matkul_dosen.is_delete', '=', 0)
-            ->where('matkul_dosen.status', '=', 0)
-            ->where('class.status', '=', 0)
-            ->where('class.is_delete', '=', 0)
-            ->where('matkul_class.status', '=', 0)
-            ->where('matkul_class.is_delete', '=', 0)
+            // ->join('matkul_class', 'matkul_class.matkul_id', '=', 'matkul.id')
+            ->join('class', 'class.id', '=', 'matkul_dosen.class_id')
+            // ->where('matkul_dosen.is_delete', '=', 0)
+            // ->where('matkul_dosen.status', '=', 0)
+            // ->where('class.status', '=', 0)
+            // ->where('class.is_delete', '=', 0)
+            // ->where('matkul_class.status', '=', 0)
+            // ->where('matkul_class.is_delete', '=', 0)
             ->where('matkul_dosen.dosen_id', '=', $dosen_id)
             ->get();
     }
@@ -58,15 +58,15 @@ class MatkulDosenModel extends Model
     static public function getTotalMatkulDosen($dosen_id)
     {
         return MatkulDosenModel::select('matkul_dosen.id*')
-            ->join('matkul', 'matkul.id', '=', 'matkul_dosen.matkul_id')
-            ->join('matkul_class', 'matkul_class.matkul_id', '=', 'matkul.id')
-            ->join('class', 'class.id', '=', 'matkul_class.class_id')
-            ->where('matkul_dosen.is_delete', '=', 0)
-            ->where('matkul_dosen.status', '=', 0)
-            ->where('class.status', '=', 0)
-            ->where('class.is_delete', '=', 0)
-            ->where('matkul_class.status', '=', 0)
-            ->where('matkul_class.is_delete', '=', 0)
+            // ->join('matkul', 'matkul.id', '=', 'matkul_dosen.matkul_id')
+            // ->join('matkul_class', 'matkul_class.matkul_id', '=', 'matkul.id')
+            // ->join('class', 'class.id', '=', 'matkul_class.class_id')
+            // ->where('matkul_dosen.is_delete', '=', 0)
+            // ->where('matkul_dosen.status', '=', 0)
+            // ->where('class.status', '=', 0)
+            // ->where('class.is_delete', '=', 0)
+            // ->where('matkul_class.status', '=', 0)
+            // ->where('matkul_class.is_delete', '=', 0)
             ->where('matkul_dosen.dosen_id', '=', $dosen_id)
             ->count();
     }
@@ -111,20 +111,38 @@ class MatkulDosenModel extends Model
         return self::find($id);
     }
 
+    // static public function getCalendarDosen($dosen_id)
+    // {
+    //     return
+    //         MatkulDosenModel::select('class_timetable.*', 'class.name as class_name', 'matkul.name as matkul_name', 'class.id as class_id', 'matkul.id as matkul_id', 'week.name as week_name', 'week.id as week_id', 'week.fullcalendar_day')
+    //         ->join('matkul', 'matkul.id', '=', 'matkul_dosen.matkul_id')
+    //         // ->join('matkul_dosen', 'matkul_dosen.dosen_id', '=', 'dosen.id')
+    //         // ->join('matkul_class', 'matkul_class.matkul_id', '=', 'matkul.id')
+    //         ->join('class', 'class.id', '=', 'matkul_dosen.class_id')
+    //         ->join('class_timetable', 'class_timetable.matkul_id', '=', 'matkul_dosen.matkul_id')
+    //         ->join('week', 'week.id', '=', 'class_timetable.week_id')
+    //         ->where('matkul_dosen.dosen_id', '=', $dosen_id)
+    //         ->where('matkul_dosen.status', '=', 0)
+    //         ->where('matkul_dosen.is_delete', '=', 0)
+    //         ->get();
+    // }
+
     static public function getCalendarDosen($dosen_id)
     {
-        return
-            MatkulDosenModel::select('class_timetable.*', 'class.name as class_name', 'matkul.name as matkul_name', 'class.id as class_id', 'matkul.id as matkul_id', 'week.name as week_name', 'week.id as week_id', 'week.fullcalendar_day')
+        return MatkulDosenModel::select('class_timetable.*', 'class.name as class_name', 'matkul.name as matkul_name', 'class.id as class_id', 'matkul.id as matkul_id', 'week.name as week_name', 'week.id as week_id', 'week.fullcalendar_day')
             ->join('matkul', 'matkul.id', '=', 'matkul_dosen.matkul_id')
-            ->join('matkul_class', 'matkul_class.matkul_id', '=', 'matkul.id')
-            ->join('class', 'class.id', '=', 'matkul_class.class_id')
-            ->join('class_timetable', 'class_timetable.matkul_id', '=', 'matkul_class.matkul_id')
+            ->join('class', 'class.id', '=', 'matkul_dosen.class_id')
+            ->join('class_timetable', 'class_timetable.matkul_id', '=', 'matkul_dosen.matkul_id')
             ->join('week', 'week.id', '=', 'class_timetable.week_id')
             ->where('matkul_dosen.dosen_id', '=', $dosen_id)
             ->where('matkul_dosen.status', '=', 0)
             ->where('matkul_dosen.is_delete', '=', 0)
+            ->whereIn('class_timetable.matkul_id', function ($query) use ($dosen_id) {
+                $query->select('matkul_id')->from('matkul_dosen')->where('dosen_id', $dosen_id);
+            })
             ->get();
     }
+
 
 
     static public function getAssignDosenID($matkul_id)

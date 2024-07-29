@@ -9,20 +9,47 @@ use Request;
 class ExamModel extends Model
 {
     use HasFactory;
-    protected $table = 'exam';
+    protected $table = 'kurikulum';
 
+    static public function getExam()
+    {
+        $return = self::select('kurikulum.*', 'users.name as created_name')
+            ->join('users', 'users.id', '=', 'kurikulum.created_by')
+            ->where('kurikulum.is_delete', '=', 0)
+            ->where('kurikulum.status', '=', 1)
+            ->orderBy('kurikulum.id', 'desc')
+            ->get();
+        return $return;
+    }
     static public function getRecord()
     {
-        $return = self::select('exam.*', 'users.name as created_name')
-            ->join('users', 'users.id', '=', 'exam.created_by');
+        $return = self::select('kurikulum.*', 'users.name as created_name')
+            ->join('users', 'users.id', '=', 'kurikulum.created_by');
         if (!empty(Request::get('name'))) {
-            $return = $return->where('exam.name', 'like', '%' . Request::get('name') . '%');
+            $return = $return->where('kurikulum.name', 'like', '%' . Request::get('name') . '%');
         }
         if (!empty(Request::get('date'))) {
-            $return = $return->whereDate('exam.created_at', '=', Request::get('date'));
+            $return = $return->whereDate('kurikulum.created_at', '=', Request::get('date'));
         }
-        $return = $return->where('exam.is_delete', '=', 0)
-            ->orderBy('exam.id', 'desc')
+        $return = $return->where('kurikulum.is_delete', '=', 0)
+            ->orderBy('kurikulum.id', 'desc')
+            ->where('kurikulum.status', '=', 1)
+            ->paginate(50);
+        return $return;
+    }
+    static public function getRecordNilai()
+    {
+        $return = self::select('kurikulum.*', 'users.name as created_name')
+            ->join('users', 'users.id', '=', 'kurikulum.created_by');
+        if (!empty(Request::get('name'))) {
+            $return = $return->where('kurikulum.name', 'like', '%' . Request::get('name') . '%');
+        }
+        if (!empty(Request::get('date'))) {
+            $return = $return->whereDate('kurikulum.created_at', '=', Request::get('date'));
+        }
+        $return = $return->where('kurikulum.is_delete', '=', 0)
+            ->orderBy('kurikulum.id', 'desc')
+            ->where('kurikulum.status', '=', 0)
             ->paginate(50);
         return $return;
     }
@@ -30,21 +57,33 @@ class ExamModel extends Model
     {
         return self::find($id);
     }
-    static public function getExam()
+    static public function getkurikulum()
     {
-        $return = self::select('exam.*', 'users.name as created_name')
-            ->join('users', 'users.id', '=', 'exam.created_by')
-            ->where('exam.is_delete', '=', 0)
-            ->orderBy('exam.id', 'desc')
+        $return = self::select('kurikulum.*', 'users.name as created_name')
+            ->join('users', 'users.id', '=', 'kurikulum.created_by')
+            ->where('kurikulum.is_delete', '=', 0)
+            ->where('kurikulum.status', '=', 1)
+            ->orderBy('kurikulum.id', 'desc')
+            ->get();
+        return $return;
+    }
+    static public function getSemester()
+    {
+        $return = self::select('kurikulum.*', 'users.name as created_name')
+            ->join('users', 'users.id', '=', 'kurikulum.created_by')
+            ->where('kurikulum.is_delete', '=', 0)
+            ->where('kurikulum.status', '=', 0)
+            ->orderBy('kurikulum.id', 'desc')
             ->get();
         return $return;
     }
 
     static public function getTotalUjian()
     {
-        $return = self::select('exam.*')
-            ->join('users', 'users.id', '=', 'exam.created_by')
-            ->where('exam.is_delete', '=', 0)
+        $return = self::select('kurikulum.*')
+            ->join('users', 'users.id', '=', 'kurikulum.created_by')
+            ->where('kurikulum.status', '=', 1)
+            ->where('kurikulum.is_delete', '=', 0)
             ->count();
         return $return;
     }

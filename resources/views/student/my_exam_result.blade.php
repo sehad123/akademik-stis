@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Hasil Ujian</h1>
+                    <h1>Hasil Nilai</h1>
                 </div>
                 
             </div>
@@ -24,7 +24,7 @@
                 <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">{{ $value['exam_name'] }} </h2>
+                        <h2 class="card-title">{{ $value['kurikulum_name'] }} </h2>
                         <a class="btn btn-primary btn-sm ml-3" target="_blank" style="float: right;" href="{{ url('student/my_exam_result/print?exam_id='.$value['exam_id'].'&student_id='.Auth::user()->id) }}">Print</a>
                     </div>
                     <!-- /.card-header -->
@@ -91,7 +91,7 @@
                                         <b> Total Keseluruhan : {{ $total_score }} / {{ $full_mark }}</b> 
                                     </td>
                                     <td colspan="2">
-                                        <b> Percentage % : {{$percentage }} %</b> 
+                                        <b> Persentasi Kelulusan : {{round($percentage,2) }} %</b> 
                                     </td>
                                     <td colspan="2">
                                         <b> Grade  : {{$getGrade }} </b> 

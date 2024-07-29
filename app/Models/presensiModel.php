@@ -18,7 +18,7 @@ class presensiModel extends Model
     static public function getRecord()
     {
 
-        $return =  presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'class.name as class_name', 'matkul.name as matkul_name', 'student.name as student_name', 'student.last_name as student_last_name')
+        $return =  presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'class.name as class_name', 'matkul.name as matkul_name', 'student.name as student_name', 'student.last_name as student_last_name', 'student.id as student_id', 'matkul.id as matkul_id', 'class.id as class_id')
             ->join('matkul', 'matkul.id', '=', 'presensi_mahasiswa.matkul_id')
             ->join('class', 'class.id', '=', 'presensi_mahasiswa.class_id')
             ->join('users as student', 'student.id', '=', 'presensi_mahasiswa.student_id');
@@ -67,8 +67,9 @@ class presensiModel extends Model
     static public function getRecordStudent($student_id)
     {
 
-        $return =  presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name')
+        $return =  presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'matkul.id as matkul_id', 'class.id as class_id')
             ->join('matkul', 'matkul.id', '=', 'presensi_mahasiswa.matkul_id')
+            ->join('class', 'class.id', '=', 'presensi_mahasiswa.class_id')
             ->where('presensi_mahasiswa.student_id', '=', $student_id);
         if (!empty(Request::get('matkul_id'))) {
             $return = $return->where('presensi_mahasiswa.matkul_id', '=', Request::get('matkul_id'));

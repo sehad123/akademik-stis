@@ -11,8 +11,10 @@ use App\Http\Controllers\ClassTimeTableController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\ExaminationController;
+use App\Http\Controllers\OlahNilaiController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PengumumanController;
+use App\Http\Controllers\PerizinanController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
@@ -127,17 +129,23 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/examinations/exam/add', [ExaminationController::class, 'exam_insert']);
     Route::post('admin/examinations/exam/edit/{id}', [ExaminationController::class, 'exam_update']);
     Route::get('admin/examinations/exam/delete/{id}', [ExaminationController::class, 'exam_delete']);
-    Route::get('admin/examinations/mark_register', [ExaminationController::class, 'mark_register']);
 
     // jadwal ujian
     Route::get('admin/examinations/exam_schedule', [ExaminationController::class, 'exam_schedule']);
     Route::post('admin/examinations/exam_schedule_insert', [ExaminationController::class, 'exam_schedule_insert']);
-    Route::post('admin/examinations/submit_mark', [ExaminationController::class, 'submit_mark']);
-    Route::post('admin/examinations/single_submit_mark', [ExaminationController::class, 'single_submit_mark']);
+    // Route::post('admin/examinations/submit_mark', [ExaminationController::class, 'submit_mark']);
+    // Route::post('admin/examinations/single_submit_mark', [ExaminationController::class, 'single_submit_mark']);
+
+    // penilaian 
+    Route::get('admin/penilaian/list', [OlahNilaiController::class, 'olah_nilai']);
+    Route::get('admin/penilaian/mark_register', [OlahNilaiController::class, 'mark_register']);
+    Route::post('admin/penilaian/penilaian_insert', [OlahNilaiController::class, 'nilai_insert']);
+    Route::post('admin/penilaian/single_submit_mark', [OlahNilaiController::class, 'single_submit_nilai']);
 
     // presensi
     Route::get('admin/presensi/student', [PresensiController::class, 'presensi_mahasiswa']);
     Route::get('admin/presensi/report', [PresensiController::class, 'laporan_presensi']);
+    Route::post('admin/presensi/report_excel', [PresensiController::class, 'laporan_presensi_excel']);
     Route::post('admin/presensi/student/save', [PresensiController::class, 'presensi_mahasiswa_save']);
     Route::post('admin/presensi/get_subject', [ClassTimeTableController::class, 'get_subject']);
 
@@ -162,12 +170,15 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/tugas/penugasan_report', [TugasController::class, 'PenugasanReport']);
 
     // Mark Grade
-    Route::get('admin/examinations/mark_grade', [ExaminationController::class, 'mark_grade']);
-    Route::get('admin/examinations/mark_grade_add', [ExaminationController::class, 'mark_grade_add']);
-    Route::post('admin/examinations/mark_grade_add', [ExaminationController::class, 'mark_grade_insert']);
-    Route::get('admin/examinations/mark_grade/edit/{id}', [ExaminationController::class, 'mark_grade_edit']);
-    Route::post('admin/examinations/mark_grade/edit/{id}', [ExaminationController::class, 'mark_grade_update']);
-    Route::get('admin/examinations/mark_grade/delete/{id}', [ExaminationController::class, 'mark_grade_delete']);
+    Route::get('admin/penilaian/mark_grade', [OlahNilaiController::class, 'mark_grade']);
+    Route::get('admin/penilaian/mark_grade_add', [OlahNilaiController::class, 'mark_grade_add']);
+    Route::post('admin/penilaian/mark_grade_add', [OlahNilaiController::class, 'mark_grade_insert']);
+    Route::get('admin/penilaian/mark_grade/edit/{id}', [OlahNilaiController::class, 'mark_grade_edit']);
+    Route::post('admin/penilaian/mark_grade/edit/{id}', [OlahNilaiController::class, 'mark_grade_update']);
+    Route::get('admin/penilaian/mark_grade/delete/{id}', [OlahNilaiController::class, 'mark_grade_delete']);
+
+    Route::get('admin/perizinan/{presensi_id}/{class_id}/{matkul_id}/{student_id}', [PerizinanController::class, 'admin_perizinan_studentID']);
+    Route::post('admin/perizinan/{presensi_id}/{class_id}/{matkul_id}/{student_id}', [PerizinanController::class, 'SubmitPerizinanUpdate']);
 
 
     // change password
@@ -192,9 +203,9 @@ Route::group(['middleware' => 'dosen'], function () {
     Route::get('dosen/my_class_subject/class_timetable/{class_id}/{matkul_id}', [ClassTimeTableController::class, 'myClassDosen']);
     Route::get('dosen/my_calendar', [CalendarController::class, 'CalendarDosen']);
 
-    Route::get('dosen/mark_register', [ExaminationController::class, 'mark_register_dosen']);
-    Route::post('dosen/submit_mark', [ExaminationController::class, 'submit_mark']);
-    Route::post('dosen/single_submit_mark', [ExaminationController::class, 'single_submit_mark']);
+    Route::get('dosen/mark_register', [OlahNilaiController::class, 'mark_register_dosen']);
+    // Route::post('dosen/submit_mark', [OlahNilaiController::class, 'submit_mark']);
+    Route::post('dosen/single_submit_mark', [OlahNilaiController::class, 'single_submit_nilai']);
 
     // presensi 
     Route::get('dosen/presensi/student', [PresensiController::class, 'presensi_mahasiswa_dosen']);
@@ -214,6 +225,15 @@ Route::group(['middleware' => 'dosen'], function () {
     Route::get('dosen/tugas/penugasan/delete/{id}', [TugasController::class, 'DeletePenugasanDosen']);
     Route::post('dosen/ajax_get_matkul', [TugasController::class, 'ajax_get_matkulDosen']);
     Route::get('dosen/tugas/penugasan/submitted/{id}', [TugasController::class, 'SubmittedPenugasanDosen']);
+
+    // materi
+    Route::get('dosen/tugas/materi', [TugasController::class, 'materiDosen']);
+    Route::get('dosen/tugas/materi/add', [TugasController::class, 'AddmateriDosen']);
+    Route::post('dosen/tugas/materi/add', [TugasController::class, 'InsertmateriDosen']);
+    Route::get('dosen/tugas/materi/edit/{id}', [TugasController::class, 'EditmateriDosen']);
+    Route::post('dosen/tugas/materi/edit/{id}', [TugasController::class, 'UpdatemateriDosen']);
+    Route::get('dosen/tugas/materi/delete/{id}', [TugasController::class, 'DeletemateriDosen']);
+    Route::post('dosen/ajax_get_matkul', [TugasController::class, 'ajax_get_matkulDosen']);
 });
 Route::group(['middleware' => 'student'], function () {
     Route::get('student/dashboard', [DashboardController::class, 'dashboard']);
@@ -228,14 +248,19 @@ Route::group(['middleware' => 'student'], function () {
     Route::get('student/my_calendar', [CalendarController::class, 'CalendarStudent']);
     Route::get('student/my_calendar/{id}', [CalendarController::class, 'CalendarStudentGet']);
 
-    Route::get('student/my_exam_result', [ExaminationController::class, 'ExamResultStudent']);
-    Route::get('student/my_exam_result/print', [ExaminationController::class, 'ExamResultStudentPrint']);
+    Route::get('student/my_exam_result', [OlahNilaiController::class, 'ExamResultStudent']);
+    Route::get('student/my_exam_result/print', [OlahNilaiController::class, 'ExamResultStudentPrint']);
     Route::get('student/my_presensi', [PresensiController::class, 'MyPresensiStudent']);
     Route::get('student/presensi/{class_id}/{matkul_id}/{student_id}/{week_id}', [PresensiController::class, 'PresensiStudent']);
     Route::post('student/presensi/save', [PresensiController::class, 'PresensiStudentSave']);
 
     Route::get('student/pengumuman', [PengumumanController::class, 'pengumuman_student']);
+    Route::get('student/perizinan/{presensi_id}/{student_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'perizinan_student']);
+    Route::post('student/perizinan/{presensi_id}/{student_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'SubmitPerizinanInsert']);
+    Route::get('student/detail_perizinan/{presensi_id}/{student_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'perizinan_studentID']);
+    // Route::get('student/perizinan', [PerizinanController::class, 'perizinan_student_add']);
 
+    Route::get('student/my_materi', [TugasController::class, 'materiStudent']);
     Route::get('student/my_tugas', [TugasController::class, 'PenugasanStudent']);
     Route::get('student/my_tugas/submit_tugas/{id}', [TugasController::class, 'SubmitTugas']);
     Route::post('student/my_tugas/submit_tugas/{id}', [TugasController::class, 'SubmitTugasInsert']);
@@ -252,7 +277,7 @@ Route::group(['middleware' => 'ortu'], function () {
     Route::get('ortu/my_student/subject/{student_id}', [SubjectController::class, 'ParentSubjectStudent']);
     Route::get('ortu/my_student/calendar/{student_id}', [CalendarController::class, 'ChildrenCalendar']);
     Route::get('ortu/my_student/exam_student/{student_id}', [ExaminationController::class, 'ExamMyChildren']);
-    Route::get('ortu/my_student/exam_result/{student_id}', [ExaminationController::class, 'ExamResultChildren']);
+    Route::get('ortu/my_student/exam_result/{student_id}', [OlahNilaiController::class, 'ExamResultChildren']);
     Route::get('ortu/my_student/subject/class_timetable/{class_id}/{matkul_id}/{student_id}', [ClassTimeTableController::class, 'myClassChild']);
 
     Route::get('ortu/pengumuman', [PengumumanController::class, 'pengumuman_ortu']);

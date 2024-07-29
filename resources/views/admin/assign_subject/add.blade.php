@@ -40,15 +40,16 @@
                   </div>
 
                   <div class="form-group">
-                    <label >Matkul Name</label>
+                    <label>Matkul Name</label>
                     @foreach ($getSubject as $subject)
                     <div>
-                      <label style="font-weight: normal">
-                        <input  type="radio" value="{{ $subject->id }}" name="matkul_id[]">{{ $subject->name }}
-                      </label>
+                        <label style="font-weight: normal">
+                            <input type="checkbox" value="{{ $subject->id }}" name="matkul_id[]">{{ $subject->name }}
+                        </label>
                     </div>
-                      @endforeach
-                  </div>
+                    @endforeach
+                </div>
+                
                   <div class="form-group">
                     <label >Status</label>
                     <select name="status" class="form-control" id="">

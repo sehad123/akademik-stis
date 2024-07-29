@@ -73,18 +73,17 @@
                       <label>Pekerjaan<span style="color:red;">*</span></label>
                       <input type="text" class="form-control" required value="{{ old('occupation') }}" name="occupation" required placeholder="Enter Occupation">
                       <div style="color:red;">
-                        {{ $errors->first('religion') }}
-                    
-                    </div>
-                    </div>
-                    <div class="form-group col-md-6">
+                          {{ $errors->first('occupation') }}
+                      </div>
+                  </div>
+                  
+                  <div class="form-group col-md-6">
                       <label>No Hp<span style="color:red;">*</span></label>
                       <input type="number" class="form-control" required value="{{ old('mobile_number') }}" name="mobile_number" required placeholder="Enter Mobile Number">
                       <div style="color:red;">
-                        {{ $errors->first('mobile_number') }}
-                    
-                    </div>
-                    </div>
+                          {{ $errors->first('mobile_number') }}
+                      </div>
+                  </div>
 
                     
 

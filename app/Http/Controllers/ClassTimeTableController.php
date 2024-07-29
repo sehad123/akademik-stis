@@ -96,7 +96,7 @@ class ClassTimeTableController extends Controller
                 $save->save();
             }
         }
-        return redirect()->back()->with('success', 'Class Timetable berhasil disimpan');
+        return redirect()->back()->with('success', 'Jadwal berhasil disimpan');
     }
 
     // student class

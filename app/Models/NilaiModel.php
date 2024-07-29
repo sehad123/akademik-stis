@@ -16,16 +16,16 @@ class NilaiModel extends Model
     }
     static public function getExam($student_id)
     {
-        return NilaiModel::select('nilai.*', 'exam.name as exam_name')
-            ->join('exam', 'exam.id', '=', 'nilai.exam_id')
+        return NilaiModel::select('nilai.*', 'kurikulum.name as kurikulum_name')
+            ->join('kurikulum', 'kurikulum.id', '=', 'nilai.exam_id')
             ->where('nilai.student_id', '=', $student_id)
             ->groupBy('nilai.exam_id')
             ->get();
     }
     static public function getExamMatkul($exam_id, $student_id)
     {
-        return NilaiModel::select('nilai.*', 'exam.name as exam_name', 'matkul.name as matkul_name', 'matkul.type as matkul_type')
-            ->join('exam', 'exam.id', '=', 'nilai.exam_id')
+        return NilaiModel::select('nilai.*', 'kurikulum.name as kurikulum_name', 'matkul.name as matkul_name', 'matkul.type as matkul_type')
+            ->join('kurikulum', 'kurikulum.id', '=', 'nilai.exam_id')
             ->join('matkul', 'matkul.id', '=', 'nilai.matkul_id')
             ->where('nilai.exam_id', '=', $exam_id)
             ->where('nilai.student_id', '=', $student_id)
@@ -35,7 +35,7 @@ class NilaiModel extends Model
     static public function getClassStudent($exam_id, $student_id)
     {
         return NilaiModel::select('class.name as class_name')
-            ->join('exam', 'exam.id', '=', 'nilai.exam_id')
+            ->join('kurikulum', 'kurikulum.id', '=', 'nilai.exam_id')
             ->join('matkul', 'matkul.id', '=', 'nilai.matkul_id')
             ->join('class', 'class.id', '=', 'nilai.class_id')
             ->where('nilai.exam_id', '=', $exam_id)

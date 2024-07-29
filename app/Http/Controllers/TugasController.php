@@ -117,7 +117,7 @@ class TugasController extends Controller
         foreach ($getClass as $class) {
             $c[] = $class->class_id;
         }
-        $data['getRecord'] = TugasModel::getRecordDosen($c);
+        $data['getRecord'] = TugasModel::getRecordPenugasanDosen($c);
         $data['header_title'] = "Penugasan  ";
         return view('dosen.penugasan.list', $data);
     }
@@ -151,6 +151,7 @@ class TugasController extends Controller
         $save->tanggal = $request->tanggal;
         $save->deadline = $request->deadline;
         $save->description = $request->description;
+        $save->status = 0;
         $save->created_by = Auth::user()->id;
 
         if (!empty($request->file('document'))) {
@@ -184,6 +185,7 @@ class TugasController extends Controller
         $save->matkul_id = $request->matkul_id;
         $save->tanggal = $request->tanggal;
         $save->deadline = $request->deadline;
+        $save->status = 0;
         $save->description = $request->description;
 
         if (!empty($request->file('document'))) {
@@ -211,9 +213,15 @@ class TugasController extends Controller
 
     public function PenugasanStudent()
     {
-        $data['getRecord'] = TugasModel::getRecordStudent(Auth::user()->class_id, Auth::user()->id);
+        $data['getRecord'] = TugasModel::getRecordTugasStudent(Auth::user()->class_id, Auth::user()->id);
         $data['header_title'] = "Penugasan  ";
         return view('student.my_tugas', $data);
+    }
+    public function materiStudent()
+    {
+        $data['getRecord'] = TugasModel::getRecordMateriStudent(Auth::user()->class_id, Auth::user()->id);
+        $data['header_title'] = "Penugasan  ";
+        return view('student.my_materi', $data);
     }
     public function SubmitTugas($tugas_id)
     {
@@ -269,5 +277,94 @@ class TugasController extends Controller
         } else {
             abort(404);
         }
+    }
+
+    // materi dosen
+
+    public function materiDosen()
+    {
+        $getClass = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
+        $c = array();
+        foreach ($getClass as $class) {
+            $c[] = $class->class_id;
+        }
+        $data['getRecord'] = TugasModel::getRecordMateriDosen($c);
+        $data['header_title'] = "materi  ";
+        return view('dosen.materi.list', $data);
+    }
+    public function AddmateriDosen()
+    {
+        $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
+
+        $data['header_title'] = "Add materi  ";
+        return view('dosen.materi.add', $data);
+    }
+
+    public function InsertmateriDosen(Request $request)
+    {
+        $save = new TugasModel;
+        $save->class_id = $request->class_id;
+        $save->matkul_id = $request->matkul_id;
+        $save->tanggal = $request->tanggal;
+        $save->deadline = null;
+        $save->description = $request->description;
+        $save->status = 1;
+        $save->created_by = Auth::user()->id;
+
+        if (!empty($request->file('document'))) {
+            $ext = $request->file('document')->getClientOriginalExtension();
+            $file =  $request->file('document');
+            $randomStr = date('Ymdhis') . Str::random(20);
+            $filename = strtolower($randomStr) . '.' . $ext;
+            $file->move('upload/tugas/', $filename);
+
+            $save->document = $filename;
+        }
+
+        $save->save();
+        return redirect('dosen/tugas/materi')->with('success', "materi Berhasil Ditambahkan");
+    }
+
+    public function EditmateriDosen($id)
+    {
+        $getRecord = TugasModel::getSingle($id);
+        $data['getRecord'] = $getRecord;
+        $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
+        $data['getMatkul'] = ClassMatkulModel::MySubject($getRecord->class_id);
+        $data['header_title'] = "Edit materi  ";
+        return view('dosen.materi.edit', $data);
+    }
+
+    public function UpdatemateriDosen($id, Request $request)
+    {
+        $save = TugasModel::getSingle($id);
+        $save->class_id = $request->class_id;
+        $save->matkul_id = $request->matkul_id;
+        $save->tanggal = $request->tanggal;
+        $save->deadline = null;
+        $save->status = 1;
+        $save->description = $request->description;
+
+        if (!empty($request->file('document'))) {
+            $ext = $request->file('document')->getClientOriginalExtension();
+            $file =  $request->file('document');
+            $randomStr = date('Ymdhis') . Str::random(20);
+            $filename = strtolower($randomStr) . '.' . $ext;
+            $file->move('upload/tugas/', $filename);
+
+            $save->document = $filename;
+        }
+
+        $save->save();
+        return redirect('dosen/tugas/materi')->with('success', "materi Berhasil Diedit");
+    }
+
+
+    public function DeletemateriDosen($id)
+    {
+        $save = TugasModel::getSingle($id);
+
+        $save->delete();
+        return redirect('dosen/tugas/materi')->with('success', "materi Berhasil Dihapus");
     }
 }

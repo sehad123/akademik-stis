@@ -54,14 +54,14 @@
                     
                     </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    {{-- <div class="form-group col-md-6">
                       <label >Roll Number<span style="color:red;">*</span></label>
                       <input type="number" class="form-control" required value="{{ old('roll_number') }}" name="roll_number" required placeholder="Enter role number">
                       <div style="color:red;">
                         {{ $errors->first('roll_number') }}
                     
                     </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group col-md-6">
                       <label >Class<span style="color:red;">*</span></label>
                       <select name="class_id" required class="form-control" id="">
@@ -98,8 +98,8 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                      <label >Caste<span style="color:red;">*</span></label>
-                      <input type="text" class="form-control" required value="{{ old('caste') }}" name="caste" required placeholder="Enter caste">
+                      <label >Asal<span style="color:red;">*</span></label>
+                      <input type="text" class="form-control" required value="{{ old('caste') }}" name="caste" required placeholder="Enter Asal">
                       <div style="color:red;">
                         {{ $errors->first('caste') }}
                     
@@ -122,14 +122,13 @@
                     </div>
                     </div>
 
-                    <div class="form-group col-md-6">
+                    {{-- <div class="form-group col-md-6">
                       <label >Admission Date<span style="color:red;">*</span></label>
                       <input type="date" class="form-control" required value="{{ old('admission_date') }}" name="admission_date" required placeholder="Enter addmision_date">
                       <div style="color:red;">
                         {{ $errors->first('admission_date') }}
-                    
                     </div>
-                    </div>
+                    </div> --}}
 
                     <div class="form-group col-md-6">
                       <label >Profile picture<span style="color:red;">*</span></label>
@@ -139,7 +138,7 @@
                     
                     </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    {{-- <div class="form-group col-md-6">
                       <label >Golongan Darah<span style="color:red;">*</span></label>
                       <input type="text" class="form-control" required value="{{ old('blood_group') }}" name="blood_group" required placeholder="Enter golongan dara">
                       <div style="color:red;">
@@ -162,8 +161,8 @@
                         {{ $errors->first('weight') }}
                     
                     </div>
-                    </div>
-                    <div class="form-group col-md-6">
+                    </div> --}}
+                    {{-- <div class="form-group col-md-6">
                       <label >Status<span style="color:red;">*</span></label>
                       <select name="status" required class="form-control" id="">
                         <option value="">Select Status</option>
@@ -174,7 +173,7 @@
                         {{ $errors->first('status') }}
                     
                     </div>
-                    </div>
+                    </div> --}}
                   </div>
 
                 

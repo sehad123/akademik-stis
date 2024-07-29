@@ -25,7 +25,7 @@
                     @foreach ($getRecord as $value)
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">{{ $value['name'] }} </h3>
+                                    <h2 class="card-title text-center">{{ $value['name'] }} </h2>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body p-0">
@@ -37,8 +37,6 @@
                                                 <th>Start Time</th>
                                                 <th>End Time</th>
                                                 <th>Ruangan</th>
-                                                <th>Nilai KKM</th>
-                                                <th>Nilai Max</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -50,8 +48,6 @@
                                                 <td>{{ !empty($valueW['start_time'])? date('h:i A', strtotime($valueW['start_time'])):'' }}</td>
                                                 <td>{{ !empty($valueW['end_time'])? date('h:i A', strtotime($valueW['end_time'])):'' }}</td>
                                                 <td> {{ $valueW['room_number'] }}</td>
-                                                <td> {{ $valueW['passing_mark'] }}</td>
-                                                <td> {{ $valueW['full_mark'] }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>

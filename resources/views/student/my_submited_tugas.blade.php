@@ -24,8 +24,8 @@
                   <div class="row">
 
                   <div class="form-group col-md-3">
-                    <label >Matkul</label>
-                    <input type="text" class="form-control"  value="{{ Request::get('matkul_name') }}" name="matkul_name" placeholder="Enter matkul_name">
+                    <label >Class</label>
+                    <input type="text" class="form-control"  value="{{ Request::get('class_name') }}" name="class_name" placeholder="Enter class_name">
                   </div>
                   <div class="form-group col-md-3">
                     <label >Matkul</label>

@@ -26,7 +26,7 @@
            
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="post" action="">
+              <form method="post" action="" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
@@ -51,13 +51,10 @@
                   <label >Profile picture<span style="color:red;">*</span></label>
                   <input type="file" class="form-control" name="profile_pic" >
                   <div style="color:red;">
-
                     {{ $errors->first('profile_pic') }}
-                
                 </div>
                 @if (!empty($getRecord->getProfile()))
                 <img src="{{ $getRecord->getProfile() }}" style="width: 100px" alt="">
-                    
                 @endif
                 </div>
                 <!-- /.card-body -->

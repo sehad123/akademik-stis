@@ -66,7 +66,7 @@
             <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">My Presensi </h3>
+                  <h3 class="card-title text-center">My Presensi </h3>
                 </div>
                 <div class="card-body p-0">
                   <table class="table table-striped">
@@ -75,6 +75,7 @@
                             <th>Matkul Name</th>
                             <th>Status </th>
                             <th>Tgl Presensi</th>
+                            <th>Action </th>
                         </tr>
                     </thead>
                <tbody>
@@ -96,10 +97,16 @@
                                 @endif
                             </td>
                             <td>{{ date('d-m-Y',strtotime($value->tgl_presensi))  }}</td>
+                            @if ($value->presensi_type == 4 || $value->presensi_type == 3)
+                            <td>
+                              <a href="{{ url('student/perizinan/'.$value->id.'/'. Auth::user()->id .'/'. $value->class_id.'/'.$value->matkul_id) }}" class="btn btn-warning">Upload bukti izin</a>
+                              <a href="{{ url('student/detail_perizinan/'.$value->id.'/'. Auth::user()->id .'/'. $value->class_id.'/'.$value->matkul_id) }}" class="btn btn-primary">Detail Izin</a>
+                            </td>
+                            @endif
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="100%"> Tidak Dvalueukan</td>
+                        <td colspan="100%"> Tidak Ditemukan</td>
                     </tr>
                 @endforelse
                </tbody>

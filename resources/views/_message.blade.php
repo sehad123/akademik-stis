@@ -1,11 +1,11 @@
 @if (!empty(session('success')))
-    <div class="aler alert-success  " role="alert">
+    <div class="aler alert-success text-center  mb-3 " role="alert">
         {{ session('success') }}
     </div>
 @endif
 
 @if (!empty(session('error')))
-    <div class="aler alert-danger  " role="alert">
+    <div class="aler alert-danger text-center  mb-3 " role="alert">
         {{ session('error') }}
     </div>
 @endif
@@ -23,7 +23,7 @@
 @endif
 
 @if (!empty(session('info')))
-    <div class="aler alert-info  " role="alert">
+    <div class="aler alert-info text-center mb-3 " role="alert">
         {{ session('info') }}
     </div>
 @endif

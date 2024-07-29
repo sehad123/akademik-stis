@@ -49,8 +49,8 @@ class ParentController extends Controller
     {
         request()->validate([
             'email' => 'required|email|unique:users',
-            'mobile_number' => 'max:12|min:8',
-            'occupation' => 'max:10',
+            'mobile_number' => 'min:10|max:12',
+            'occupation' => 'max:20',
             'address' => 'max:50',
         ]);
         $parent = new User;
@@ -83,6 +83,7 @@ class ParentController extends Controller
     {
         request()->validate([
             'email' => 'required|email|unique:users,email,' . $id,
+            'mobile_number' => 'max:12|min:8',
         ]);
         $parent =  User::getSingle($id);
         $parent->name = trim($request->name);

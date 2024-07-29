@@ -41,31 +41,31 @@ class StudentController extends Controller
     {
         request()->validate([
             'email' => 'required|email|unique:users',
-            'height' => 'max:10',
-            'weight' => 'max:10',
-            'blood_group' => 'max:10',
+            // 'height' => 'max:10',
+            // 'weight' => 'max:10',
+            // 'blood_group' => 'max:10',
             'mobile_number' => 'max:12|min:8',
             'religion' => 'max:10',
-            'caste' => 'max:15',
+            // 'caste' => 'max:15',
             'admission_number' => 'max:15',
-            'roll_number' => 'max:10',
+            // 'roll_number' => 'max:10',
         ]);
         $student = new User;
         $student->name = trim($request->name);
         $student->last_name = trim($request->last_name);
         $student->email = trim($request->email);
-        $student->status = trim($request->status);
+        $student->status = 0;
         $student->gender = trim($request->gender);
-        $student->weight = trim($request->weight);
-        $student->height = trim($request->height);
-        $student->blood_group = trim($request->blood_group);
+        // $student->weight = trim($request->weight);
+        // $student->height = trim($request->height);
+        // $student->blood_group = trim($request->blood_group);
         $student->religion = trim($request->religion);
         $student->caste = trim($request->caste);
         $student->mobile_number = trim($request->mobile_number);
-        if (!empty($request->profile_pic)) {
+        // if (!empty($request->admission_date)) {
 
-            $student->admission_date = trim($request->admission_date);
-        }
+        //     $student->admission_date = trim($request->admission_date);
+        // }
         if (!empty($request->date_of_birth)) {
             $student->date_of_birth = trim($request->date_of_birth);
         }
@@ -80,7 +80,7 @@ class StudentController extends Controller
         }
         $student->admission_number = trim($request->admission_number);
         $student->class_id = trim($request->class_id);
-        $student->roll_number = trim($request->roll_number);
+        // $student->roll_number = trim($request->roll_number);
         $student->password = Hash::make($request->password);
         $student->user_type = 3;
 
@@ -92,14 +92,14 @@ class StudentController extends Controller
     {
         request()->validate([
             'email' => 'required|email|unique:users,email,' . $id,
-            'height' => 'max:10',
-            'weight' => 'max:10',
-            'blood_group' => 'max:10',
+            // 'height' => 'max:10',
+            // 'weight' => 'max:10',
+            // 'blood_group' => 'max:10',
             'mobile_number' => 'max:12|min:8',
             'religion' => 'max:10',
-            'caste' => 'max:15',
+            // 'caste' => 'max:15',
             'admission_number' => 'max:15',
-            'roll_number' => 'max:10',
+            // 'roll_number' => 'max:10',
         ]);
         $student =  User::getSingle($id);
         $student->name = trim($request->name);
@@ -107,16 +107,16 @@ class StudentController extends Controller
         $student->email = trim($request->email);
         $student->status = trim($request->status);
         $student->gender = trim($request->gender);
-        $student->weight = trim($request->weight);
-        $student->height = trim($request->height);
-        $student->blood_group = trim($request->blood_group);
+        // $student->weight = trim($request->weight);
+        // $student->height = trim($request->height);
+        // $student->blood_group = trim($request->blood_group);
         $student->religion = trim($request->religion);
         $student->caste = trim($request->caste);
         $student->mobile_number = trim($request->mobile_number);
-        if (!empty($request->admission_date)) {
+        // if (!empty($request->admission_date)) {
 
-            $student->admission_date = trim($request->admission_date);
-        }
+        //     $student->admission_date = trim($request->admission_date);
+        // }
         if (!empty($request->date_of_birth)) {
             $student->date_of_birth = trim($request->date_of_birth);
         }
@@ -134,7 +134,7 @@ class StudentController extends Controller
         }
         $student->admission_number = trim($request->admission_number);
         $student->class_id = trim($request->class_id);
-        $student->roll_number = trim($request->roll_number);
+        // $student->roll_number = trim($request->roll_number);
         if (!empty($request->password)) {
             $student->password = Hash::make($request->password);
         }

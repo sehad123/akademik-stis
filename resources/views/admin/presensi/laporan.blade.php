@@ -78,6 +78,17 @@
             <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Presensi Mahasiswa List</h3>
+                  <form method="post" action="{{ url('admin/presensi/report_excel') }}" style="float: right;">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="student_id" value={{ Request::get('student_id') }}>
+                    <input type="hidden" name="student_name" value={{ Request::get('student_name') }}>
+                    <input type="hidden" name="student_last_name" value={{ Request::get('student_last_name') }}>
+                    <input type="hidden" name="class_id" value={{ Request::get('class_id') }}>
+                    <input type="hidden" name="start_presensi_date" value={{ Request::get('start_presensi_date') }}>
+                    <input type="hidden" name="end_presensi_date" value={{ Request::get('end_presensi_date') }}>
+                    <input type="hidden" name="presensi_type" value={{ Request::get('presensi_type') }}>
+                 <button class="btn btn-primary">Export Excel</button>   
+                  </form>
                 </div>
                 <div class="card-body p-0">
                   <table class="table table-striped">
@@ -90,6 +101,7 @@
                             <th>Presensi</th>
                             <th>Tgl Presensi</th>
                             <th>Created Date</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -117,6 +129,12 @@
                             </td>
                             <td>{{ $value->tgl_presensi }}</td>
                             <td>{{ date('d-m-Y H:i:A',strtotime($value->created_at)) }}</td>
+                            <td>{{ date('d-m-Y',strtotime($value->tgl_presensi))  }}</td>
+                            @if ($value->presensi_type == 4 || $value->presensi_type == 3)
+                            <td>
+                              <a href="{{ url('admin/perizinan/'.$value->id.'/'. $value->class_id.'/'.$value->matkul_id.'/'.$value->student_id ) }}" class="btn btn-primary">Detail Izin</a>
+                            </td>
+                            @endif
                         </tr>
                         @empty
                         <tr>

@@ -74,6 +74,8 @@
                               <td></td>
                               @elseif (!empty($getPresensi->presensi_type))
                               <td></td>
+                              @elseif (!empty($getPresensi->presensi_type))
+                              <td></td>
                                 @else
                                 <td class="text-center">
                                   <label style="margin-right: 10px;">
@@ -142,29 +144,58 @@
     var presensi_type = $(this).val();
     var tgl_presensi = {{ now()->toDateString() }}
 
-    $.ajax({
+    if (presensi_type == '3' || presensi_type == '4') {
+      // window.location.href = "{{ url('student/perizinan') }}" + "/" + student_id + "/" + class_id + "/" + matkul_id;
+      $.ajax({
         type: "POST",
         url: "{{ url('student/presensi/save') }}",
         data: {
-            '_token': "{{ csrf_token() }}",
-            student_id: student_id,
-            presensi_type: presensi_type,
-            class_id:class_id,
-            matkul_id:matkul_id,
-            week_id:week_id,
-            tgl_presensi: tgl_presensi, // Assuming you want the current date
+          '_token': "{{ csrf_token() }}",
+          student_id: student_id,
+          presensi_type: presensi_type,
+          class_id: class_id,
+          matkul_id: matkul_id,
+          week_id: week_id,
+          tgl_presensi: tgl_presensi,
         },
         dataType: "json",
-        success: function(data) {
-            alert(data.message);
-            location.reload();
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-        }
-    });
-});
+            success: function (data) {
+                alert(data.message);
+location.reload();                
+      window.location.href = "{{ url('student/my_presensi') }}" ;
 
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+
+
+    } else {
+        // Continue with the AJAX request for other presensi_type values
+        $.ajax({
+            type: "POST",
+            url: "{{ url('student/presensi/save') }}",
+            data: {
+                '_token': "{{ csrf_token() }}",
+                student_id: student_id,
+                presensi_type: presensi_type,
+                class_id: class_id,
+                matkul_id: matkul_id,
+                week_id: week_id,
+                tgl_presensi: tgl_presensi,
+            },
+            dataType: "json",
+            success: function (data) {
+                alert(data.message);
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+});
 </script>
 
     

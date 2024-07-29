@@ -54,7 +54,7 @@
                     @foreach ($getDosen as $dosen)
                     <div>
                       <label style="font-weight: normal">
-                        <input  type="radio" value="{{ $dosen->id }}" name="dosen_id[]">{{ $dosen->name }} {{ $dosen->name }} {{ $dosen->last_name }}
+                        <input  type="checkbox" value="{{ $dosen->id }}" name="dosen_id[]">{{ $dosen->name }} {{ $dosen->last_name }}
                       </label>
                     </div>
                       @endforeach

@@ -69,17 +69,17 @@
                     </div>
                     <div class="form-group col-md-2">
                       <label >Alamat</label>
-                      <input type="text" class="form-control"  value="{{ Request::get('caste') }}" name="caste" placeholder="Enter asal provinsi">
+                      <input type="text" class="form-control"  value="{{ Request::get('address') }}" name="address" placeholder="Enter alamat">
                     </div>
                     <div class="form-group col-md-2">
                       <label >Pekerjaan</label>
-                      <input type="text" class="form-control"  value="{{ Request::get('religion') }}" name="religion" placeholder="Enter Agama">
+                      <input type="text" class="form-control"  value="{{ Request::get('occupation') }}" name="occupation" placeholder="Enter pekerjaan">
                     </div>
                   
-                    <div class="form-group col-md-2">
+                    {{-- <div class="form-group col-md-2">
                       <label >Date</label>
                       <input type="date" class="form-control"  value="{{ Request::get('date') }}" name="date" placeholder="Enter date">
-                    </div>
+                    </div> --}}
                     <div class="form-group col-md-3">
                       <button class="btn btn-primary mt-4" type="submit">Search</button>
                       <a href="{{ url('admin/parent/list') }}" class="btn btn-success mt-4" type="submit">clear</a>
@@ -90,8 +90,6 @@
                 </form>
               </div>
             
-
-            @include('_message');
             <!-- /.card -->
 
             <div class="card">
@@ -112,7 +110,7 @@
                       <th>Pekerjaan</th>
                       <th>Alamat</th>
                       {{-- <th>Status</th> --}}
-                      <th>Created Date</th>
+                      {{-- <th>Created Date</th> --}}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -135,7 +133,7 @@
                         <td>{{ $value->occupation }}</td>
                         <td>{{ $value->address }}</td>
                         {{-- <td>{{ ($value->status == 0)? 'Active' :"Inactive" }}</td> --}}
-                        <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
+                        {{-- <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td> --}}
                         <td style="min-width: 150px;">
                           <a href="{{ url('admin/parent/edit/'. $value->id) }}" class="btn btn-primary btn-sm">Edit</a>
                           <a href="{{ url('admin/parent/delete/'. $value->id) }}" class="btn btn-danger btn-sm">Delete</a>

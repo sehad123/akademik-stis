@@ -24,17 +24,27 @@ class ExamScheduleModel extends Model
     }
     static public function getExam($class_id)
     {
-        return ExamScheduleModel::select('jadwal_ujian.*', 'exam.name as exam_name')
-            ->join('exam', 'exam.id', '=', 'jadwal_ujian.exam_id')
+        return ExamScheduleModel::select('jadwal_ujian.*', 'kurikulum.name as kurikulum_name')
+            ->join('kurikulum', 'kurikulum.id', '=', 'jadwal_ujian.exam_id')
             ->where('jadwal_ujian.class_id', '=', $class_id)
+            ->groupBy('jadwal_ujian.exam_id')
+            ->orderBy('jadwal_ujian.id', 'desc')
+            ->get();
+    }
+    static public function getExamStudent($class_id)
+    {
+        return ExamScheduleModel::select('jadwal_ujian.*', 'kurikulum.name as kurikulum_name')
+            ->join('kurikulum', 'kurikulum.id', '=', 'jadwal_ujian.exam_id')
+            ->where('jadwal_ujian.class_id', '=', $class_id)
+            ->where('kurikulum.status', '=', 1)
             ->groupBy('jadwal_ujian.exam_id')
             ->orderBy('jadwal_ujian.id', 'desc')
             ->get();
     }
     static public function getExamDosen($dosen_id)
     {
-        return ExamScheduleModel::select('jadwal_ujian.*', 'exam.name as exam_name')
-            ->join('exam', 'exam.id', '=', 'jadwal_ujian.exam_id')
+        return ExamScheduleModel::select('jadwal_ujian.*', 'kurikulum.name as kurikulum_name')
+            ->join('kurikulum', 'kurikulum.id', '=', 'jadwal_ujian.exam_id')
             ->join('matkul_dosen', 'matkul_dosen.class_id', '=', 'jadwal_ujian.class_id')
             ->where('matkul_dosen.dosen_id', '=', $dosen_id)
             ->groupBy('jadwal_ujian.exam_id')

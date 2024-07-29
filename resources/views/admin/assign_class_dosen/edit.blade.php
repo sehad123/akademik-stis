@@ -64,9 +64,10 @@
                       @endforeach
                       <div>
                         <label style="font-weight: normal">
-                          <input {{ $checked }}  type="checkbox" value="{{ $dosen->id }}" name="dosen_id[]">{{ $dosen->name }}
+                          <input {{ in_array($dosen->id, $getAssignDosenID->pluck('dosen_id')->toArray()) ? 'checked' : '' }} type="checkbox" value="{{ $dosen->id }}" name="dosen_id[]">{{ $dosen->name }}
                         </label>
                       </div>
+                      
                         @endforeach
                   </div>
                   <div class="form-group">
