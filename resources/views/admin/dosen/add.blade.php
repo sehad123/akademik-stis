@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add new Dosen </h1>
+            <h1>Tambah Dosen </h1>
           </div>
           
         </div>
@@ -79,7 +79,7 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                      <label>Material Status<span style="color:red;">*</span></label>
+                      <label>Mata Kuliah<span style="color:red;">*</span></label>
                       <input type="text" class="form-control" required value="{{ old('material_status') }}" name="material_status" required placeholder="Enter Material Status">
                       <div style="color:red;">
                         {{ $errors->first('material_status') }}
@@ -107,14 +107,14 @@
                     </div>
                     </div>
                     <div class="form-group col-md-6">
-                      <label >current_address<span style="color:red;">*</span></label>
+                      <label >Alamat Saat ini<span style="color:red;">*</span></label>
                       <textarea name="address" class="form-control" >{{ old('address') }}</textarea>
                       <div style="color:red;">
                         {{ $errors->first('address') }}
                     </div>
                     </div>
                     <div class="form-group col-md-6">
-                      <label >permanent_address<span style="color:red;">*</span></label>
+                      <label >Asal Domisili<span style="color:red;">*</span></label>
                       <textarea name="permanent_address" class="form-control" >{{ old('permanent_address') }}</textarea>
                       <div style="color:red;">
                         {{ $errors->first('permanent_address') }}
@@ -128,7 +128,7 @@
                     </div>
                     </div>
                     <div class="form-group col-md-6">
-                      <label >work_experience<span style="color:red;">*</span></label>
+                      <label >Pengalaman Kerja<span style="color:red;">*</span></label>
                       <textarea name="work_experience" class="form-control" >{{ old('work_experience') }}</textarea>
                       <div style="color:red;">
                         {{ $errors->first('work_experience') }}

@@ -13,7 +13,7 @@
             <h1>Parent List ( Total : {{ $getRecord->total() }})</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('admin/parent/add') }}" class="btn btn-primary">add new Parent</a>
+            <a href="{{ url('admin/parent/add') }}" class="btn btn-primary">+</a>
           </div>
         
         </div>

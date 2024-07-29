@@ -8,10 +8,10 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Admin List ( Total : {{ $getRecord->total() }})</h1>
+            <h1>Daftar Admin ( Total : {{ $getRecord->total() }})</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('admin/admin/add') }}" class="btn btn-primary">add new Admin</a>
+            <a href="{{ url('admin/admin/add') }}" class="btn btn-primary">Tambah Admin</a>
           </div>
         </div>
       </div><!-- /.container-fluid -->

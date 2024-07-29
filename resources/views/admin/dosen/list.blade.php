@@ -10,10 +10,10 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>dosen List ( Total : {{ $getRecord->total() }})</h1>
+            <h1>Daftar Dosen ( Total : {{ $getRecord->total() }})</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('admin/dosen/add') }}" class="btn btn-primary">add new dosen</a>
+            <a href="{{ url('admin/dosen/add') }}" class="btn btn-primary">Tambah Dosen</a>
           </div>
         
         </div>
@@ -49,10 +49,10 @@
                       <label >Name</label>
                       <input type="text" class="form-control" value="{{ Request::get('name') }}" name="name" placeholder="Enter name">
                     </div>
-                    <div class="form-group col-md-2">
+                    {{-- <div class="form-group col-md-2">
                       <label >Last Name</label>
                       <input type="text" class="form-control" value="{{ Request::get('last_name') }}" name="last_name" placeholder="Enter Last name">
-                    </div>
+                    </div> --}}
                     {{-- <div class="form-group col-md-2">
                       <label >Status</label>
                       <select name="gender" class="form-control" id="">
@@ -75,12 +75,12 @@
                       <input type="text" class="form-control"  value="{{ Request::get('email') }}" name="email" placeholder="Enter email">
                     </div>
                     <div class="form-group col-md-2">
-                      <label >Current Address</label>
-                      <input type="text" class="form-control"  value="{{ Request::get('address') }}" name="address" placeholder="Enter Current Address">
+                      <label >Asal Domisili</label>
+                      <input type="text" class="form-control"  value="{{ Request::get('permanent_address') }}" name="permanent_address" placeholder="Enter Asal Domisili">
                     </div>
                     <div class="form-group col-md-2">
-                      <label >Material Status</label>
-                      <input type="text" class="form-control"  value="{{ Request::get('material_status') }}" name="material_status" placeholder="Enter Material Status">
+                      <label >Mata Kuliah</label>
+                      <input type="text" class="form-control"  value="{{ Request::get('material_status') }}" name="material_status" placeholder="Enter Mata Kuliah">
                     </div>
                     <div class="form-group col-md-2">
                       <label >Tanggal Gabung</label>
@@ -113,15 +113,15 @@
                     <tr>
                       <th>#</th>
                       <th>profile_pic</th>
-                      <th>Dosen Name</th>
+                      <th> Nama</th>
                       <th>Email</th>
                       <th>Gender</th>
-                      <th>Tanggal Lahir</th>
+                      {{-- <th>Tanggal Lahir</th> --}}
                       <th>Tanggal Gabung</th>
                       <th>Nomer Hp</th>
-                      <th>Material Status</th>
-                      <th>Current Address</th>
-                      <th>Permanent Address</th>
+                      <th>Mata Kuliah</th>
+                      {{-- <th>Current Address</th> --}}
+                      <th>Asal Domisili</th>
                       {{-- <th>Qualification</th> --}}
                       {{-- <th>Pengalaman Kerja</th> --}}
                       {{-- <th>Note</th> --}}
@@ -145,11 +145,11 @@
                         <td>{{ $value->name }} {{ $value->last_name }}</td>
                         <td>{{ $value->email }}</td>
                         <td>{{ $value->gender }}</td>
-                        <td>{{ $value->date_of_birth }}</td>
+                        {{-- <td>{{ $value->date_of_birth }}</td> --}}
                         <td>{{ $value->admission_date }}</td>
                         <td>{{ $value->mobile_number }}</td>
                         <td>{{ $value->material_status }}</td>
-                        <td>{{ $value->address }}</td>
+                        {{-- <td>{{ $value->address }}</td> --}}
                         <td>{{ $value->permanent_address }}</td>
                         {{-- <td>{{ $value->qualification }}</td> --}}
                         {{-- <td>{{ $value->work_experience }}</td> --}}

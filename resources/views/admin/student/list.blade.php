@@ -13,7 +13,7 @@
             <h1>Student List ( Total : {{ $getRecord->total() }})</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('admin/student/add') }}" class="btn btn-primary">add new Student</a>
+            <a href="{{ url('admin/student/add') }}" class="btn btn-primary">Tambah Mahasiswa</a>
           </div>
         
         </div>
@@ -56,7 +56,7 @@
                       <input type="text" class="form-control"  value="{{ Request::get('admission_number') }}" name="admission_number" placeholder="NIM">
                     </div>
                     <div class="form-group col-md-2">
-                      <label >Class</label>
+                      <label >Kelas</label>
                       <input type="text" class="form-control"  value="{{ Request::get('class') }}" name="class" placeholder="Class">
                     </div>
                     <div class="form-group col-md-2">
@@ -119,7 +119,7 @@
                       <th>Email</th>
                       <th>NIM</th>
                       {{-- <th>Roll Number</th> --}}
-                      <th>Class</th>
+                      <th>Kelas</th>
                       <th>Gender</th>
                       <th>Asal</th>
                       <th>Tanggal Lahir</th>
