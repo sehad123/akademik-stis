@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add New Assign Matkul  </h1>
+            <h1>Tambah Kelas & Mata Kuliah  </h1>
           </div>
           
         </div>
@@ -30,9 +30,9 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Class Name</label>
+                    <label >Nama Kelas</label>
                     <select name="class_id" class="form-control" id="">
-                      <option value="">Select Class</option>
+                      <option value="">Pilih Kelas</option>
                       @foreach ($getClass as $class)
                       <option value="{{ $class->id }}">{{ $class->name }}</option>
                       @endforeach
@@ -40,7 +40,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label>Matkul Name</label>
+                    <label>Nama Mata Kuliah</label>
                     @foreach ($getSubject as $subject)
                     <div>
                         <label style="font-weight: normal">

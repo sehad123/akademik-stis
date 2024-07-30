@@ -9,7 +9,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>My Submited Tugas</h1>
+            <h1> Tugas Tersubmit</h1>
           </div>
         
           <div class="col-md-12">
@@ -24,11 +24,11 @@
                   <div class="row">
 
                   <div class="form-group col-md-3">
-                    <label >Class</label>
+                    <label >Kelas</label>
                     <input type="text" class="form-control"  value="{{ Request::get('class_name') }}" name="class_name" placeholder="Enter class_name">
                   </div>
                   <div class="form-group col-md-3">
-                    <label >Matkul</label>
+                    <label >Mata Kuliah</label>
                     <input type="text" class="form-control"  value="{{ Request::get('matkul_name') }}" name="matkul_name" placeholder="Enter matkul_name">
                   </div>
                 
@@ -61,8 +61,8 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Class</th>
-                      <th>Matkul</th>
+                      <th>Kelas</th>
+                      <th>Mata Kuliah</th>
                       <th>Tanggal </th>
                       <th>Deadline </th>
                       <th>Document </th>

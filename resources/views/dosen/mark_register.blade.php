@@ -27,16 +27,17 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="form-group col-md-3">
-                      <label >Semester </label>
-                      <select name="exam_id" required id="" class="form-control">
+                      <label>Semester</label>
+                      <select name="exam_id" required class="form-control">
                           <option value="">Select</option>
                           @foreach ($getExam as $exam)
-                          <option {{ (Request::get('exam_id') == $exam->exam_id)?'selected':'' }}  value="{{ $exam->exam_id }}">{{ $exam->kurikulum_name }}</option>
+                          <option {{ (Request::get('exam_id') == $exam->exam_id) ? 'selected' : '' }} value="{{ $exam->exam_id }}">{{ $exam->kurikulum_name }}</option>
                           @endforeach
                       </select>
-                    </div>
+                  </div>
+                  
                     <div class="form-group col-md-3">
-                      <label >Class </label>
+                      <label >Kelas </label>
                       <select name="class_id" required id="" class="form-control">
                           <option value="">Select</option>
                           @foreach ($getClass as $class)

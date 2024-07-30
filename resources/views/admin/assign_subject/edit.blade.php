@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Edit Data Class </h1>
+            <h1>Edit Data </h1>
           </div>
           
         </div>
@@ -30,10 +30,10 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Name Class</label>
-                      <label >Select Class</label>
+                    <label >Nama Kelas</label>
+                      <label >Pilih Kelas</label>
                       <select name="class_id" class="form-control" required>
-                        <option value="">Select Class</option>
+                        <option value="">Pilih Kelas</option>
                         @foreach ($getClass as $class)
                         <option value="{{ $class->id }}" {{ ($getRecord->class_id == $class->id)? 'selected' :'' }}>
                           {{ $class->name }}</option>
@@ -43,7 +43,7 @@
                       </div>
 
                          <div class="form-group">
-                          <label >Matkul Name</label>
+                          <label >Mata Kuliah</label>
                           @foreach ($getSubject as $subject)
                           @php
                               $checked = "";

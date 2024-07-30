@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add new Exam </h1>
+            <h1>Tambah Ujian </h1>
           </div>
           
         </div>
@@ -30,11 +30,11 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Exam Name</label>
+                    <label >Nama Ujian</label>
                     <input type="text" class="form-control" value="{{ old('name') }}" name="name" required placeholder="Enter Ujian Name">
                   </div>
                   <div class="form-group">
-                    <label >Note</label>
+                    <label >Catatan</label>
                     <textarea name="note" id=""class="form-control" placeholder="note">
                     </textarea>
                   </div>

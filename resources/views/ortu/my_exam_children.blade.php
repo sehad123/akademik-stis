@@ -29,10 +29,10 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Matkul Name</th>
+                                                <th>Mata Kuliah</th>
                                                 <th>Tanggal </th>
-                                                <th>Start Time</th>
-                                                <th>End Time</th>
+                                                <th>Waktu Mulai</th>
+                                                <th>Waktu Akhir</th>
                                                 <th>Ruangan</th>
                                             </tr>
                                         </thead>

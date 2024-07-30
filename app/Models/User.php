@@ -128,9 +128,7 @@ class User extends Authenticatable
         if (!empty(Request::get('name'))) {
             $return = $return->where('name', 'like', '%' . Request::get('name') . '%');
         }
-        if (!empty(Request::get('last_name'))) {
-            $return = $return->where('last_name', 'like', '%' . Request::get('last_name') . '%');
-        }
+
         if (!empty(Request::get('email'))) {
             $return = $return->where('email', 'like', '%' . Request::get('email') . '%');
         }
@@ -174,7 +172,7 @@ class User extends Authenticatable
 
     static public function getStudent()
     {
-        $return =  self::select('users.*', 'class.name as class_name', 'parent.name as parent_name', 'parent.last_name as parent_last_name')
+        $return =  self::select('users.*', 'class.name as class_name', 'parent.name as parent_name')
             ->join('users as parent', 'parent.id', '=', 'users.parent_id', 'left')
             ->join('class', 'class.id', '=', 'users.class_id', 'left')
             ->where('users.user_type', '=', 3)
@@ -182,9 +180,7 @@ class User extends Authenticatable
         if (!empty(Request::get('name'))) {
             $return = $return->where('users.name', 'like', '%' . Request::get('name') . '%');
         }
-        if (!empty(Request::get('last_name'))) {
-            $return = $return->where('users.last_name', 'like', '%' . Request::get('last_name') . '%');
-        }
+
         if (!empty(Request::get('class'))) {
             $return = $return->where('class.name', 'like', '%' . Request::get('class') . '%');
         }
@@ -235,7 +231,7 @@ class User extends Authenticatable
     }
     static public function getSearchStudent()
     {
-        if (!empty(Request::get('id')) || !empty(Request::get('name')) || !empty(Request::get('last_name')) || !empty(Request::get('email'))) {
+        if (!empty(Request::get('id')) || !empty(Request::get('name'))  || !empty(Request::get('email'))) {
             $return =  self::select('users.*', 'class.name as class_name', 'parent.name as parent_name')
                 ->join('users as parent', 'parent.id', '=', 'users.parent_id', 'left')
                 ->join('class', 'class.id', '=', 'users.class_id', 'left')
@@ -247,9 +243,7 @@ class User extends Authenticatable
             if (!empty(Request::get('name'))) {
                 $return = $return->where('users.name', 'like', '%' . Request::get('name') . '%');
             }
-            if (!empty(Request::get('last_name'))) {
-                $return = $return->where('users.last_name', 'like', '%' . Request::get('last_name') . '%');
-            }
+
 
             if (!empty(Request::get('email'))) {
                 $return = $return->where('users.email', 'like', '%' . Request::get('email') . '%');
@@ -302,7 +296,7 @@ class User extends Authenticatable
 
     static public function getStudentClass($class_id)
     {
-        $return =  self::select('users.*', 'users.name', 'users.last_name')
+        $return =  self::select('users.*', 'users.name')
             ->where('users.user_type', '=', 3)
             ->where('users.is_delete', '=', 0)
             ->where('users.class_id', '=', $class_id)

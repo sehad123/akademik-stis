@@ -65,7 +65,7 @@
                             <tbody>
                                 <tr>
                                     <td width="23%">Nama :</td>
-                                    <td style="border-bottom: 1px solid; width:100%">{{ $getStudent->first_name }} {{ $getStudent->last_name }}</td>
+                                    <td style="border-bottom: 1px solid; width:100%">{{ $getStudent->name }} </td>
                                 </tr>
                             </tbody>
                     </table>

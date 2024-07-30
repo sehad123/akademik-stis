@@ -25,7 +25,7 @@
             <!-- general form elements -->
             <div class="card ">
               <div class="card-header">
-                <h3 class="card-title">Search Semester </h3>
+                <h3 class="card-title"> Semester </h3>
               </div>
               <form method="get" action="">
                 <div class="card-body">

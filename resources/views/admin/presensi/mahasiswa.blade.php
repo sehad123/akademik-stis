@@ -27,7 +27,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="form-group col-md-3">
-                      <label>Class Name</label>
+                      <label>Kelas</label>
                       <select id="getClass" name="class_id" class="form-control getClass" required>
                           <option value="">Select</option>
                           @foreach ($getClass as $class)
@@ -36,7 +36,7 @@
                       </select>
                   </div>
                   <div class="form-group col-md-3">
-                      <label>Matkul Name</label>
+                      <label>Mata Kuliah</label>
                       <select id="getMatkul" name="matkul_id" class="form-control getSubject" required>
                           <option value="">Select</option>
                           @if (!empty($getSubject))
@@ -65,14 +65,14 @@
             <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Presensi Mahasiswa List</h3>
+                  <h3 class="card-title">Daftar Presensi Mahasiswa</h3>
                 </div>
                 <div class="card-body p-0">
                   <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Mahasiswa Name</th>
+                            <th>Nama Mahasiswa</th>
                             <th>Presensi</th>
                         </tr>
                     </thead>

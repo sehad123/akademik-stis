@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add new Class </h1>
+            <h1>Tambah Kelas </h1>
           </div>
           
         </div>
@@ -30,7 +30,7 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Class Name</label>
+                    <label >Nama Kelas</label>
                     <input type="text" class="form-control"  name="name" required placeholder="Enter name">
                   </div>
                   <div class="form-group">

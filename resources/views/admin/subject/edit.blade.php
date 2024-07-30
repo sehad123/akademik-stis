@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Edit Data Class </h1>
+            <h1>Edit Data Matkul </h1>
           </div>
           
         </div>
@@ -30,7 +30,7 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Name Class</label>
+                    <label >Nama Mata Kuliah</label>
                     <input type="text" value="{{  old('name',$getRecord->name)  }}" class="form-control" name="name" required placeholder="Enter name">
                   </div>
                   <div class="form-group">

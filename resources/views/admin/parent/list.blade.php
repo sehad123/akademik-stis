@@ -10,7 +10,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Parent List ( Total : {{ $getRecord->total() }})</h1>
+            <h1>Daftar Orang Tua ( Total : {{ $getRecord->total() }})</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
             <a href="{{ url('admin/parent/add') }}" class="btn btn-primary">+</a>
@@ -49,10 +49,10 @@
                       <label >Name</label>
                       <input type="text" class="form-control" value="{{ Request::get('name') }}" name="name" placeholder="Enter name">
                     </div>
-                    <div class="form-group col-md-2">
+                    {{-- <div class="form-group col-md-2">
                       <label >Last Name</label>
                       <input type="text" class="form-control" value="{{ Request::get('last_name') }}" name="last_name" placeholder="Enter Last name">
-                    </div>
+                    </div> --}}
                    
                     <div class="form-group col-md-2">
                       <label >Gender</label>
@@ -80,7 +80,7 @@
                       <label >Date</label>
                       <input type="date" class="form-control"  value="{{ Request::get('date') }}" name="date" placeholder="Enter date">
                     </div> --}}
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                       <button class="btn btn-primary mt-4" type="submit">Search</button>
                       <a href="{{ url('admin/parent/list') }}" class="btn btn-success mt-4" type="submit">clear</a>
                     </div>
@@ -103,10 +103,10 @@
                     <tr>
                       <th>#</th>
                       <th>profile_pic</th>
-                      <th>Name</th>
+                      <th>Nama</th>
                       <th>Email</th>
                       <th>Gender</th>
-                      <th>Phone</th>
+                      <th>No HP</th>
                       <th>Pekerjaan</th>
                       <th>Alamat</th>
                       {{-- <th>Status</th> --}}
@@ -126,7 +126,7 @@
                           <img src="{{  $value->getProfile()}}" style="width: 50px; height:50px; border-radius:50px;" alt="">
                           @endif
                         </td>
-                        <td>{{ $value->name }} {{ $value->last_name }}</td>
+                        <td>{{ $value->name }} </td>
                         <td>{{ $value->email }}</td>
                         <td>{{ $value->gender }}</td>
                         <td>{{ $value->mobile_number }}</td>

@@ -32,14 +32,14 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="form-group col-md-6">
-                      <label >First Name <span style="color:red;">*</span></label>
+                      <label >Nama <span style="color:red;">*</span></label>
                       <input type="text" class="form-control" required value="{{ old('name', $getRecord->name) }}" name="name" required placeholder="Enter first name">
                       <div style="color:red;">
                         {{ $errors->first('name') }}
                     
                     </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    {{-- <div class="form-group col-md-6">
                       <label >Last Name<span style="color:red;">*</span></label>
                       <input type="text" class="form-control" required value="{{ old('last_name',$getRecord->last_name) }}" name="last_name" required placeholder="Enter last name">
                       <div style="color:red;">
@@ -47,7 +47,7 @@
                     
                     </div>
                     </div>
-                  
+                   --}}
                  
                     <div class="form-group col-md-6">
                       <label >gender<span style="color:red;">*</span></label>

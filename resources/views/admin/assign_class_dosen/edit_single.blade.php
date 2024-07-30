@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Edit Matkul Dosen </h1>
+            <h1>Edit Data </h1>
           </div>
           
         </div>
@@ -30,9 +30,9 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Nama Matkul</label>
+                    <label >Mata Kuliah</label>
                       <select name="matkul_id" class="form-control" required>
-                        <option value="">Select Matkul</option>
+                        <option value="">Mata Kuliah</option>
                         @foreach ($getSubject as $subject)
                         <option value="{{ $subject->id }}" {{ ($getRecord->matkul_id == $subject->id)? 'selected' :'' }}>
                           {{ $subject->name }}</option>
@@ -42,9 +42,9 @@
                       </div>
 
                       <div class="form-group">
-                        <label >Class Name</label>
+                        <label >Nama Kelas</label>
                         <select name="class_id" class="form-control" required>
-                          <option value="">Select Class</option>
+                          <option value="">Pilih Kelas</option>
                           @foreach ($getClass as $class)
                           <option value="{{ $class->id }}" {{ ($getRecord->class_id == $class->id)? 'selected' :'' }}>
                             {{ $class->name }}</option>
@@ -56,7 +56,7 @@
                       <div class="form-group">
                           <label >Nama Dosen </label>
                           <select name="dosen_id" class="form-control" required>
-                            <option value="">Select Dosen</option>
+                            <option value="">Pilih Dosen</option>
                             @foreach ($getDosen as $dosen)
                             <option value="{{ $dosen->id }}" {{ ($getRecord->dosen_id == $dosen->id)? 'selected' :'' }}>
                               {{ $dosen->name }} {{ $dosen->last_name }}</option>

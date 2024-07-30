@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Class Timetable </h1>
+                    <h1>Jadwal Kelas & Mata Kuliah </h1>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -31,7 +31,7 @@
                                 <div class="row">
 
                                     <div class="form-group col-md-3">
-                                        <label>Class Name</label>
+                                        <label>Kelas</label>
                                         <select name="class_id" class="form-control getClass" required>
                                             <option value="">Select</option>
                                             @foreach ($getClass as $class)
@@ -40,7 +40,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-md-3">
-                                        <label>Matkul Name</label>
+                                        <label>Mata Kuliah</label>
                                         <select name="matkul_id" class="form-control getSubject" required>
                                             <option value="">Select</option>
                                             @if (!empty($getSubject))
@@ -76,9 +76,9 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Week</th>
-                                                <th>Start Time</th>
-                                                <th>End Time</th>
+                                                <th>Hari</th>
+                                                <th>Waktu Mulai</th>
+                                                <th>Waktu Akhir</th>
                                                 <th>Ruangan</th>
                                                 <th>Tanggal</th>
                                                 <th>Jam Mulai</th>

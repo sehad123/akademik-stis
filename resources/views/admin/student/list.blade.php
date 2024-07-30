@@ -10,7 +10,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Student List ( Total : {{ $getRecord->total() }})</h1>
+            <h1>Daftar Mahasiswa ( Total : {{ $getRecord->total() }})</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
             <a href="{{ url('admin/student/add') }}" class="btn btn-primary">Tambah Mahasiswa</a>
@@ -44,7 +44,7 @@
                     <div class="row">
 
                     <div class="form-group col-md-2">
-                      <label >Name</label>
+                      <label >Nama</label>
                       <input type="text" class="form-control" value="{{ Request::get('name') }}" name="name" placeholder="Enter name">
                     </div>
                     {{-- <div class="form-group col-md-2">
@@ -114,7 +114,7 @@
                     <tr>
                       <th>#</th>
                       <th>profile_pic</th>
-                      <th>Student Name</th>
+                      <th>Nama</th>
                       {{-- <th>Parent Name</th> --}}
                       <th>Email</th>
                       <th>NIM</th>
@@ -146,7 +146,7 @@
                           <img src="{{  $value->getProfile()}}" style="width: 50px; height:50px; border-radius:50px;" alt="">
                           @endif
                         </td>
-                        <td>{{ $value->name }} {{ $value->last_name }}</td>
+                        <td>{{ $value->name }}</td>
                         {{-- <td>{{ $value->parent_name }} {{ $value->parent_last_name }}</td> --}}
                         <td>{{ $value->email }}</td>
                         <td>{{ $value->admission_number }}</td>

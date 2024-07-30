@@ -57,7 +57,8 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="javascript:;" class="brand-link" style="text-align: center;">
-      <span class="brand-text font-weight-bold">SIPADU</span>
+      {{-- <span class="brand-text font-weight-bold">SIPADU</span> --}}
+      <span class="brand-text font-weight-bold">AKADEMIK</span>
     </a>
 
     <!-- Sidebar -->
@@ -122,7 +123,7 @@
             <a href="#" class="nav-link @if(Request::segment(2) == 'class' ||Request::segment(2) == 'subject' || Request::segment(2) == 'assign_subject' || Request::segment(2) == 'assign_class_dosen'|| Request::segment(2) == 'class_timetable') active @endif">
               <i class=" nav-icon fa-solid fa-book-open-reader"></i>
                             <p>
-                Academics
+                Layanan Akademik
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -130,31 +131,31 @@
               <li class="nav-item ">
                 <a href="{{ url('admin/class/list') }}" class="nav-link @if(Request::segment(2) == 'class') active @endif" >
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Class</p>
+                  <p>Kelas</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ url('admin/subject/list') }}" class="nav-link @if(Request::segment(2) == 'subject') active @endif">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Matkul</p>
+                  <p>Mata Kuliah</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ url('admin/assign_subject/list') }}" class="nav-link @if(Request::segment(2) == 'assign_subject') active @endif">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Assign Matkul</p>
+                  <p>Kelas & Mata Kuliah</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ url('admin/class_timetable/list') }}" class="nav-link @if(Request::segment(2) == 'class_timetable') active @endif">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Jadwal Class</p>
+                  <p>Jadwal Kelas</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{ url('admin/assign_class_dosen/list') }}" class="nav-link @if(Request::segment(2) == 'assign_class_dosen') active @endif">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Assign Class Dosen</p>
+                  <p> Kelas & Dosen</p>
                 </a>
               </li>
             </ul>
@@ -171,7 +172,7 @@
               <li class="nav-item ">
                 <a href="{{ url('admin/examinations/exam/list') }}" class="nav-link @if(Request::segment(3) == 'exam') active @endif" >
                   <i class="far fa-circle nav-icon"></i>
-                  <p>List Ujian</p>
+                  <p>Daftar Ujian</p>
                 </a>
               </li>
               <li class="nav-item ">
@@ -270,7 +271,7 @@
             <a href="{{ url('admin/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
               <i class="nav-icon fa-solid fa-gear"></i>
                             <p>
-                My Account
+                Info Akun
               </p>
             </a>
           </li>
@@ -278,7 +279,7 @@
             <a href="{{ url('admin/change_password') }}" class="nav-link @if(Request::segment(2) == 'change_password') active @endif">
               <i class="nav-icon fas fa-key"></i>
               <p>
-                Change Password
+                Ubah Password
               </p>
             </a>
           </li>
@@ -287,7 +288,7 @@
             <a href="{{ url('dosen/dashboard') }}" class="nav-link @if(Request::segment(2) == 'dashboard') active @endif">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                dashboard
+                Dashboard
               </p>
             </a>
           </li>
@@ -295,7 +296,7 @@
             <a href="{{ url('dosen/my_matkul') }}" class="nav-link @if(Request::segment(2) == 'my_matkul') active @endif">
               <i class=" nav-icon fa-solid fa-chalkboard-user"></i> 
                            <p>
-                My Class & Matkul
+                Kelas & Mata Kuliah
               </p>
             </a>
           </li>
@@ -311,7 +312,7 @@
             <a href="{{ url('dosen/my_calendar') }}" class="nav-link @if(Request::segment(2) == 'my_calendar') active @endif">
               <i class="nav-icon fa-regular fa-calendar-days"></i>
                             <p>
-                My Calendar
+                Jadwal Saya
               </p>
             </a>
           </li>
@@ -372,7 +373,7 @@
             <a href="{{ url('dosen/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
               <i class="nav-icon fa-solid fa-gear"></i>
               <p>
-                My Account
+                Info Akun
               </p>
             </a>
           </li>
@@ -380,7 +381,7 @@
             <a href="{{ url('dosen/change_password') }}" class="nav-link @if(Request::segment(2) == 'change_password') active @endif">
               <i class="nav-icon fas fa-key"></i>
               <p>
-                Change Password
+                Ubah Password
               </p>
             </a>
           </li>
@@ -390,7 +391,7 @@
             <a href="{{ url('student/dashboard') }}" class="nav-link @if(Request::segment(2) == 'dashboard') active @endif">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                dashboard
+                Dashboard
               </p>
             </a>
           </li>
@@ -398,7 +399,7 @@
             <a href="{{ url('student/my_class') }}" class="nav-link @if(Request::segment(2) == 'my_class') active @endif">
               <i class="nav-icon fa-solid fa-chalkboard-user"></i>
                             <p>
-                My Class
+                Kelas Saya
               </p>
             </a>
           </li>
@@ -406,7 +407,7 @@
             <a href="{{ url('student/my_calendar') }}" class="nav-link @if(Request::segment(2) == 'my_calendar') active @endif">
               <i class="nav-icon fa-regular fa-calendar-days"></i>
                             <p>
-                My Calendar
+                Jadwal Saya
               </p>
             </a>
           </li>
@@ -423,7 +424,7 @@
             <a href="{{ url('student/my_subject') }}" class="nav-link @if(Request::segment(2) == 'my_subject') active @endif">
               <i class="nav-icon fas fa-list"></i>
               <p>
-                Daftar Matkul
+                Mata Kuliah
               </p>
             </a>
           </li>
@@ -486,7 +487,7 @@
             <a href="{{ url('student/change_password') }}" class="nav-link @if(Request::segment(2) == 'change_password') active @endif">
               <i class="nav-icon fas fa-key"></i>
               <p>
-                Change Password
+                Ubah Password
               </p>
             </a>
           </li>
@@ -504,7 +505,7 @@
             <a href="{{ url('ortu/my_student') }}" class="nav-link @if(Request::segment(2) == 'my_student') active @endif">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                My Children
+                Data Anak
               </p>
             </a>
           </li>
@@ -520,7 +521,7 @@
             <a href="{{ url('ortu/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
               <i class="nav-icon fa-solid fa-gear"></i>
               <p>
-                My Account
+                Info Akun
               </p>
             </a>
           </li>
@@ -528,7 +529,7 @@
             <a href="{{ url('ortu/change_password') }}" class="nav-link @if(Request::segment(2) == 'change_password') active @endif">
               <i class="nav-icon fas fa-key"></i>
               <p>
-                Change Password
+                Ubah Password
               </p>
             </a>
           </li>

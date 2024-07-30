@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Edit Parent </h1>
+            <h1>Edit Data Dosen </h1>
           </div>
           
         </div>
@@ -31,21 +31,21 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="form-group col-md-6">
-                      <label >First Name <span style="color:red;">*</span></label>
+                      <label >Nama <span style="color:red;">*</span></label>
                       <input type="text" class="form-control" required value="{{ old('name', $getRecord->name) }}" name="name" required placeholder="Enter first name">
                       <div style="color:red;">
                         {{ $errors->first('name') }}
                     
                     </div>
                     </div>
-                    <div class="form-group col-md-6">
+                    {{-- <div class="form-group col-md-6">
                       <label >Last Name<span style="color:red;">*</span></label>
                       <input type="text" class="form-control" required value="{{ old('last_name',$getRecord->last_name) }}" name="last_name" required placeholder="Enter last name">
                       <div style="color:red;">
                         {{ $errors->first('last_name') }}
                     
                     </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group col-md-6">
                       <label >gender<span style="color:red;">*</span></label>
                       <select name="gender" required class="form-control" id="">
@@ -78,7 +78,7 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                      <label>Material Status<span style="color:red;">*</span></label>
+                      <label>Mata Kuliah<span style="color:red;">*</span></label>
                       <input type="text" class="form-control" required value="{{ old('material_status',$getRecord->material_status) }}" name="material_status" required placeholder="Enter Material Status">
                       <div style="color:red;">
                         {{ $errors->first('material_status') }}
@@ -97,14 +97,14 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                      <label >current_address<span style="color:red;">*</span></label>
+                      <label >Alamat Saat ini<span style="color:red;">*</span></label>
                       <textarea name="address" class="form-control" >{{ old('address',$getRecord->address) }}</textarea>
                       <div style="color:red;">
                         {{ $errors->first('address') }}
                     </div>
                     </div>
                     <div class="form-group col-md-6">
-                      <label >permanent_address<span style="color:red;">*</span></label>
+                      <label >Asal Domisili<span style="color:red;">*</span></label>
                       <textarea name="permanent_address" class="form-control" >{{ old('permanent_address',$getRecord->permanent_address) }}</textarea>
                       <div style="color:red;">
                         {{ $errors->first('permanent_address') }}
@@ -118,14 +118,14 @@
                     </div>
                     </div>
                     <div class="form-group col-md-6">
-                      <label >work_experience<span style="color:red;">*</span></label>
+                      <label >Pengalaman Kerja<span style="color:red;">*</span></label>
                       <textarea name="work_experience" class="form-control" >{{ old('work_experience',$getRecord->work_experience) }}</textarea>
                       <div style="color:red;">
                         {{ $errors->first('work_experience') }}
                     </div>
                     </div>
                     <div class="form-group col-md-6">
-                      <label >note<span style="color:red;">*</span></label>
+                      <label >Catatan<span style="color:red;">*</span></label>
                       <textarea name="note" class="form-control" >{{ old('note',$getRecord->note) }}</textarea>
                       <div style="color:red;">
                         {{ $errors->first('note') }}

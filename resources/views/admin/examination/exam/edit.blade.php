@@ -30,11 +30,11 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Name Exam</label>
+                    <label >Nama Ujian</label>
                     <input type="text" value="{{  old('name',$getRecord->name)  }}" class="form-control" name="name" required placeholder="Enter name">
                   </div>
                   <div class="form-group">
-                    <label >Note</label>
+                    <label >Catatan</label>
                   <textarea name="note"  class="form-control"> {{  $getRecord->note }}</textarea>        
                           </div>
 

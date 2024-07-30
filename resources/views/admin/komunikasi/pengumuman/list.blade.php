@@ -12,7 +12,7 @@
             <h1>Papan Pengumuman</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('admin/komunikasi/pengumuman/add') }}" class="btn btn-primary">add new Pengumuman</a>
+            <a href="{{ url('admin/komunikasi/pengumuman/add') }}" class="btn btn-primary mb-3">Tambah Pengumuman</a>
           </div>
         
 
@@ -21,7 +21,7 @@
             <!-- general form elements -->
             <div class="card ">
                 <div class="card-header">
-                    <h3 class="card-title">Search Class </h3>
+                    <h3 class="card-title">Search Kelas </h3>
                 </div>
                 <form method="get" action="">
                     <div class="card-body">
@@ -102,8 +102,8 @@
                       <th>Tanggal Pengumuman</th>
                       <th>Tanggal Publish</th>
                       <th>Untuk </th>
-                      <th>Created By</th>
-                      <th>Created Date</th>
+                      {{-- <th>Dibuat Oleh</th> --}}
+                      {{-- <th>Created Date</th> --}}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -132,8 +132,8 @@
                              @endif
                         @endforeach
                       </td>
-                      <td>{{ $item->created_name }}</td>
-                      <td>{{ date('d-m-Y',strtotime( $item->created_at)) }}</td>
+                      {{-- <td>{{ $item->created_name }}</td> --}}
+                      {{-- <td>{{ date('d-m-Y',strtotime( $item->created_at)) }}</td> --}}
                       <td>
                         <a href="{{ url('admin/komunikasi/pengumuman/edit/'. $item->id) }}" class="btn btn-primary">Edit</a>
                         <a href="{{ url('admin/komunikasi/pengumuman/delete/'. $item->id) }}" class="btn btn-danger">Delete</a>

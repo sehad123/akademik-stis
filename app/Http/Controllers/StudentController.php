@@ -52,7 +52,7 @@ class StudentController extends Controller
         ]);
         $student = new User;
         $student->name = trim($request->name);
-        $student->last_name = trim($request->last_name);
+        // $student->last_name = trim($request->last_name);
         $student->email = trim($request->email);
         $student->status = 0;
         $student->gender = trim($request->gender);
@@ -103,7 +103,7 @@ class StudentController extends Controller
         ]);
         $student =  User::getSingle($id);
         $student->name = trim($request->name);
-        $student->last_name = trim($request->last_name);
+        // $student->last_name = trim($request->last_name);
         $student->email = trim($request->email);
         $student->status = trim($request->status);
         $student->gender = trim($request->gender);

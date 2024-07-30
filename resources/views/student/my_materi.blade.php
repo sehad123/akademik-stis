@@ -55,7 +55,7 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Matkul</th>
+                      <th>Mata Kuliah</th>
                       <th>Tanggal </th>
                       <th>Deskripsi</th>
                       <th>Document </th>

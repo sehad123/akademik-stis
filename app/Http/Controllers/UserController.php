@@ -39,7 +39,6 @@ class UserController extends Controller
         ]);
         $dosen =  User::getSingle($id);
         $dosen->name = trim($request->name);
-        $dosen->last_name = trim($request->last_name);
         $dosen->email = trim($request->email);
         $dosen->material_status = trim($request->material_status);
         $dosen->qualification = trim($request->qualification);
@@ -79,7 +78,6 @@ class UserController extends Controller
         ]);
         $ortu =  User::getSingle($id);
         $ortu->name = trim($request->name);
-        $ortu->last_name = trim($request->last_name);
         $ortu->email = trim($request->email);
         $ortu->occupation = trim($request->occupation);
         $ortu->gender = trim($request->gender);
@@ -128,7 +126,6 @@ class UserController extends Controller
         ]);
         $student =  User::getSingle($id);
         $student->name = trim($request->name);
-        $student->last_name = trim($request->last_name);
         $student->email = trim($request->email);
         $student->caste = trim($request->caste);
         $student->height = trim($request->height);

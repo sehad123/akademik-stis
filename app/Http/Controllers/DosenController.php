@@ -44,7 +44,7 @@ class DosenController extends Controller
         ]);
         $dosen = new User;
         $dosen->name = trim($request->name);
-        $dosen->last_name = trim($request->last_name);
+        // $dosen->last_name = trim($request->last_name);
         $dosen->email = trim($request->email);
         $dosen->status = trim($request->status);
         $dosen->qualification = trim($request->qualification);
@@ -88,7 +88,7 @@ class DosenController extends Controller
         ]);
         $dosen =  User::getSingle($id);
         $dosen->name = trim($request->name);
-        $dosen->last_name = trim($request->last_name);
+        // $dosen->last_name = trim($request->last_name);
         $dosen->email = trim($request->email);
         $dosen->material_status = trim($request->material_status);
         $dosen->status = trim($request->status);

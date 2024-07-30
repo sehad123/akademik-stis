@@ -10,7 +10,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="card-title"> My children </h1>
+            <h1 class="card-title"> Data Anak </h1>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -26,7 +26,6 @@
             <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title"> My Children  </h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
@@ -41,12 +40,12 @@
                       <th>NIM</th>
                       <th>Class</th>
                       <th>Gender</th>
-                      <th>Tanggal Lahir</th>
-                      <th>Agama</th>
+                      {{-- <th>Tanggal Lahir</th> --}}
+                      {{-- <th>Agama</th> --}}
                       <th>Nomer Hp</th>
                       {{-- <th>Tinggi Badan (cm)</th>
                       <th>Berat Badan (kg)</th> --}}
-                      <th>Created Date</th>
+                      {{-- <th>Created Date</th> --}}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -62,27 +61,27 @@
                           <img src="{{  $value->getProfile()}}" style="width: 50px; height:50px; border-radius:50px;" alt="">
                           @endif
                         </td>
-                        <td>{{ $value->name }} {{ $value->last_name }}</td>
+                        <td>{{ $value->name }}</td>
                         {{-- <td>{{ $value->parent_name }} {{ $value->parent_last_name }}</td> --}}
                         <td>{{ $value->email }}</td>
                         <td>{{ $value->admission_number }}</td>
                         <td>{{ $value->class_name }}</td>
                         <td>{{ $value->gender }}</td>
-                        <td>
+                        {{-- <td>
                           @if(!empty($value->date_of_birth ))
                               {{ date('d-m-Y', strtotime($value->date_of_birth)) }}
                           @endif
                         </td>
-                        <td>{{ $value->religion }}</td>
-                        <td>{{ $value->mobile_number }}</td>
+                        <td>{{ $value->religion }}</td> --}}
+                        <td>{{ $value->mobile_number }}</td> 
                         {{-- <td>{{ $value->height }}</td>
-                        <td>{{ $value->weight }}</td> --}}
-                        <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
+                        <td>{{ $value->weight }}</td>
+                        {{-- <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td> --}}
                         <td style="width: 250px;">
                           <a href="{{ url('ortu/my_student/subject/'.$value->id) }}" class="btn btn-success btn-sm mb-1">Matkul</a>
                           <a href="{{ url('ortu/my_student/exam_student/'.$value->id) }}" class="btn btn-primary btn-sm mb-1">Jadwal Ujian</a>
                           <a href="{{ url('ortu/my_student/calendar/'.$value->id) }}" class="btn btn-warning btn-sm">Calendar</a>
-                          <a href="{{ url('ortu/my_student/exam_result/'.$value->id) }}" class="btn btn-danger btn-sm">Hasil Ujian</a>
+                          <a href="{{ url('ortu/my_student/exam_result/'.$value->id) }}" class="btn btn-danger btn-sm">Nilai</a>
                           <a href="{{ url('chat?receiver_id=' .base64_encode($value->id)) }}" class="btn btn-success btn-sm">Chat</a>
                         </td>
                    @endforeach

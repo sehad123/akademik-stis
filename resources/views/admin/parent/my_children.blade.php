@@ -35,24 +35,24 @@
 
               <div class="card ">
                 <div class="card-header">
-                  <h3 class="card-title">Search student </h3>
+                  <h3 class="card-title">Search Mahasiswa </h3>
                 </div>
                 <form method="get" action="">
                   <div class="card-body">
                     <div class="row">
 
-                    <div class="form-group col-md-2">
+                    {{-- <div class="form-group col-md-2">
                       <label >Student ID</label>
                       <input type="text" class="form-control" value="{{ Request::get('id') }}" name="id" placeholder="Enter name">
-                    </div>
+                    </div> --}}
                     <div class="form-group col-md-2">
-                      <label >Name</label>
+                      <label >Nama</label>
                       <input type="text" class="form-control" value="{{ Request::get('name') }}" name="name" placeholder="Enter name">
                     </div>
-                    <div class="form-group col-md-2">
+                    {{-- <div class="form-group col-md-2">
                       <label >Last Name</label>
                       <input type="text" class="form-control" value="{{ Request::get('last_name') }}" name="last_name" placeholder="Enter Last name">
-                    </div>
+                    </div> --}}
                    
                    
                     <div class="form-group col-md-2">
@@ -85,10 +85,10 @@
                     <tr>
                       <th>#</th>
                       <th>profile_pic</th>
-                      <th>Student Name</th>
-                      <th>Parent Name</th>
+                      <th>Nama Mahasiswa</th>
+                      <th>Nama Orang Tua</th>
                       <th>Email</th>
-                      <th>Created Date</th>
+                      {{-- <th>Created Date</th> --}}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -101,10 +101,10 @@
                        <img src="{{  $value->getProfile()}}" style="width: 50px; height:50px; border-radius:50px;" alt="">
                        @endif
                      </td>
-                     <td>{{ $value->name }} {{ $value->last_name }}</td>
+                     <td>{{ $value->name }}</td>
                      <td>{{ $value->parent_name }}</td>
                      <td>{{ $value->email }}</td>
-                     <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
+                     {{-- <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td> --}}
                      <td style="min-width: 150px;">
                        <a href="{{ url('admin/parent/assign_student_parent/'. $value->id.'/'.$parent_id) }}" class="btn btn-primary btn-sm">Tambah sebagai anak</a>
                      </td>
@@ -122,7 +122,7 @@
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title"> Parent children List  </h3>
+                <h3 class="card-title"> Daftar Mahasiswa Orang tua  </h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
@@ -131,10 +131,10 @@
                     <tr>
                       <th>#</th>
                       <th>profile_pic</th>
-                      <th>Student Name</th>
-                      <th>Parent Name</th>
+                      <th>Nama Mahasiswa</th>
+                      <th>Nama Orang Tua</th>
                       <th>Email</th>
-                      <th>Created Date</th>
+                      {{-- <th>Created Date</th> --}}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -147,10 +147,10 @@
                        <img src="{{  $value->getProfile()}}" style="width: 50px; height:50px; border-radius:50px;" alt="">
                        @endif
                      </td>
-                     <td>{{ $value->name }} {{ $value->last_name }}</td>
+                     <td>{{ $value->name }}</td>
                      <td>{{ $value->parent_name }}</td>
                      <td>{{ $value->email }}</td>
-                     <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
+                     {{-- <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td> --}}
                      <td style="min-width: 150px;">
                        <a href="{{ url('admin/parent/assign_student_parent_delete/'. $value->id) }}" class="btn btn-danger btn-sm">Delete</a>
                      </td>

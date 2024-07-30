@@ -55,7 +55,7 @@ class ParentController extends Controller
         ]);
         $parent = new User;
         $parent->name = trim($request->name);
-        $parent->last_name = trim($request->last_name);
+        // $parent->last_name = trim($request->last_name);
         $parent->email = trim($request->email);
         $parent->status = trim($request->status);
         $parent->gender = trim($request->gender);
@@ -87,7 +87,7 @@ class ParentController extends Controller
         ]);
         $parent =  User::getSingle($id);
         $parent->name = trim($request->name);
-        $parent->last_name = trim($request->last_name);
+        // $parent->last_name = trim($request->last_name);
         $parent->email = trim($request->email);
         $parent->status = trim($request->status);
         $parent->address = trim($request->address);

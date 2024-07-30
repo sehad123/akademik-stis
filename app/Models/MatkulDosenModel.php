@@ -13,7 +13,7 @@ class MatkulDosenModel extends Model
 
     static public function getRecord()
     {
-        $return = self::select('matkul_dosen.*', 'matkul.name as matkul_name', 'class.name as class_name', 'dosen.last_name as dosen_last_name', 'dosen.name as dosen_name', 'users.name as created_by_name')
+        $return = self::select('matkul_dosen.*', 'matkul.name as matkul_name', 'class.name as class_name', 'dosen.name as dosen_name', 'users.name as created_by_name')
             ->join('users as dosen', 'dosen.id', 'matkul_dosen.dosen_id')
             ->join('matkul', 'matkul.id', 'matkul_dosen.matkul_id')
             ->join('class', 'class.id', 'matkul_dosen.class_id')
@@ -129,19 +129,29 @@ class MatkulDosenModel extends Model
 
     static public function getCalendarDosen($dosen_id)
     {
-        return MatkulDosenModel::select('class_timetable.*', 'class.name as class_name', 'matkul.name as matkul_name', 'class.id as class_id', 'matkul.id as matkul_id', 'week.name as week_name', 'week.id as week_id', 'week.fullcalendar_day')
+        return MatkulDosenModel::select(
+            'class_timetable.*',
+            'class.name as class_name',
+            'matkul.name as matkul_name',
+            'class.id as class_id',
+            'matkul.id as matkul_id',
+            'week.name as week_name',
+            'week.id as week_id',
+            'week.fullcalendar_day'
+        )
             ->join('matkul', 'matkul.id', '=', 'matkul_dosen.matkul_id')
             ->join('class', 'class.id', '=', 'matkul_dosen.class_id')
-            ->join('class_timetable', 'class_timetable.matkul_id', '=', 'matkul_dosen.matkul_id')
+            ->join('class_timetable', function ($join) {
+                $join->on('class_timetable.matkul_id', '=', 'matkul_dosen.matkul_id')
+                    ->on('class_timetable.class_id', '=', 'matkul_dosen.class_id');
+            })
             ->join('week', 'week.id', '=', 'class_timetable.week_id')
             ->where('matkul_dosen.dosen_id', '=', $dosen_id)
             ->where('matkul_dosen.status', '=', 0)
             ->where('matkul_dosen.is_delete', '=', 0)
-            ->whereIn('class_timetable.matkul_id', function ($query) use ($dosen_id) {
-                $query->select('matkul_id')->from('matkul_dosen')->where('dosen_id', $dosen_id);
-            })
             ->get();
     }
+
 
 
 

@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1> Change Password </h1>
+            <h1> Ganti Password </h1>
           </div>
           
         </div>
@@ -19,7 +19,7 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-            @include('_message');
+            @include('_message')
           <!-- left column -->
           <div class="col-md-12">
             <!-- general form elements -->
@@ -31,15 +31,15 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Old Password</label>
+                    <label > Password Lama</label>
                     <input type="password" class="form-control"  name="old_password" required placeholder="Old Password">
                   </div>
                   <div class="form-group">
-                    <label >New Password</label>
+                    <label > Password Baru</label>
                     <input type="password" class="form-control"  name="new_password" required placeholder="New Password">
                   </div>
                   <div class="form-group">
-                    <label >Confirm Password</label>
+                    <label >Konfirmasi Password</label>
                     <input type="password" class="form-control"  name="confirm_password" required placeholder="Confirm Password">
                   </div>
                   

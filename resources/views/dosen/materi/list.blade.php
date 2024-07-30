@@ -12,7 +12,7 @@
             <h1>Materi</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('dosen/tugas/materi/add') }}" class="btn btn-primary">add new Materi</a>
+            <a href="{{ url('dosen/tugas/materi/add') }}" class="btn btn-primary mb-2">+</a>
           </div>
         
           <div class="col-md-12">
@@ -27,11 +27,11 @@
                   <div class="row">
 
                   <div class="form-group col-md-3">
-                    <label >Class</label>
+                    <label >Kelas</label>
                     <input type="text" class="form-control" value="{{ Request::get('class_name') }}" name="class_name" placeholder="Enter class_name">
                   </div>
                   <div class="form-group col-md-3">
-                    <label >Matkul</label>
+                    <label >Mata Kuliah</label>
                     <input type="text" class="form-control"  value="{{ Request::get('matkul_name') }}" name="matkul_name" placeholder="Enter matkul_name">
                   </div>
                 
@@ -69,12 +69,12 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Class</th>
-                      <th>Matkul</th>
+                      <th>Kelas</th>
+                      <th>Mata Kuliah</th>
                       <th>Tanggal </th>
                       <th>Document </th>
                       <th>Deskripsi</th>
-                      <th>Created By</th>
+                      {{-- <th>Created By</th> --}}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -94,7 +94,7 @@
                   @endif
                 </td>
                 <td>{!! $item->description !!}</td>
-                <td>{{ $item->created_name }}</td>
+                {{-- <td>{{ $item->created_name }}</td> --}}
                 <td>
                   <a href="{{ url('dosen/tugas/materi/edit/'. $item->id) }}" class="btn btn-primary">Edit</a>
                   <a href="{{ url('dosen/tugas/materi/delete/'. $item->id) }}" class="btn btn-danger">Delete</a>

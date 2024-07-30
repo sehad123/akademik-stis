@@ -8,10 +8,10 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Matkul List</h1>
+                    <h1>Daftar Mata Kuliah</h1>
                 </div>
                 <div class="col-sm-6" style="text-align: right;">
-                    <a href="{{ url('admin/subject/add') }}" class="btn btn-primary">add new Matkul</a>
+                    <a href="{{ url('admin/subject/add') }}" class="btn btn-primary">Tambah Matkul </a>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -37,7 +37,7 @@
                                 <div class="row">
 
                                     <div class="form-group col-md-3">
-                                        <label>Name</label>
+                                        <label>Nama</label>
                                         <input type="text" class="form-control" value="{{ Request::get('name') }}"
                                             name="name" placeholder="Enter name">
                                     </div>
@@ -51,11 +51,11 @@
                                     </div>
                                       
                                    
-                                    <div class="form-group col-md-3">
+                                    {{-- <div class="form-group col-md-3">
                                         <label>Date</label>
                                         <input type="date" class="form-control" value="{{ Request::get('date') }}"
                                             name="date" placeholder="Enter Date">
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group col-md-3">
                                         <button class="btn btn-primary mt-4" type="submit">Search</button>
                                         <a href="{{ url('admin/subject/list') }}" class="btn btn-success mt-4"
@@ -82,11 +82,11 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Matkul Name</th>
+                                    <th>Nama Matkul</th>
                                     <th>Status</th>
                                     <th>Matkul Type</th>
-                                    <th>Created By</th>
-                                    <th>Created Date</th>
+                                    {{-- <th>Created By</th> --}}
+                                    {{-- <th>Created Date</th> --}}
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -107,8 +107,8 @@
                                     </td>
                                     <td>{{ $value->type }}</td>
                                     </td>
-                                    <td>{{ $value->created_by_name }}</td>
-                                    <td>{{ date('d-m-Y H:i A', strtotime($value->created_at)) }}</td>
+                                    {{-- <td>{{ $value->created_by_name }}</td> --}}
+                                    {{-- <td>{{ date('d-m-Y H:i A', strtotime($value->created_at)) }}</td> --}}
                                         <td>
                                             <a href="{{ url('admin/subject/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
                                             <a href="{{ url('admin/subject/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>

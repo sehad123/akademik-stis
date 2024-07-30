@@ -10,7 +10,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Exam List ( Total : {{ $getRecord->total() }})</h1>
+            <h1>Daftar Ujian ( Total : {{ $getRecord->total() }})</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
             <a href="{{ url('admin/examinations/exam/add') }}" class="btn btn-primary">add new Exam</a>
@@ -35,19 +35,19 @@
                 <!-- general form elements -->
                 <div class="card ">
                   <div class="card-header">
-                    <h3 class="card-title">Search Exam </h3>
+                    <h3 class="card-title">Search Ujian </h3>
                   </div>
                   <form method="get" action="">
                     <div class="card-body">
                       <div class="row">
 
                       <div class="form-group col-md-3">
-                        <label >Exam Name</label>
+                        <label >Nama Ujian</label>
                         <input type="text" class="form-control" value="{{ Request::get('name') }}" name="name" placeholder="Enter name">
                       </div>
                       
                       <div class="form-group col-md-3">
-                        <label >Date</label>
+                        <label >Tanggal</label>
                         <input type="date" class="form-control"  value="{{ Request::get('date') }}" name="date" placeholder="Enter date">
                       </div>
                       <div class="form-group col-md-3">
@@ -69,7 +69,7 @@
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Ujian List </h3>
+                <h3 class="card-title">Daftar Ujian </h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
@@ -77,10 +77,10 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Name</th>
-                      <th>Note</th>
-                      <th>Created By</th>
-                      <th>Created Date</th>
+                      <th>Nama</th>
+                      <th>Catatan</th>
+                      {{-- <th>Created By</th> --}}
+                      <th>Tanggal Pembuatan</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -93,7 +93,7 @@
                     <td>{{ $nomer++ }}</td>
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->note }}</td>
-                        <td>{{ $value->created_name }}</td>
+                        {{-- <td>{{ $value->created_name }}</td> --}}
                         <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
                         <td>
                           <a href="{{ url('admin/examinations/exam/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>

@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>My Kelas & Matkul</h1>
+                    <h1>Kelas & Mata Kuliah</h1>
                 </div>
                
             </div>
@@ -32,7 +32,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">My Class Matkul </h3>
+                        <h3 class="card-title">Kelas & Mata Kuliah </h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body p-0 table-responsive">
@@ -41,8 +41,8 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Class Name</th>
-                                    <th>Matkul Name</th>
-                                    <th>Matkul Type</th>
+                                    <th>Nama Mata Kuliah</th>
+                                    <th>Type</th>
                                     {{-- <th>Jam </th> --}}
                                     {{-- <th>Created Date</th> --}}
                                     <th>Action</th>
@@ -69,7 +69,7 @@
                                     </td>  --}}
                                     {{-- <td>{{ date('d-m-Y H:i A', strtotime($value->created_at)) }}</td> --}}
                                         <td>
-                                            <a href="{{ url('dosen/my_class_subject/class_timetable/'. $value->class_id.'/'.$value->matkul_id) }}" class="btn btn-primary">My Class Time</a>
+                                            <a href="{{ url('dosen/my_class_subject/class_timetable/'. $value->class_id.'/'.$value->matkul_id) }}" class="btn btn-primary">Jadwal Saya</a>
                                           </td>
                                     </td>
                                 </tr>

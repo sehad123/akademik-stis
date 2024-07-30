@@ -10,7 +10,6 @@
           <div class="col-sm-6">
             <h1>Submit Tugas </h1>
           </div>
-          
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -23,31 +22,27 @@
           <div class="col-md-12">
             <!-- general form elements -->
             <div class="card card-primary">
-           
               <!-- /.card-header -->
               <!-- form start -->
               <form method="post" action="" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                  <div class="form-group">
-                    <label >Document<span style="color: red;">*</span></label>
+                    <label>Document<span style="color: red;">*</span></label>
                     <input type="file" class="form-control" value="{{ old('document') }}" name="document" required placeholder="Enter document">
                   </div>
                   <div class="form-group">
-                    <label >Deskripsi<span style="color: red;">*</span></label>
-                    <textarea name="description" id="compose-textarea" class="form-control " style="height: 300px;"></textarea>
+                    <label>Deskripsi<span style="color: red;">*</span></label>
+                    <textarea name="description" class="form-control" style="height: 300px;"></textarea>
                   </div>
-                 
+                </div>
                 
                 <!-- /.card-body -->
-
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
               </form>
             </div>
-          
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -59,16 +54,4 @@
 <!-- Add these lines for Summernote -->
 <link rel="stylesheet" href="{{ url('public/plugins/summernote/summernote-bs4.min.css')}}">
 <script src="{{ url('public/plugins/summernote/summernote-bs4.min.js')}}"></script>
-
-<script src="https://cdn.tiny.cloud/1/your-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
-<script>
-    tinymce.init({
-        selector: '#compose-textarea',
-        plugins: 'autolink lists link image charmap print preview hr anchor pagebreak',
-        toolbar_mode: 'floating',
-        tinycomments_mode: 'embedded',
-        tinycomments_author: 'Author name',
-    });
-</script>
 @endsection

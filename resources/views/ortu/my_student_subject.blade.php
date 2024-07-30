@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>My Children Matkul List ({{ $getUser->name }} {{ $getUser->last_name }})</h1>
+                    <h1>Daftar Mata Kuliah ({{ $getUser->name }} {{ $getUser->last_name }})</h1>
                 </div>
                 
             </div>
@@ -23,17 +23,15 @@
             <div class="row">
                 <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">My Children Matkul List  </h3>
-                    </div>
+                 
                     <!-- /.card-header -->
                     <div class="card-body p-0 table-responsive">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Matkul Name</th>
-                                    <th>Matkul Type</th>
+                                    <th>Mata Kuliah</th>
+                                    <th>Type</th>
                                     <th>Action </th>
                                 </tr>
                             </thead>
@@ -47,7 +45,7 @@
                                         <td>{{ $item->matkul_name }}</td>
                                         <td>{{ $item->matkul_type }}</td>
                                         <td>
-                                            <a href="{{ url('ortu/my_student/subject/class_timetable/'. $item->class_id.'/'.$item->matkul_id.'/'.$getUser->id) }}" class="btn btn-primary">My Children Jadwal</a>
+                                            <a href="{{ url('ortu/my_student/subject/class_timetable/'. $item->class_id.'/'.$item->matkul_id.'/'.$getUser->id) }}" class="btn btn-primary"> Jadwal</a>
                                             
                                         </td>
                                     </tr>

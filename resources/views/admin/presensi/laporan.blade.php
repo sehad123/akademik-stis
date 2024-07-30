@@ -28,9 +28,9 @@
                   <div class="row">
 
                     <div class="form-group col-md-3">
-                      <label >Class </label>
+                      <label >Kelas </label>
                       <select name="class_id"  id="getClass" class="form-control">
-                          <option value="">Select Class</option>
+                          <option value="">Select </option>
                           @foreach ($getClass as $class)
                           <option {{ (Request::get('class_id') == $class->id)?'selected':''  }} value="{{ $class->id }}">{{ $class->name }}</option>
                           @endforeach
@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="form-group col-md-3">
-                      <label>Matkul </label>
+                      <label>Mata Kuliah </label>
                       <select id="getMatkul" name="matkul_id" class="form-control getSubject" >
                           <option value="">Select</option>
                           @if (!empty($getSubject))
@@ -61,7 +61,7 @@
                         <option value="2" {{ (Request::get('tgl_presensi') == 2)?'selected':''  }}>Terlambat</option>
                         <option value="3" {{ (Request::get('tgl_presensi') == 3)?'selected':''  }}>Sakit</option>
                         <option value="4" {{ (Request::get('tgl_presensi') == 4)?'selected':''  }}>Izin</option>
-                        <option value="5" {{ (Request::get('tgl_presensi') == 5)?'selected':''  }}>Terlambat</option>
+                        <option value="5" {{ (Request::get('tgl_presensi') == 5)?'selected':''  }}>Tidak Hadir</option>
                     </select>
                     </div>
                     <div class="form-group col-md-3">
@@ -95,12 +95,12 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Mahasiswa Name</th>
-                            <th>Class</th>
-                            <th>Matkul</th>
+                            <th>Nama Mahasiswa</th>
+                            <th>Kelas</th>
+                            <th>Mata Kuliah</th>
                             <th>Presensi</th>
                             <th>Tgl Presensi</th>
-                            <th>Created Date</th>
+                            {{-- <th>Created Date</th> --}}
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -127,8 +127,8 @@
                                 Tidak Hadir
                                 @endif
                             </td>
-                            <td>{{ $value->tgl_presensi }}</td>
-                            <td>{{ date('d-m-Y H:i:A',strtotime($value->created_at)) }}</td>
+                            {{-- <td>{{ $value->tgl_presensi }}</td> --}}
+                            {{-- <td>{{ date('d-m-Y H:i:A',strtotime($value->created_at)) }}</td> --}}
                             <td>{{ date('d-m-Y',strtotime($value->tgl_presensi))  }}</td>
                             @if ($value->presensi_type == 4 || $value->presensi_type == 3)
                             <td>

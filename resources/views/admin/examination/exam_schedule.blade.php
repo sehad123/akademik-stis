@@ -25,13 +25,13 @@
             <!-- general form elements -->
             <div class="card ">
               <div class="card-header">
-                <h3 class="card-title">Search Exam </h3>
+                <h3 class="card-title">Search Ujian </h3>
               </div>
               <form method="get" action="">
                 <div class="card-body">
                   <div class="row">
                     <div class="form-group col-md-3">
-                      <label >Exam </label>
+                      <label >Ujian </label>
                       <select name="exam_id" required id="" class="form-control">
                           <option value="">Select</option>
                           @foreach ($getExam as $exam)
@@ -40,7 +40,7 @@
                       </select>
                     </div>
                     <div class="form-group col-md-3">
-                      <label >Class </label>
+                      <label >Kelas </label>
                       <select name="class_id" required id="" class="form-control">
                           <option value="">Select</option>
                           @foreach ($getClass as $class)
@@ -75,10 +75,10 @@
                   <table class="table table-striped">
                     <thead>
                       <tr>
-                        <th>Matkul Name</th>
+                        <th>Mata Kuliah</th>
                         <th>Tanggal Ujian</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
+                        <th>Waktu Mulai</th>
+                        <th>Waktu Akhir</th>
                         <th>Ruangan</th>
                       </tr>
                     </thead>
