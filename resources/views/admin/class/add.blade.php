@@ -31,7 +31,7 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label >Nama Kelas</label>
-                    <input type="text" class="form-control"  name="name" required placeholder="Enter name">
+                    <input type="text" class="form-control"  name="name" required placeholder="Nama Kelas">
                   </div>
                   <div class="form-group">
                     <label >Status</label>

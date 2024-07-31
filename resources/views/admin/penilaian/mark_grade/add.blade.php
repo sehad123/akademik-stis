@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add new Grade </h1>
+            <h1> Grade Nilai </h1>
           </div>
           
         </div>
@@ -30,18 +30,18 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Grade Name</label>
-                    <input type="text" class="form-control" value="{{ old('name') }}" name="name" required placeholder="Enter Grade Name">
+                    <label >Grade </label>
+                    <input type="text" class="form-control" value="{{ old('name') }}" name="name" required placeholder="Grade Name">
                   </div>
                   
                   <div class="form-group">
                     <label >percent From</label>
-                    <input type="number" class="form-control" value="{{ old('percent_from') }}" name="percent_from" required placeholder="Enter percent Name">
+                    <input type="number" class="form-control" value="{{ old('percent_from') }}" name="percent_from" required placeholder="percent Name">
                   </div>
                   
                   <div class="form-group">
                     <label >percent To</label>
-                    <input type="number" class="form-control" value="{{ old('percent_to') }}" name="percent_to" required placeholder="Enter percent To">
+                    <input type="number" class="form-control" value="{{ old('percent_to') }}" name="percent_to" required placeholder="percent To">
                   </div>
                   
                 

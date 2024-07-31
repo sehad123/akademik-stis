@@ -346,7 +346,7 @@ class PresensiController extends Controller
 
                     $presensi->save();
 
-                    $json['message'] = 'Berhasil Melakukan Presensi';
+                    $json['message'] = 'Anda Terlambat melakukan presensi';
                     return response()->json($json);
                 } else if ($classSchedule['jam_mulai'] <= now()->hour &&  $classSchedule['jam_akhir'] >= now()->hour && ($classSchedule['menit_mulai'] + 30) < (now()->minute) % 60) {
                     $presensi = new presensiModel;
@@ -365,7 +365,7 @@ class PresensiController extends Controller
 
                     $presensi->save();
 
-                    $json['message'] = 'Berhasil Melakukan Presensi';
+                    $json['message'] = 'Anda Terlambat melakukan presensi';
                     return response()->json($json);
                 } else {
                     $presensi = new presensiModel;

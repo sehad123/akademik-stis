@@ -20,9 +20,9 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card ">
-              <div class="card-header">
+              {{-- <div class="card-header">
                 <h3 class="card-title">Search Presensi </h3>
-              </div>
+              </div> --}}
               <form method="get" action="">
                 <div class="card-body">
                   <div class="row">
@@ -44,7 +44,7 @@
                       <input type="date" id="getPresensiDate" value="{{ Request::get('tgl_presensi') }}" name="tgl_presensi" class="form-control" >
                     </div>
                     <div class="form-group col-md-3">
-                      <label > Presensi Type </label>
+                      <label > Type </label>
                       <select name="presensi_type"  id="getClass" class="form-control">
                         <option value="">Select</option>
                         <option value="1" {{ (Request::get('tgl_presensi') == 1)?'selected':''  }}>Hadir</option>
@@ -65,14 +65,14 @@
           </div>
             <div class="col-md-12">
             <div class="card">
-                <div class="card-header">
+                {{-- <div class="card-header">
                   <h3 class="card-title text-center">My Presensi </h3>
-                </div>
+                </div> --}}
                 <div class="card-body p-0">
                   <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Matkul Name</th>
+                            <th>Mata Kuliah</th>
                             <th>Status </th>
                             <th>Tgl Presensi</th>
                             <th>Action </th>

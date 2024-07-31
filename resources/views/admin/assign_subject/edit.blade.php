@@ -30,7 +30,6 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Nama Kelas</label>
                       <label >Pilih Kelas</label>
                       <select name="class_id" class="form-control" required>
                         <option value="">Pilih Kelas</option>

@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>My TimeTable  {{ $getClass->name }} - {{ $getMatkul->name }} </h1>
+                    <h1>Jadwal Saya  {{ $getClass->name }} - {{ $getMatkul->name }} </h1>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -31,9 +31,8 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Week</th>
-                                                <th>Start Time</th>
-                                                <th>End Time</th>
+                                                <th>Hari</th>
+                                                <th>Jam</th>
                                                 <th>Ruangan</th>
                                             </tr>
                                         </thead>
@@ -42,8 +41,7 @@
                                             @foreach ($getRecord as $valueW)
                                                 <tr>
                                                     <td>{{ $valueW['week_name'] }}</td>
-                                                    <td>{{ !empty($valueW['start_time'])? date('h:i A', strtotime($valueW['start_time'])):'' }}</td>
-                                                    <td>{{ !empty($valueW['end_time'])? date('h:i A', strtotime($valueW['end_time'])):'' }}</td>
+                                                    <td>{{ !empty($valueW['start_time'])? date('h:i A', strtotime($valueW['start_time'])):'' }} - {{ !empty($valueW['end_time'])? date('h:i A', strtotime($valueW['end_time'])):'' }}</td>
                                                     <td>{{ $valueW['room_number'] }}</td>
                                                 </tr>
                                             @endforeach

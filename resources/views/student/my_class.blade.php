@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>My Class  </h1>
+                    <h1>Kelas Saya  </h1>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -26,16 +26,15 @@
                     @foreach ($getRecord as $value)
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">{{ $value['name'] }} </h3>
+                                    <h1 class="card-title font-bold">{{ $value['name'] }} </h1>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body p-0">
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Week</th>
-                                                <th>Start Time</th>
-                                                <th>End Time</th>
+                                                <th>Hari</th>
+                                                <th>Jam</th>
                                                 <th>Ruangan</th>
                                             </tr>
                                         </thead>
@@ -46,8 +45,7 @@
                                             @foreach ($value['week'] as $valueW)
                                                 <tr>
                                                     <td>{{ $valueW['week_name'] }}</td>
-                                                    <td>{{ !empty($valueW['start_time'])? date('h:i A', strtotime($valueW['start_time'])):'' }}</td>
-                                                    <td>{{ !empty($valueW['end_time'])? date('h:i A', strtotime($valueW['end_time'])):'' }}</td>
+                                                    <td>{{ !empty($valueW['start_time'])? date('h:i A', strtotime($valueW['start_time'])):'' }} - {{ !empty($valueW['end_time'])? date('h:i A', strtotime($valueW['end_time'])):'' }}</td>
                                                     <td>{{ $valueW['room_number'] }}</td>
                                                 </tr>
                                             @endforeach

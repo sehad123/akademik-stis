@@ -16,7 +16,7 @@ class PerizinanModel extends Model
 
     static public function getRecord($presensi_id)
     {
-        $return = PerizinanModel::select('perizinan.*', 'matkul.name as matkul_name', 'class.name as class_name', 'users.name as name', 'users.last_name as last_name')
+        $return = PerizinanModel::select('perizinan.*', 'matkul.name as matkul_name', 'class.name as class_name', 'users.name as name')
             ->join('users', 'users.id', '=', 'perizinan.student_id')
             ->join('presensi_mahasiswa', 'presensi_mahasiswa.id', '=', 'perizinan.presensi_id')
             ->join('class', 'class.id', '=', 'perizinan.class_id')

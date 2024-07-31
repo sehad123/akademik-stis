@@ -31,9 +31,9 @@
                 <div class="col-md-12">
 
                 <div class="card">
-                    <div class="card-header">
+                    {{-- <div class="card-header">
                         <h3 class="card-title">Kelas & Mata Kuliah </h3>
-                    </div>
+                    </div> --}}
                     <!-- /.card-header -->
                     <div class="card-body p-0 table-responsive">
                         <table class="table table-striped">

@@ -20,9 +20,9 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card ">
-              <div class="card-header">
+              {{-- <div class="card-header">
                 <h3 class="card-title">Search Presensi </h3>
-              </div>
+              </div> --}}
               <form method="get" action="">
                 <div class="card-body">
                   <div class="row">

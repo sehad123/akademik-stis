@@ -13,6 +13,16 @@ class ClassTimeTableModel extends Model
 
     static public function getRecordClassMatkul($class_id, $matkul_id, $week_id)
     {
-        return self::where('class_id', '=', $class_id)->where('matkul_id', '=', $matkul_id)->where('week_id', '=', $week_id)->first();
+        return self::where('class_id', '=', $class_id)
+            ->where('matkul_id', '=', $matkul_id)
+            ->where('week_id', '=', $week_id)
+            ->first();
+    }
+
+    static public function deleteRecord($class_id, $matkul_id)
+    {
+        return self::where('class_id', '=', $class_id)
+            ->where('matkul_id', '=', $matkul_id)
+            ->delete();
     }
 }

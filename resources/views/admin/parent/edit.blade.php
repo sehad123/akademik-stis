@@ -47,9 +47,9 @@
                     </div>
                     </div> --}}
                     <div class="form-group col-md-6">
-                      <label >gender<span style="color:red;">*</span></label>
+                      <label >Jenis Kelamin<span style="color:red;">*</span></label>
                       <select name="gender" required class="form-control" id="">
-                        <option value="">Select Gender</option>
+                        <option value="">Select</option>
                         <option {{ (old('gender',$getRecord->gender) =='Laki-Laki')?'selected':'' }} value="Laki-Laki">Laki-Laki</option>
                         <option {{ (old('gender',$getRecord->gender) =='Perempuan')?'selected':'' }} value="Perempuan">Perempuan</option>
                         <option {{ (old('gender',$getRecord->gender) =='Other')?'selected':'' }}  value="Other">Other</option>
@@ -89,7 +89,7 @@
 
                     <div class="form-group col-md-6">
                       <label >Profile picture<span style="color:red;">*</span></label>
-                      <input type="file" class="form-control" name="profile_pic" >
+                      <input type="file" class="form-control mb-3" name="profile_pic" >
                       <div style="color:red;">
 
                         {{ $errors->first('profile_pic') }}

@@ -32,10 +32,9 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Matkul Name</th>
+                                                <th>Mata Kuliah</th>
                                                 <th>Tanggal </th>
-                                                <th>Start Time</th>
-                                                <th>End Time</th>
+                                                <th>Jam</th>
                                                 <th>Ruangan</th>
                                             </tr>
                                         </thead>
@@ -45,8 +44,7 @@
                                             <tr>
                                                 <td> {{ $valueW['matkul_name'] }}</td>
                                                 <td>{{ (new \IntlDateFormatter('id_ID', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE))->format(strtotime($valueW['exam_date'])) }}</td>
-                                                <td>{{ !empty($valueW['start_time'])? date('h:i A', strtotime($valueW['start_time'])):'' }}</td>
-                                                <td>{{ !empty($valueW['end_time'])? date('h:i A', strtotime($valueW['end_time'])):'' }}</td>
+                                                <td>{{ !empty($valueW['start_time'])? date('h:i A', strtotime($valueW['start_time'])):'' }} - {{ !empty($valueW['end_time'])? date('h:i A', strtotime($valueW['end_time'])):'' }}</td>
                                                 <td> {{ $valueW['room_number'] }}</td>
                                             </tr>
                                             @endforeach

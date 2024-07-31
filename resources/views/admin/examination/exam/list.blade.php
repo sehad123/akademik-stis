@@ -13,7 +13,7 @@
             <h1>Daftar Ujian ( Total : {{ $getRecord->total() }})</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('admin/examinations/exam/add') }}" class="btn btn-primary">add new Exam</a>
+            <a href="{{ url('admin/examinations/exam/add') }}" class="btn btn-primary">+</a>
           </div>
         
         </div>
@@ -34,22 +34,20 @@
             
                 <!-- general form elements -->
                 <div class="card ">
-                  <div class="card-header">
-                    <h3 class="card-title">Search Ujian </h3>
-                  </div>
+                  
                   <form method="get" action="">
                     <div class="card-body">
                       <div class="row">
 
                       <div class="form-group col-md-3">
                         <label >Nama Ujian</label>
-                        <input type="text" class="form-control" value="{{ Request::get('name') }}" name="name" placeholder="Enter name">
+                        <input type="text" class="form-control" value="{{ Request::get('name') }}" name="name" placeholder="Nama">
                       </div>
                       
-                      <div class="form-group col-md-3">
+                      {{-- <div class="form-group col-md-3">
                         <label >Tanggal</label>
                         <input type="date" class="form-control"  value="{{ Request::get('date') }}" name="date" placeholder="Enter date">
-                      </div>
+                      </div> --}}
                       <div class="form-group col-md-3">
                         <button class="btn btn-primary mt-4" type="submit">Search</button>
                         <a href="{{ url('admin/examinations/exam/list') }}" class="btn btn-success mt-4" type="submit">clear</a>
@@ -68,9 +66,7 @@
             <div class="col-md-12">
 
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Daftar Ujian </h3>
-              </div>
+             
               <!-- /.card-header -->
               <div class="card-body p-0">
                 <table class="table table-striped">
@@ -80,7 +76,7 @@
                       <th>Nama</th>
                       <th>Catatan</th>
                       {{-- <th>Created By</th> --}}
-                      <th>Tanggal Pembuatan</th>
+                      {{-- <th>Tanggal Pembuatan</th> --}}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -94,10 +90,14 @@
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->note }}</td>
                         {{-- <td>{{ $value->created_name }}</td> --}}
-                        <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
+                        {{-- <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td> --}}
                         <td>
-                          <a href="{{ url('admin/examinations/exam/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
-                          <a href="{{ url('admin/examinations/exam/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
+                          <a href="{{ url('admin/examinations/exam/edit/'. $value->id) }}" class="btn btn-primary">
+                            <i class="fas fa-edit"></i>
+                          </a>
+                          <a href="{{ url('admin/examinations/exam/delete/'. $value->id) }}" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i>
+                          </a>
                         </td>
                        </tr>
                    @endforeach

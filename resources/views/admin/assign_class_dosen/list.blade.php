@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Daftar Matkul Dosen ({{ $getRecord->total() }})</h1>
+                    <h1> Mata Kuliah & Dosen ({{ $getRecord->total() }})</h1>
                 </div>
                 <div class="col-sm-6" style="text-align: right;">
                     <a href="{{ url('admin/assign_class_dosen/add') }}" class="btn btn-primary">+</a>
@@ -42,18 +42,18 @@
                                     <div class="form-group col-md-3">
                                         <label>Nama Dosen</label>
                                         <input type="text" class="form-control" value="{{ Request::get('dosen_name') }}"
-                                            name="dosen_name" placeholder="Dosen name">
+                                            name="dosen_name" placeholder="Dosen">
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label>Mata Kuliah</label>
                                         <input type="text" class="form-control" value="{{ Request::get('matkul_name') }}"
-                                            name="matkul_name" placeholder="Matkul name">
+                                            name="matkul_name" placeholder="Mata Kuliah">
                                     </div>
                                    
                                     <div class="form-group col-md-3">
                                         <label>Kelas</label>
                                         <input type="text" class="form-control" value="{{ Request::get('class_name') }}"
-                                            name="class_name" placeholder="class name">
+                                            name="class_name" placeholder="Kelas">
                                     </div>
                                    
                                     {{-- <div class="form-group col-md-3">
@@ -78,15 +78,13 @@
                 <div class="col-md-12">
 
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Matkul List </h3>
-                    </div>
+                    
                     <!-- /.card-header -->
                     <div class="card-body p-0 table-responsive">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th>No</th>
                                     <th>Dosen </th>
                                     <th>Kelas</th>
                                     <th>Mata Kuliah</th>
@@ -118,8 +116,12 @@
                                     {{-- <td>{{ date('d-m-Y H:i A', strtotime($value->created_at)) }}</td> --}}
                                         <td>
                                             {{-- <a href="{{ url('admin/assign_class_dosen/edit/'. $value->id) }}" class="btn btn-primary">Edit</a> --}}
-                                            <a href="{{ url('admin/assign_class_dosen/edit_single/'. $value->id) }}" class="btn btn-warning">Edit</a>
-                                            <a href="{{ url('admin/assign_class_dosen/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
+                                            <a href="{{ url('admin/assign_class_dosen/edit_single/'. $value->id) }}" class="btn btn-warning">
+                              <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{{ url('admin/assign_class_dosen/delete/'. $value->id) }}" class="btn btn-danger">
+                              <i class="fas fa-trash-alt"></i>
+                                            </a>
                                           </td>
                                     </td>
                                 </tr>

@@ -1,56 +1,56 @@
 @extends('layouts.app')
 @section('style')
 <style type="text/css">
-
-.fc-daygrid-event{
+.fc-daygrid-event {
     white-space: normal;
 }
-</style>  
+</style>
 @endsection
 
 @section('content')
-    
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Jadwal Saya</h1>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Jadwal Saya</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
     </section>
 
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-12">
-            <div id="calendar"></div>
-          </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="calendar"></div>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
-  </div>
+</div>
 @endsection
 
 @section('script')
-<script  src="{{ url('public/dist/fullcalendar/index.global.js') }}"></script>
+<script src="{{ url('public/dist/fullcalendar/index.global.js') }}"></script>
 <script type="text/javascript">
     var events = [];
 
     // jadwal harian
     @foreach($getMyJadwal as $value)
-            events.push({
-                title: '{{ $value->class_name }} - {{ $value->matkul_name }}',
-                daysOfWeek: [{{$value->fullcalendar_day  }}], // Adjust as needed
-                startTime: '{{ $value->start_time }}', // Adjust as needed
-                endTime: '{{ $value->end_time }}', // Adjust as needed
-                // url: "{{ url('http://localhost:85/akademik.stis/dosen/presensi') }}" + '/' + {{ $value['class_id'] }} + '/' + {{ $value['matkul_id'] }} + '/' + {{ $value['dosen_id'] }} + '/' + {{ $value['week_id'] }},
-                url: "{{ url('http://localhost:85/akademik.stis/dosen/presensi') }}" + '/' + {{ $value['class_id'] }} + '/' + {{ $value['matkul_id'] }} + '/' + {{ Auth::user()->id }} + '/' + {{ $value['week_id'] }},
-
-            });
+        events.push({
+            title: '{{ $value->matkul_name }}',
+            daysOfWeek: [{{$value->fullcalendar_day }}], // Adjust as needed
+            startTime: '{{ $value->start_time }}', // Adjust as needed
+            endTime: '{{ $value->end_time }}', // Adjust as needed
+            extendedProps: {
+                className: '{{ $value->class_name }}',
+                roomNumber: '{{ $value->room_number }}'
+            },
+            url: "{{ url('http://localhost:85/akademik.stis/dosen/presensi') }}" + '/' + {{ $value['class_id'] }} + '/' + {{ $value['matkul_id'] }} + '/' + {{ Auth::user()->id }} + '/' + {{ $value['week_id'] }},
+        });
     @endforeach
 
     var calendarEl = document.getElementById('calendar');
@@ -64,7 +64,24 @@
         navLinks: true,
         editable: false,
         events: events,
-        initialView:'timeGridWeek',
+        initialView: 'timeGridWeek',
+        eventContent: function(arg) {
+            var matkulName = arg.event.title;
+            var className = arg.event.extendedProps.className;
+            var startTime = arg.event.startStr.split('T')[1].slice(0, 5);
+            var endTime = arg.event.endStr.split('T')[1].slice(0, 5);
+            var roomNumber = arg.event.extendedProps.roomNumber;
+
+            var customHtml = `
+                <div>
+                    <b>${matkulName}</b><br>
+                    ${className}<br>
+                    ${startTime} - ${endTime}<br>
+                    Ruangan : ${roomNumber}
+                </div>
+            `;
+            return { html: customHtml };
+        }
     });
 
     calendar.render();

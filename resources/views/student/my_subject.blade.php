@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Matkul List</h1>
+                    <h1>Mata Kuliah</h1>
                 </div>
                 
             </div>
@@ -23,17 +23,17 @@
             <div class="row">
                 <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title text-center">My Matkul List </h3>
-                    </div>
+                    {{-- <div class="card-header">
+                        <h3 class="card-title text-center">My Ma </h3>
+                    </div> --}}
                     <!-- /.card-header -->
                     <div class="card-body p-0 table-responsive">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Matkul Name</th>
-                                    <th>Matkul Type</th>
+                                    <th>No</th>
+                                    <th>Mata Kuliah</th>
+                                    <th>Type</th>
                                 </tr>
                             </thead>
                             <tbody>

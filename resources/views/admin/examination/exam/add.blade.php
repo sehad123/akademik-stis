@@ -31,7 +31,7 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label >Nama Ujian</label>
-                    <input type="text" class="form-control" value="{{ old('name') }}" name="name" required placeholder="Enter Ujian Name">
+                    <input type="text" class="form-control" value="{{ old('name') }}" name="name" required placeholder="Ujian">
                   </div>
                   <div class="form-group">
                     <label >Catatan</label>

@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add new Admin </h1>
+            <h1>Tambah Admin </h1>
           </div>
           
         </div>
@@ -30,12 +30,12 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Name</label>
-                    <input type="text" class="form-control" value="{{ old('name') }}" name="name" required placeholder="Enter name">
+                    <label >Nama</label>
+                    <input type="text" class="form-control" value="{{ old('name') }}" name="name" required placeholder=" Nama">
                   </div>
                   <div class="form-group">
                     <label >Email</label>
-                    <input type="email" class="form-control" value="{{ old('email') }}" name="email" required placeholder="Enter email">
+                    <input type="email" class="form-control" value="{{ old('email') }}" name="email" required placeholder=" Email">
                     <div style="color:red;">
                         {{ $errors->first('email') }}
                     
@@ -46,9 +46,9 @@
                     <input type="password" class="form-control" name="password" required placeholder="Password">
                   </div>
                 </div>
-                <div class="form-group ">
+                <div class="form-group ml-3">
                   <label >Profile picture<span style="color:red;">*</span></label>
-                  <input type="file" class="form-control" name="profile_pic" >
+                  <input type="file" class="form-control mb-3" name="profile_pic" >
                   <div style="color:red;">
                     {{ $errors->first('profile_pic') }}
                 

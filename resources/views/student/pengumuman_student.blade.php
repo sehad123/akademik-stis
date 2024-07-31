@@ -17,16 +17,16 @@
 
     <!-- general form elements -->
     <div class="card ">
-        <div class="card-header">
+        {{-- <div class="card-header">
             <h3 class="card-title">Search Class </h3>
-        </div>
+        </div> --}}
         <form method="get" action="">
             <div class="card-body">
                 <div class="row">
 
                     <div class="form-group col-md-3">
-                        <label>judul</label>
-                        <input type="text" class="form-control" value="{{ Request::get('judul') }}"
+                        <label>Judul</label>
+                        <input type="text" class="form-control" value="{{ Request::get('Judul') }}"
                             name="judul" placeholder="Enter judul">
                     </div>
                    

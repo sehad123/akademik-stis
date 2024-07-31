@@ -30,8 +30,8 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Nama Mata Kuliah</label>
-                    <input type="text" class="form-control"  name="name" required placeholder="Matkul name">
+                    <label >Mata Kuliah</label>
+                    <input type="text" class="form-control"  name="name" required placeholder="Mata Kuliah">
                   </div>
                   <div class="form-group">
                     <label >Status</label>

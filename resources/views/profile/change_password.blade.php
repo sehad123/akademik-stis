@@ -32,15 +32,15 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label > Password Lama</label>
-                    <input type="password" class="form-control"  name="old_password" required placeholder="Old Password">
+                    <input type="password" class="form-control"  name="old_password" required placeholder="Password Lama">
                   </div>
                   <div class="form-group">
                     <label > Password Baru</label>
-                    <input type="password" class="form-control"  name="new_password" required placeholder="New Password">
+                    <input type="password" class="form-control"  name="new_password" required placeholder="Password Baru">
                   </div>
                   <div class="form-group">
                     <label >Konfirmasi Password</label>
-                    <input type="password" class="form-control"  name="confirm_password" required placeholder="Confirm Password">
+                    <input type="password" class="form-control"  name="confirm_password" required placeholder="Konfirmasi Password">
                   </div>
                   
                  

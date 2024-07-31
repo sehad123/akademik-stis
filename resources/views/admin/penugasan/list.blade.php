@@ -12,7 +12,7 @@
             <h1>Tugas</h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('admin/tugas/penugasan/add') }}" class="btn btn-primary">add new Tugas</a>
+            <a href="{{ url('admin/tugas/penugasan/add') }}" class="btn btn-primary">+</a>
           </div>
         
           <div class="col-md-12">

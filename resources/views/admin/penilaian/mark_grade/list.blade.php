@@ -13,7 +13,7 @@
             <h1>Grade Nilai </h1>
           </div>
           <div class="col-sm-6" style="text-align: right;">
-            <a href="{{ url('admin/penilaian/mark_grade_add') }}" class="btn btn-primary">add new Grade</a>
+            <a href="{{ url('admin/penilaian/mark_grade_add') }}" class="btn btn-primary">+</a>
           </div>
         
         </div>
@@ -32,9 +32,9 @@
             <div class="col-md-12">
 
             <div class="card">
-              <div class="card-header">
+              {{-- <div class="card-header">
                 <h3 class="card-title">Grade Nilai </h3>
-              </div>
+              </div> --}}
               <!-- /.card-header -->
               <div class="card-body p-0">
                 <table class="table table-striped">
@@ -44,8 +44,8 @@
                       <th>Grade Name</th>
                       <th>Percent From</th>
                       <th>Percent To</th>
-                      <th>Percent By</th>
-                      <th>Created Date</th>
+                      {{-- <th>Percent By</th> --}}
+                      {{-- <th>Created Date</th> --}}
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -59,11 +59,16 @@
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->percent_from }}</td>
                         <td>{{ $value->percent_to }}</td>
-                        <td>{{ $value->created_name }}</td>
-                        <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td>
+                        {{-- <td>{{ $value->created_name }}</td> --}}
+                        {{-- <td>{{ date('d-m-Y H:i A',strtotime($value->created_at)) }}</td> --}}
                         <td>
-                          <a href="{{ url('admin/penilaian/mark_grade/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
-                          <a href="{{ url('admin/penilaian/mark_grade/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
+                          <a href="{{ url('admin/penilaian/mark_grade/edit/'. $value->id) }}" class="btn btn-primary">
+                            <i class="fas fa-edit"></i>
+                          
+                          </a>
+                          <a href="{{ url('admin/penilaian/mark_grade/delete/'. $value->id) }}" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i>
+                          </a>
                         </td>
                        </tr>
                    @endforeach

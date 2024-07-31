@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>My Account </h1>
+            <h1>Akun Saya </h1>
           </div>
           
         </div>
@@ -32,7 +32,7 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Name</label>
+                    <label >Nama</label>
                     <input type="text" value="{{  old('name',$getRecord->name)  }}" class="form-control" name="name" required placeholder="Enter name">
                   </div>
                   <div class="form-group">

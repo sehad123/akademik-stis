@@ -17,29 +17,29 @@
 
     <!-- general form elements -->
     <div class="card ">
-        <div class="card-header">
+        {{-- <div class="card-header">
             <h3 class="card-title">Search Class </h3>
-        </div>
+        </div> --}}
         <form method="get" action="">
             <div class="card-body">
                 <div class="row">
 
                     <div class="form-group col-md-3">
-                        <label>judul</label>
+                        <label>Judul</label>
                         <input type="text" class="form-control" value="{{ Request::get('judul') }}"
-                            name="judul" placeholder="Enter judul">
+                            name="judul" placeholder=" Judul">
                     </div>
                    
                     <div class="form-group col-md-3">
                       <label> Tanggal Dari</label>
                       <input type="date" class="form-control" value="{{ Request::get('pengumuman_from') }}"
-                          name="pengumuman_from" placeholder="Enter Date">
+                          name="pengumuman_from" placeholder=" Date">
                   </div>
                   
                     <div class="form-group col-md-3">
                         <label> Tanggal To</label>
                         <input type="date" class="form-control" value="{{ Request::get('pengumuman_to') }}"
-                            name="pengumuman_to" placeholder="Enter Date">
+                            name="pengumuman_to" placeholder=" Date">
                     </div>
                     
                   

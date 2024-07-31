@@ -29,9 +29,7 @@
 
                     <!-- general form elements -->
                     <div class="card ">
-                        <div class="card-header">
-                            <h3 class="card-title">Search Class & Mata Kuliah </h3>
-                        </div>
+                        
                         <form method="get" action="">
                             <div class="card-body">
                                 <div class="row">
@@ -39,12 +37,12 @@
                                     <div class="form-group col-md-3">
                                         <label> Kelas</label>
                                         <input type="text" class="form-control" value="{{ Request::get('class_name') }}"
-                                            name="class_name" placeholder="Class name">
+                                            name="class_name" placeholder="Kelas">
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label> Mata Kuliah</label>
                                         <input type="text" class="form-control" value="{{ Request::get('matkul_name') }}"
-                                            name="matkul_name" placeholder="Matkul name">
+                                            name="matkul_name" placeholder="Mata Kuliah">
                                     </div>
                                    
                                     {{-- <div class="form-group col-md-3">
@@ -69,9 +67,7 @@
                 <div class="col-md-12">
 
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Matkul List </h3>
-                    </div>
+                   
                     <!-- /.card-header -->
                     <div class="card-body p-0 table-responsive">
                         <table class="table table-striped">

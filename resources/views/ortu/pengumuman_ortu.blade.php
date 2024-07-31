@@ -23,8 +23,8 @@
                 <div class="row">
 
                     <div class="form-group col-md-3">
-                        <label>judul</label>
-                        <input type="text" class="form-control" value="{{ Request::get('judul') }}"
+                        <label>Judul</label>
+                        <input type="text" class="form-control" value="{{ Request::get('Judul') }}"
                             name="judul" placeholder="Enter judul">
                     </div>
                    

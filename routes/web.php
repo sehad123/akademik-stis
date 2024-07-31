@@ -107,6 +107,7 @@ Route::group(['middleware' => 'admin'], function () {
 
     // TimeTable
     Route::get('admin/class_timetable/list', [ClassTimeTableController::class, 'list']);
+    Route::post('admin/class_timetable/delete', [ClassTimeTableController::class, 'delete'])->name('class-timetable.delete');
     Route::post('admin/class_timetable/get_subject', [ClassTimeTableController::class, 'get_subject']);
     Route::post('admin/class_timetable/add', [ClassTimeTableController::class, 'insert_update']);
 

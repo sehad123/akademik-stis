@@ -99,6 +99,15 @@ class ClassTimeTableController extends Controller
         return redirect()->back()->with('success', 'Jadwal berhasil disimpan');
     }
 
+    public function delete(Request $request)
+    {
+        ClassTimeTableModel::where('class_id', '=', $request->class_id)
+            ->where('matkul_id', '=', $request->matkul_id)
+            ->delete();
+        return redirect()->back()->with('success', 'Jadwal berhasil dihapus');
+    }
+
+
     // student class
     public function myClassStudent()
     {

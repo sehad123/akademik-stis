@@ -11,7 +11,7 @@
                     <h1>Daftar Mata Kuliah</h1>
                 </div>
                 <div class="col-sm-6" style="text-align: right;">
-                    <a href="{{ url('admin/subject/add') }}" class="btn btn-primary">Tambah Matkul </a>
+                    <a href="{{ url('admin/subject/add') }}" class="btn btn-primary">+ </a>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -29,20 +29,18 @@
 
                     <!-- general form elements -->
                     <div class="card ">
-                        <div class="card-header">
-                            <h3 class="card-title">Search Matkul </h3>
-                        </div>
+                        
                         <form method="get" action="">
                             <div class="card-body">
                                 <div class="row">
 
                                     <div class="form-group col-md-3">
-                                        <label>Nama</label>
+                                        <label>Mata Kuliah</label>
                                         <input type="text" class="form-control" value="{{ Request::get('name') }}"
-                                            name="name" placeholder="Enter name">
+                                            name="name" placeholder="Mata Kuliah">
                                     </div>
                                     <div class="form-group col-md-3">
-                                        <label >Matkul type</label>
+                                        <label > Type</label>
                                         <select name="type" class="form-control" id="">
                                             <option value="">Select Type</option>
                                           <option value="Teori" {{ (Request::get('type') == 'Teori')? 'selected':'' }}>Teori </option>
@@ -54,7 +52,7 @@
                                     {{-- <div class="form-group col-md-3">
                                         <label>Date</label>
                                         <input type="date" class="form-control" value="{{ Request::get('date') }}"
-                                            name="date" placeholder="Enter Date">
+                                            name="date" placeholder=" Date">
                                     </div> --}}
                                     <div class="form-group col-md-3">
                                         <button class="btn btn-primary mt-4" type="submit">Search</button>
@@ -73,9 +71,7 @@
                 <div class="col-md-12">
 
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Matkul List </h3>
-                    </div>
+                  
                     <!-- /.card-header -->
                     <div class="card-body p-0 table-responsive">
                         <table class="table table-striped">
@@ -110,8 +106,12 @@
                                     {{-- <td>{{ $value->created_by_name }}</td> --}}
                                     {{-- <td>{{ date('d-m-Y H:i A', strtotime($value->created_at)) }}</td> --}}
                                         <td>
-                                            <a href="{{ url('admin/subject/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
-                                            <a href="{{ url('admin/subject/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
+                                            <a href="{{ url('admin/subject/edit/'. $value->id) }}" class="btn btn-primary">
+                              <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{{ url('admin/subject/delete/'. $value->id) }}" class="btn btn-danger">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
                                           </td>
                                     </td>
                                 </tr>

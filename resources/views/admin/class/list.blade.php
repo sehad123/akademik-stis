@@ -29,9 +29,7 @@
 
                     <!-- general form elements -->
                     <div class="card ">
-                        <div class="card-header">
-                            <h3 class="card-title">Search Kelas </h3>
-                        </div>
+                        
                         <form method="get" action="">
                             <div class="card-body">
                                 <div class="row">
@@ -64,9 +62,7 @@
                 <div class="col-md-12">
 
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Class List </h3>
-                    </div>
+                   
                     <!-- /.card-header -->
                     <div class="card-body p-0 table-responsive">
                         <table class="table table-striped">
@@ -98,8 +94,12 @@
                                     {{-- <td>{{ $value->created_by_name }}</td> --}}
                                     {{-- <td>{{ date('d-m-Y H:i A', strtotime($value->created_at)) }}</td> --}}
                                     <td>
-                                            <a href="{{ url('admin/class/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
-                                            <a href="{{ url('admin/class/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
+                                            <a href="{{ url('admin/class/edit/'. $value->id) }}" class="btn btn-primary">
+                              <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{{ url('admin/class/delete/'. $value->id) }}" class="btn btn-danger">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
                                     </td>
                                 </tr>
                                 @endforeach
