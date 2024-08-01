@@ -98,12 +98,14 @@
                                   @if ($presensi_type == 1)
                                       Hadir
                                   @elseif ($presensi_type == 2)
-                                      Terlambat
+                                      Terlambat A
                                   @elseif ($presensi_type == 3)
-                                      Sakit
+                                      Terlambat B
                                   @elseif ($presensi_type == 4)
-                                      Izin
+                                      Sakit
                                   @elseif ($presensi_type == 5)
+                                      Izin
+                                  @elseif ($presensi_type == 6)
                                       Tidak Hadir
                                   @endif
                                   @else

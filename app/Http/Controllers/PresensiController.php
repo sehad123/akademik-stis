@@ -259,7 +259,6 @@ class PresensiController extends Controller
         $presensi_type = $request->input('presensi_type');
         $tgl_presensi = now()->toDateString();
 
-
         $c = ClassModel::getSingle($class_id);
         $m = SubjectModel::getSingle($matkul_id);
         $d = WeekModel::getSingle($week_id);
@@ -276,7 +275,7 @@ class PresensiController extends Controller
                 $dataW['week_name'] = $valueW->name;
                 $dataW['fullcalendar_day'] = $valueW->fullcalendar_day;
 
-                $classSubject =   ClassTimeTableModel::getRecordClassMatkul($c->id, $m->id, $d->id);
+                $classSubject = ClassTimeTableModel::getRecordClassMatkul($c->id, $m->id, $d->id);
                 if (!empty($classSubject)) {
                     $dataW['start_time'] = $classSubject->start_time;
                     $dataW['end_time'] = $classSubject->end_time;
@@ -297,8 +296,6 @@ class PresensiController extends Controller
             $result[] = $dataS;
         }
         $getMyJadwal = $result;
-
-
 
         // Assuming you have the necessary models imported
         $getClass = ClassModel::getSingle($class_id);
@@ -322,65 +319,42 @@ class PresensiController extends Controller
                 return response()->json($json);
             } else {
                 $classSchedule = $getMyJadwal[0]['week'][0];
+                $current_time = now()->hour * 60 + now()->minute;
+                $start_time = $classSchedule['jam_mulai'] * 60 + $classSchedule['menit_mulai'];
+                $end_time = $classSchedule['jam_akhir'] * 60 + $classSchedule['menit_akhir'];
 
-                if ($classSchedule['jam_mulai'] > now()->hour) {
+                if ($current_time < $start_time) {
                     $json['message'] = "Anda hanya bisa melakukan presensi pada jam {$classSchedule['jam_mulai']}";
                     return response()->json($json);
-                } else if ($classSchedule['jam_akhir'] < now()->hour) {
-                    $json['message'] = "Anda sudah tidak bisa melakukan presensi karana udah jam " + now()->hour;
-                    return response()->json($json);
-                } else if ($classSchedule['jam_mulai'] <= now()->hour &&  $classSchedule['jam_akhir'] >= now()->hour && ($classSchedule['menit_mulai'] + 20) < (now()->minute) % 60) {
+                }
+                //  else if ($current_time > $end_time) {
+                //     $json['message'] = 'Anda terlambat lebih dari 40 menit, harap lapor BAAK';
+                //     return response()->json($json);
+                // }
+                else {
                     $presensi = new presensiModel;
                     $presensi->student_id = $getMahasiswa->id;
                     $presensi->matkul_id = $getMatkul->id;
                     $presensi->class_id = $getClass->id;
-                    // $presensi->week_id = $getDay->id;
-                    $presensi->tgl_presensi = $tgl_presensi; // Use the provided date
+                    $presensi->tgl_presensi = $tgl_presensi;
                     $presensi->created_by = $getMahasiswa->name;
                     $presensi->created_at = now()->format('h:i A');
 
-                    if ($presensi_type == 1)
-                        $presensi->presensi_type = 2;
-                    else
-                        $presensi->presensi_type = $presensi_type;
+                    if ($current_time - $start_time > 30) {
+                        $presensi->presensi_type = 6; // Tidak Hadir
+                        $json['message'] = 'Anda terlambat lebih dari 30 menit, harap lapor BAAK';
+                    } else if ($current_time - $start_time > 20) {
+                        $presensi->presensi_type = 3; // Terlambat B
+                        $json['message'] = 'Anda terlambat lebih dari 20 menit';
+                    } else if ($current_time - $start_time > 15) {
+                        $presensi->presensi_type = 2; // Terlambat A
+                        $json['message'] = 'Anda terlambat lebih dari 15 menit';
+                    } else {
+                        $presensi->presensi_type = $presensi_type; // Hadir
+                        $json['message'] = 'Anda Presensi tepat waktu';
+                    }
 
                     $presensi->save();
-
-                    $json['message'] = 'Anda Terlambat melakukan presensi';
-                    return response()->json($json);
-                } else if ($classSchedule['jam_mulai'] <= now()->hour &&  $classSchedule['jam_akhir'] >= now()->hour && ($classSchedule['menit_mulai'] + 30) < (now()->minute) % 60) {
-                    $presensi = new presensiModel;
-                    $presensi->student_id = $getMahasiswa->id;
-                    $presensi->matkul_id = $getMatkul->id;
-                    $presensi->class_id = $getClass->id;
-                    // $presensi->week_id = $getDay->id;
-                    $presensi->tgl_presensi = $tgl_presensi; // Use the provided date
-                    $presensi->created_by = $getMahasiswa->name;
-                    $presensi->created_at = now()->format('h:i A');
-
-                    if ($presensi_type == 1)
-                        $presensi->presensi_type = 5;
-                    else
-                        $presensi->presensi_type = $presensi_type;
-
-                    $presensi->save();
-
-                    $json['message'] = 'Anda Terlambat melakukan presensi';
-                    return response()->json($json);
-                } else {
-                    $presensi = new presensiModel;
-                    $presensi->student_id = $getMahasiswa->id;
-                    $presensi->matkul_id = $getMatkul->id;
-                    $presensi->class_id = $getClass->id;
-                    // $presensi->week_id = $getDay->id;
-                    $presensi->tgl_presensi = $tgl_presensi; // Use the provided date
-                    $presensi->created_by = $getMahasiswa->name;
-                    $presensi->created_at = now()->format('h:i A');
-
-                    $presensi->presensi_type = $presensi_type;
-                    $presensi->save();
-
-                    $json['message'] = 'Berhasil Melakukan Presensi';
                     return response()->json($json);
                 }
             }

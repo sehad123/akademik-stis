@@ -11,13 +11,31 @@ class presensiModel extends Model
     use HasFactory;
     protected $table = 'presensi_mahasiswa';
 
+    protected $fillable = [
+        'student_id',
+        'class_id',
+        'matkul_id',
+        'week_id',
+        'presensi_type',
+        'tgl_presensi',
+        'latitude',  // Menambahkan latitude
+        'longitude'  // Menambahkan longitude
+    ];
+
+    // Metode yang lain tetap sama
+
     static public function checkPresensi($student_id, $class_id, $tgl_presensi, $matkul_id, $week_id)
     {
-        return presensiModel::where('student_id', '=', $student_id)->where('class_id', '=', $class_id)->where('tgl_presensi', '=', $tgl_presensi)->where('matkul_id', '=', $matkul_id)->where('week_id', '=', $week_id)->first();
+        return presensiModel::where('student_id', '=', $student_id)
+            ->where('class_id', '=', $class_id)
+            ->where('tgl_presensi', '=', $tgl_presensi)
+            ->where('matkul_id', '=', $matkul_id)
+            ->where('week_id', '=', $week_id)
+            ->first();
     }
+
     static public function getRecord()
     {
-
         $return =  presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'class.name as class_name', 'matkul.name as matkul_name', 'student.name as student_name',  'student.id as student_id', 'matkul.id as matkul_id', 'class.id as class_id')
             ->join('matkul', 'matkul.id', '=', 'presensi_mahasiswa.matkul_id')
             ->join('class', 'class.id', '=', 'presensi_mahasiswa.class_id')
@@ -39,6 +57,7 @@ class presensiModel extends Model
         $return = $return->orderBy('presensi_mahasiswa.id', 'desc')->paginate(20);
         return $return;
     }
+
     static public function getRecordDosen($class_id)
     {
         if (!empty($class_id)) {
@@ -64,9 +83,9 @@ class presensiModel extends Model
             return " ";
         }
     }
+
     static public function getRecordStudent($student_id)
     {
-
         $return =  presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'matkul.id as matkul_id', 'class.id as class_id')
             ->join('matkul', 'matkul.id', '=', 'presensi_mahasiswa.matkul_id')
             ->join('class', 'class.id', '=', 'presensi_mahasiswa.class_id')

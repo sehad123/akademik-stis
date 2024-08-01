@@ -85,10 +85,10 @@
                                       <input value="2" {{ ($presensi_type == '2') ? 'checked' :'' }} class="SavePresensi" id="{{ $value->id }}"type="radio" name="presensi{{ $value->id }}"> Terlambat
                                   </label> --}}
                                   <label style="margin-right: 10px;">
-                                      <input value="3" {{ ($presensi_type == '3') ? 'checked' :'' }} class="SavePresensi" id="{{ $value->id }}" type="radio" name="presensi{{ $value->id }}"> Sakit
+                                      <input value="3" {{ ($presensi_type == '4') ? 'checked' :'' }} class="SavePresensi" id="{{ $value->id }}" type="radio" name="presensi{{ $value->id }}"> Sakit
                                   </label>
                                   <label style="margin-right: 10px;">
-                                      <input value="4" {{ ($presensi_type == '4') ? 'checked' :'' }} class="SavePresensi" id="{{ $value->id }}" type="radio" name="presensi{{ $value->id }}"> Izin
+                                      <input value="4" {{ ($presensi_type == '5') ? 'checked' :'' }} class="SavePresensi" id="{{ $value->id }}" type="radio" name="presensi{{ $value->id }}"> Izin
                                   </label>
                                   {{-- <label style="margin-right: 10px;">
                                       <input value="5" {{ ($presensi_type == '5') ? 'checked' :'' }} class="SavePresensi" id="{{ $value->id }}" type="radio" name="presensi{{ $value->id }}"> Tidak Hadir
@@ -100,12 +100,14 @@
                                   @if ($presensi_type == 1)
                                       Hadir
                                   @elseif ($presensi_type == 2)
-                                      Terlambat
+                                      Terlambat A
                                   @elseif ($presensi_type == 3)
-                                      Sakit
+                                      Terlambat B
                                   @elseif ($presensi_type == 4)
-                                      Izin
+                                      Sakit
                                   @elseif ($presensi_type == 5)
+                                      Izin
+                                  @elseif ($presensi_type == 6)
                                       Tidak Hadir
                                   @endif
                                   @else
