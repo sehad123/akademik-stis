@@ -16,7 +16,7 @@
 
     <div class="container">
         <div class="info-section col-sm-6 ml-4">
-            <p>Nama: {{ $getMahasiswa->name }} {{ $getMahasiswa->last_name }}</p>
+            <p>Nama: {{ $getMahasiswa->name }}</p>
             <p>Kelas: {{ $getClass->name }}</p>
             <p>Matkul: {{ $getMatkul->name }}</p>
             @foreach($getMyJadwal as $value)
@@ -25,7 +25,7 @@
             $h = $week['tanggal'];
             $w = $week['start_time'];
             $e = $week['end_time'];
-            $r = $week['room_number']
+            $r = $week['room_number'];
             @endphp
             @endforeach
             @endforeach
@@ -51,6 +51,13 @@
                     <div class="card">
                         <div class="card-header"></div>
                         <div class="card-body p-0">
+                            @php
+                            $current_time = \Carbon\Carbon::now()->format('H:i:s');
+                            $class_start_time = \Carbon\Carbon::parse($w)->format('H:i:s');
+                            $class_end_time = \Carbon\Carbon::parse($e)->format('H:i:s');
+                            @endphp
+
+                            @if ($current_time >= $class_start_time && $current_time <= $class_end_time)
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
@@ -70,12 +77,9 @@
                                         $presensi_type = $getPresensi->presensi_type;
                                         $created_at = $getPresensi->created_at;
                                     }
-
-                                    $current_time = \Carbon\Carbon::now()->format('H:i:s');
-                                    $class_end_time = \Carbon\Carbon::parse($e)->format('H:i:s');
                                     @endphp
-                                       <tr>
-                                        @if ($getDay->id != (now()->dayOfWeek + 1) % 7 || $current_time > $class_end_time)
+                                    <tr>
+                                        @if ($getDay->id != (now()->dayOfWeek + 1) % 7)
                                         <td></td>
                                         @elseif (!empty($getPresensi->presensi_type))
                                         <td></td>
@@ -116,6 +120,9 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            @else
+                            <p class="text-center">Presensi akan dibuka saat memasuki waktu kelas.</p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -212,45 +219,44 @@
               week_id: week_id,
               tgl_presensi: tgl_presensi,
               latitude: latitude,
-              longitude: longitude,
+              longitude: longitude
           },
           dataType: "json",
-          success: function (data) {
-              alert(data.message);
+          success: function(response) {
               location.reload();
       window.location.href = "{{ url('dosen/presensi/my_presensi') }}" ;
-          },
-          error: function (xhr, status, error) {
-              console.error(xhr.responseText);
           }
       });
   });
 </script>
 
 <style>
-  .container {
+    #map {
+        margin-top: 10px;
+    }
+
+    .container {
         display: flex;
     }
     .lat, .long{
       display: none
     }
   
-@media screen and (max-width: 768px) {
-    .container {
-        display: flex;
-        flex-direction: column-reverse;
+    @media screen and (max-width: 768px) {
+        .container {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+        .info-section {
+            order: 1;
+        }
+        section.content {
+            order: 2;
+        }
+        #map{
+          margin: 20px 10px;
+        }
     }
-    .info-section {
-        order: 1;
-    }
-    section.content {
-        order: 2;
-    }
-    #map{
-      margin: 20px 10px;
-    }
-
-}
 </style>
 
 @endsection

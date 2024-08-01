@@ -318,7 +318,7 @@
             <a href="{{ url('dosen/my_calendar') }}" class="nav-link @if(Request::segment(2) == 'my_calendar') active @endif">
               <i class="nav-icon fa-regular fa-calendar-days"></i>
                             <p>
-                Jadwal Saya
+                Jadwal 
               </p>
             </a>
           </li>
@@ -405,7 +405,7 @@
             <a href="{{ url('student/my_class') }}" class="nav-link @if(Request::segment(2) == 'my_class') active @endif">
               <i class="nav-icon fa-solid fa-chalkboard-user"></i>
                             <p>
-                Kelas Saya
+                Kelas 
               </p>
             </a>
           </li>
@@ -413,7 +413,7 @@
             <a href="{{ url('student/my_calendar') }}" class="nav-link @if(Request::segment(2) == 'my_calendar') active @endif">
               <i class="nav-icon fa-regular fa-calendar-days"></i>
                             <p>
-                Jadwal Saya
+                Jadwal 
               </p>
             </a>
           </li>
@@ -453,7 +453,7 @@
             <a href="{{ url('student/my_submited_tugas') }}" class="nav-link @if(Request::segment(2) == 'my_submited_tugas') active @endif">
               <i class="nav-icon fa-solid fa-book-atlas"></i>
                                           <p>
-                My Submited Tugas
+              Tugas Tersubmit
               </p>
             </a>
           </li>
