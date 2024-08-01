@@ -326,12 +326,10 @@ class PresensiController extends Controller
                 if ($current_time < $start_time) {
                     $json['message'] = "Anda hanya bisa melakukan presensi pada jam {$classSchedule['jam_mulai']}";
                     return response()->json($json);
-                }
-                //  else if ($current_time > $end_time) {
-                //     $json['message'] = 'Anda terlambat lebih dari 40 menit, harap lapor BAAK';
-                //     return response()->json($json);
-                // }
-                else {
+                } else if ($current_time > $end_time) {
+                    $json['message'] = 'Anda terlambat lebih dari 40 menit, harap lapor BAAK';
+                    return response()->json($json);
+                } else {
                     $presensi = new presensiModel;
                     $presensi->student_id = $getMahasiswa->id;
                     $presensi->matkul_id = $getMatkul->id;

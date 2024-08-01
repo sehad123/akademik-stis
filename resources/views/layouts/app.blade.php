@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="{{ url('public/plugins/daterangepicker/daterangepicker.css')}}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{ url('public/plugins/summernote/summernote-bs4.min.css')}}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   @yield('style')
 
 </head>
@@ -52,6 +53,8 @@
 <script>
   $.widget.bridge('uibutton', $.ui.button)
 </script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
 <!-- Bootstrap 4 -->
 <script src="{{ url('public/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- ChartJS -->
