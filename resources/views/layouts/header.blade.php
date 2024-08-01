@@ -253,6 +253,12 @@
                 </a>
               </li>
               <li class="nav-item ">
+                <a href="{{ url('admin/presensi/dosen') }}" class="nav-link @if(Request::segment(3) == 'dosen') active @endif" >
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Presensi Dosen</p>
+                </a>
+              </li>
+              <li class="nav-item ">
                 <a href="{{ url('admin/presensi/report') }}" class="nav-link @if(Request::segment(3) == 'report') active @endif" >
                   <i class="far fa-circle nav-icon"></i>
                   <p>Laporan Presensi</p>
@@ -335,7 +341,7 @@
 
        
           <li class="nav-item ">
-            <a href="{{ url('dosen/presensi/report') }}" class="nav-link @if(Request::segment(3) == 'report') active @endif" >
+            <a href="{{ url('dosen/presensi/my_presensi') }}" class="nav-link @if(Request::segment(3) == 'report') active @endif" >
               <i class="nav-icon fas fa-table"></i>
               <p>Presensi</p>
             </a>

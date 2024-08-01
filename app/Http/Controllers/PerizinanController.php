@@ -26,6 +26,12 @@ class PerizinanController extends Controller
         $data['header_title'] = "Perizinan  ";
         return view('student.perizinan_detail', $data);
     }
+    public function perizinan_dosenID($presensi_id)
+    {
+        $data['getData'] = PerizinanModel::getRecordDosen($presensi_id);
+        $data['header_title'] = "Perizinan  ";
+        return view('dosen.perizinan_detail', $data);
+    }
 
     public function perizinan_student($presensi_id, $class_id, $matkul_id, $student_id)
     {
@@ -36,6 +42,16 @@ class PerizinanController extends Controller
         $data['getIzin'] = $classSubject;
         $data['header_title'] = "add Perizinan";
         return view('student.submit_izin', $data);
+    }
+    public function perizinan_dosen($presensi_id, $class_id, $matkul_id, $dosen_id)
+    {
+        // $data['getClass'] = ClassModel::getSingle($class_id);
+        // $data['getMatkul'] =  SubjectModel::getSingle($matkul_id);
+        // $data['getMahasiswa'] =  User::getSingle($student_id);
+        $classSubject =   PerizinanModel::getRecordClassMatkulDosen($presensi_id, $class_id, $matkul_id, $dosen_id);
+        $data['getIzin'] = $classSubject;
+        $data['header_title'] = "add Perizinan";
+        return view('dosen.submit_izin', $data);
     }
     public function SubmitPerizinanInsert(Request $request, $presensi_id, $student_id, $class_id, $matkul_id)
     {
@@ -61,6 +77,31 @@ class PerizinanController extends Controller
 
         $save->save();
         return redirect('student/my_presensi')->with('success', "Perizinan Berhasil Disubmit");
+    }
+    public function SubmitPerizinanInsertDosen(Request $request, $presensi_id, $dosen_id, $class_id, $matkul_id)
+    {
+
+        // $studentId =  Auth::user()->id;
+
+
+        $save = new PerizinanModel;
+        $save->dosen_id = $dosen_id;
+        $save->presensi_id = $presensi_id;
+        $save->class_id = $class_id;
+        $save->matkul_id = $matkul_id;
+        $save->alasan = $request->alasan;
+        $save->status = "belum diterima";
+        if (!empty($request->file('bukti'))) {
+            $ext = $request->file('bukti')->getClientOriginalExtension();
+            $file =  $request->file('bukti');
+            $randomStr = date('Ymdhis') . Str::random(20);
+            $filename = strtolower($randomStr) . '.' . $ext;
+            $file->move('upload/perizinan/', $filename);
+            $save->bukti = $filename;
+        }
+
+        $save->save();
+        return redirect('dosen/presensi/my_presensi')->with('success', "Perizinan Berhasil Disubmit");
     }
 
     public function admin_perizinan_studentID($presensi_id, $class_id, $matkul_id, $student_id)

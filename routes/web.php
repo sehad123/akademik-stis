@@ -145,9 +145,11 @@ Route::group(['middleware' => 'admin'], function () {
 
     // presensi
     Route::get('admin/presensi/student', [PresensiController::class, 'presensi_mahasiswa']);
+    Route::get('admin/presensi/dosen', [PresensiController::class, 'presensi_dosen']);
     Route::get('admin/presensi/report', [PresensiController::class, 'laporan_presensi']);
     Route::post('admin/presensi/report_excel', [PresensiController::class, 'laporan_presensi_excel']);
     Route::post('admin/presensi/student/save', [PresensiController::class, 'presensi_mahasiswa_save']);
+    Route::post('admin/presensi/dosen/save', [PresensiController::class, 'presensi_dosen_save']);
     Route::post('admin/presensi/get_subject', [ClassTimeTableController::class, 'get_subject']);
 
     // Komunikasi
@@ -210,8 +212,11 @@ Route::group(['middleware' => 'dosen'], function () {
 
     // presensi 
     Route::get('dosen/presensi/student', [PresensiController::class, 'presensi_mahasiswa_dosen']);
-    Route::get('dosen/presensi/report', [PresensiController::class, 'laporan_presensi_dosen']);
-    Route::post('dosen/presensi/student/save', [PresensiController::class, 'presensi_mahasiswa_save']);
+    Route::get('dosen/presensi/my_presensi', [PresensiController::class, 'MyPresensiDosen']);
+    Route::post('dosen/presensi/save', [PresensiController::class, 'presensi_dosen_save']);
+    Route::get('dosen/perizinan/{presensi_id}/{dosen_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'perizinan_dosen']);
+    Route::post('dosen/perizinan/{presensi_id}/{dosen_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'SubmitPerizinanInsertDosen']);
+    Route::get('dosen/detail_perizinan/{presensi_id}/{dosen_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'perizinan_dosenID']);
     Route::get('dosen/presensi/{class_id}/{matkul_id}/{student_id}/{week_id}', [PresensiController::class, 'PresensiDosen']);
     Route::post('dosen/presensi/save', [PresensiController::class, 'PresensiStudentSave']);
 

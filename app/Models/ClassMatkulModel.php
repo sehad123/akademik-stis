@@ -38,7 +38,7 @@ class ClassMatkulModel extends Model
     }
     static public function MySubject($class_id)
     {
-        return self::select('matkul_class.*',  'matkul.name as matkul_name', 'matkul.type as matkul_type')
+        return self::select('matkul_class.*',  'matkul.name as matkul_name', 'matkul.type as matkul_type', 'class.name as class_name')
             ->join('matkul', 'matkul.id', 'matkul_class.matkul_id')
             ->join('class', 'class.id', 'matkul_class.class_id')
             ->join('users', 'users.id', 'matkul_class.created_by')

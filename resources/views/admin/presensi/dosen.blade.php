@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Presensi Mahasiswa </h1>
+            <h1>Presensi Dosen </h1>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -50,7 +50,7 @@
                     </div>
                     <div class="form-group col-md-3">
                       <button class="btn btn-primary mt-4" type="submit">Search</button>
-                      <a href="{{ url('admin/presensi/student') }}" class="btn btn-success mt-4" type="submit">clear</a>
+                      <a href="{{ url('admin/presensi/dosen') }}" class="btn btn-success mt-4" type="submit">clear</a>
                     </div>
                   </div>
                 </div>
@@ -62,24 +62,24 @@
             <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Daftar Presensi Mahasiswa</h3>
+                  <h3 class="card-title">Daftar Presensi Dosen</h3>
                 </div>
                 <div class="card-body p-0">
                   <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Nama Mahasiswa</th>
+                            <th>Nama Dosen</th>
                             <th>Presensi</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (!empty($getStudent) && !empty($getStudent->count()))
+                        @if (!empty($getDosen) && !empty($getDosen->count()))
                         @php
                             $i = 1;
                         @endphp
-                        @foreach ($getStudent as $value)
+                        @foreach ($getDosen as $value)
                         @php
                         $presensi_type = '';
                             $getPresensi = $value->getPresensi($value->id,Request::get('class_id'),Request::get('tgl_presensi'),Request::get('matkul_id'));
@@ -90,7 +90,7 @@
                         @endphp
                             <tr>
                                 <td>{{ $i++ }}</td>
-                                <td>{{ $value->name }} {{ $value->last_name }}</td>
+                                <td>{{ $value->name }}</td>
                                 <td>
                                     <button class="SavePresensi btn btn-primary m-2" data-value="1" id="{{ $value->id }}">Hadir</button>
                                     <button class="SavePresensi btn btn-warning m-2" data-value="2" id="{{ $value->id }}">Terlambat</button>
@@ -157,7 +157,7 @@ $('#getClass').change(function()
 });
 
 $('.SavePresensi').click(function(e) {
-    var student_id = $(this).attr('id');
+    var dosen_id = $(this).attr('id');
     var presensi_type = $(this).data('value');
     var class_id = $('#getClass').val();
     var matkul_id = $('#getMatkul').val();
@@ -165,10 +165,10 @@ $('.SavePresensi').click(function(e) {
 
     $.ajax({
         type: "POST",
-        url: "{{ url('admin/presensi/student/save') }}",
+        url: "{{ url('admin/presensi/dosen/save') }}",
         data: {
             '_token': "{{ csrf_token() }}",
-            student_id: student_id,
+            dosen_id: dosen_id,
             presensi_type: presensi_type,
             class_id: class_id,
             matkul_id: matkul_id,
@@ -177,7 +177,7 @@ $('.SavePresensi').click(function(e) {
         dataType: "json",
         success: function(data) {
             alert(data.message);
-            $('#status' + student_id).text(data.presensi_status);
+            $('#status' + dosen_id).text(data.presensi_status);
             location.reload();
 
         },

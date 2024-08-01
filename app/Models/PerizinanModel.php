@@ -29,6 +29,21 @@ class PerizinanModel extends Model
 
         return $return;
     }
+    static public function getRecordDosen($presensi_id)
+    {
+        $return = PerizinanModel::select('perizinan.*', 'matkul.name as matkul_name', 'class.name as class_name', 'users.name as name')
+            ->join('users', 'users.id', '=', 'perizinan.dosen_id')
+            ->join('presensi_mahasiswa', 'presensi_mahasiswa.id', '=', 'perizinan.presensi_id')
+            ->join('class', 'class.id', '=', 'perizinan.class_id')
+            ->join('matkul', 'matkul.id', '=', 'perizinan.matkul_id');
+
+        $return = $return
+            ->where('perizinan.presensi_id', '=', $presensi_id)
+            ->orderBy('perizinan.id', 'desc')
+            ->paginate(10);
+
+        return $return;
+    }
     static public function getRecordStudent($student_id)
     {
         $return = PerizinanModel::select('perizinan.*', 'matkul.name as matkul_name', 'class.name as class_name', 'users.name as name', 'users.last_name as last_name')
@@ -56,6 +71,10 @@ class PerizinanModel extends Model
     static public function getRecordClassMatkul($presensi_id, $class_id, $matkul_id, $student_id)
     {
         return self::where('presensi_id', '=', $presensi_id)->where('class_id', '=', $class_id)->where('matkul_id', '=', $matkul_id)->where('student_id', '=', $student_id)->first();
+    }
+    static public function getRecordClassMatkulDosen($presensi_id, $class_id, $matkul_id, $dosen_id)
+    {
+        return self::where('presensi_id', '=', $presensi_id)->where('class_id', '=', $class_id)->where('matkul_id', '=', $matkul_id)->where('dosen_id', '=', $dosen_id)->first();
     }
 
     static public function getSingle($id)

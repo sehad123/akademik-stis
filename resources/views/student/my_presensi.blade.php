@@ -48,10 +48,11 @@
                       <select name="presensi_type"  id="getClass" class="form-control">
                         <option value="">Select</option>
                         <option value="1" {{ (Request::get('tgl_presensi') == 1)?'selected':''  }}>Hadir</option>
-                        <option value="2" {{ (Request::get('tgl_presensi') == 2)?'selected':''  }}>Terlambat</option>
-                        <option value="3" {{ (Request::get('tgl_presensi') == 3)?'selected':''  }}>Sakit</option>
-                        <option value="4" {{ (Request::get('tgl_presensi') == 4)?'selected':''  }}>Izin</option>
-                        <option value="5" {{ (Request::get('tgl_presensi') == 5)?'selected':''  }}>Terlambat</option>
+                        <option value="2" {{ (Request::get('tgl_presensi') == 2)?'selected':''  }}>Terlambat A</option>
+                        <option value="3" {{ (Request::get('tgl_presensi') == 3)?'selected':''  }}>Terlambat B</option>
+                        <option value="4" {{ (Request::get('tgl_presensi') == 4)?'selected':''  }}>Sakit</option>
+                        <option value="5" {{ (Request::get('tgl_presensi') == 5)?'selected':''  }}>Izin</option>
+                        <option value="6" {{ (Request::get('tgl_presensi') == 6)?'selected':''  }}>Terlambat</option>
                     </select>
                     </div>
                     <div class="form-group col-md-3">
@@ -84,23 +85,25 @@
                         {{-- <td>{{ $value->class_name }} </td> --}}
                         <td>{{ $value->matkul_name }} </td>
                             <td>
-                                @if ($value->presensi_type == 1)
-                                Hadir
-                                @elseif ($value->presensi_type == 2)
-                                Terlambat
-                                @elseif ($value->presensi_type == 3)
-                                Sakit
-                                @elseif ($value->presensi_type == 4)
-                                Izin
-                                @elseif ($value->presensi_type == 5)
-                                Tidak Hadir
-                                @endif
+                              @if ($value->presensi_type == 1)
+                              Hadir
+                              @elseif ($value->presensi_type == 2)
+                              Terlambat A
+                              @elseif ($value->presensi_type == 3)
+                              Terlambat B
+                              @elseif ($value->presensi_type == 4)
+                              Sakit
+                              @elseif ($value->presensi_type == 5)
+                              Izin
+                              @elseif ($value->presensi_type == 6)
+                              Tidak Hadir
+                              @endif
                             </td>
                             <td>{{ date('d-m-Y',strtotime($value->tgl_presensi))  }}</td>
-                            @if ($value->presensi_type == 4 || $value->presensi_type == 3)
+                            @if ($value->presensi_type == 4 || $value->presensi_type == 5)
                             <td>
-                              <a href="{{ url('student/perizinan/'.$value->id.'/'. Auth::user()->id .'/'. $value->class_id.'/'.$value->matkul_id) }}" class="btn btn-warning">Upload bukti izin</a>
-                              <a href="{{ url('student/detail_perizinan/'.$value->id.'/'. Auth::user()->id .'/'. $value->class_id.'/'.$value->matkul_id) }}" class="btn btn-primary">Detail Izin</a>
+                              <a href="{{ url('student/perizinan/'.$value->id.'/'. Auth::user()->id .'/'. $value->class_id.'/'.$value->matkul_id) }}" class="btn btn-warning">Upload bukti sakit / izin</a>
+                              <a href="{{ url('student/detail_perizinan/'.$value->id.'/'. Auth::user()->id .'/'. $value->class_id.'/'.$value->matkul_id) }}" class="btn btn-primary">Detail sakit / izin</a>
                             </td>
                             @endif
                     </tr>

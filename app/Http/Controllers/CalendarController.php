@@ -38,11 +38,11 @@ class CalendarController extends Controller
 
     public function getJadwalStudent($class_id)
     {
-        // jadwal
         $result = array();
         $getRecord = ClassMatkulModel::MySubject($class_id);
         foreach ($getRecord as $value) {
             $dataS['name'] = $value->matkul_name;
+            $dataS['class_name'] = $value->class_name; // Add class_name
 
             $getWeek = WeekModel::getRecord();
             $week = array();
@@ -51,7 +51,7 @@ class CalendarController extends Controller
                 $dataW['week_name'] = $valueW->name;
                 $dataW['fullcalendar_day'] = $valueW->fullcalendar_day;
 
-                $classSubject =   ClassTimeTableModel::getRecordClassMatkul($value->class_id, $value->matkul_id, $valueW->id);
+                $classSubject = ClassTimeTableModel::getRecordClassMatkul($value->class_id, $value->matkul_id, $valueW->id);
                 if (!empty($classSubject)) {
                     $dataW['start_time'] = $classSubject->start_time;
                     $dataW['end_time'] = $classSubject->end_time;
