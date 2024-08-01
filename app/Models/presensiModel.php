@@ -19,6 +19,7 @@ class presensiModel extends Model
         'week_id',
         'presensi_type',
         'tgl_presensi',
+        'image',
         'latitude',  // Menambahkan latitude
         'longitude'  // Menambahkan longitude
     ];
@@ -34,6 +35,7 @@ class presensiModel extends Model
             ->where('week_id', '=', $week_id)
             ->first();
     }
+
     static public function checkPresensiDosen($dosen_id, $class_id, $tgl_presensi, $matkul_id, $week_id)
     {
         return presensiModel::where('dosen_id', '=', $dosen_id)
@@ -67,6 +69,7 @@ class presensiModel extends Model
         $return = $return->orderBy('presensi_mahasiswa.id', 'desc')->paginate(20);
         return $return;
     }
+
     static public function getRecordDosenn()
     {
         $return =  presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'class.name as class_name', 'matkul.name as matkul_name',  'dosen.name as dosen_name',  'dosen.id as dosen_id', 'matkul.id as matkul_id', 'class.id as class_id')
@@ -136,6 +139,7 @@ class presensiModel extends Model
         $return = $return->orderBy('presensi_mahasiswa.id', 'desc')->paginate(20);
         return $return;
     }
+
     static public function getRecorddDosen($dosen_id)
     {
         $return =  presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'matkul.id as matkul_id', 'class.id as class_id')
