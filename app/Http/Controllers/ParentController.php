@@ -68,7 +68,7 @@ class ParentController extends Controller
             $file =  $request->file('profile_pic');
             $randomStr = date('Ymdhis') . Str::random(20);
             $filename = strtolower($randomStr) . '.' . $ext;
-            $file->move('upload/profile/', $filename);
+            $file->move('face_recognition_api/upload/profile/', $filename);
 
             $parent->profile_pic = $filename;
         }
@@ -94,18 +94,27 @@ class ParentController extends Controller
         $parent->occupation = trim($request->occupation);
         $parent->gender = trim($request->gender);
         $parent->mobile_number = trim($request->mobile_number);
-        if (!empty($request->file('profile_pic'))) {
-            if (!empty($parent->getProfile())) {
-                unlink('upload/profile/' . $parent->profile_pic);
+        if ($request->hasFile('profile_pic')) {
+            // Periksa apakah kolom profile_pic tidak null atau kosong
+            if (!empty($parent->profile_pic)) {
+                $filePath = 'face_recognition_api/upload/profile/' . $parent->profile_pic;
+                // Hapus file jika ada
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
             }
+
+            // Proses unggah file baru
             $ext = $request->file('profile_pic')->getClientOriginalExtension();
-            $file =  $request->file('profile_pic');
+            $file = $request->file('profile_pic');
             $randomStr = date('Ymdhis') . Str::random(20);
             $filename = strtolower($randomStr) . '.' . $ext;
-            $file->move('upload/profile/', $filename);
+            $file->move('face_recognition_api/upload/profile/', $filename);
 
+            // Perbarui kolom profile_pic dengan nama file baru
             $parent->profile_pic = $filename;
         }
+
         if (!empty($request->password)) {
             $parent->password = Hash::make($request->password);
         }

@@ -18,16 +18,8 @@ class AuthController extends Controller
 {
     public function login()
     {
-        if (!empty(Auth::check())) {
-            if (Auth::user()->user_type == 1) {
-                return redirect('admin/dashboard');
-            } else if (Auth::user()->user_type == 2) {
-                return redirect('dosen/dashboard');
-            } else if (Auth::user()->user_type == 3) {
-                return redirect('student/dashboard');
-            } else if (Auth::user()->user_type == 4) {
-                return redirect('ortu/dashboard');
-            }
+        if (Auth::check()) {
+            return redirect('verify-face');
         }
         return view('auth.login');
     }
@@ -36,12 +28,19 @@ class AuthController extends Controller
     {
         $remember = !empty($request->remember) ? true : false;
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
-            return response()->json(['status' => 'success', 'message' => 'Email and password correct. Please verify your face.']);
+            return response()->json(['status' => 'success', 'message' => 'Berhasil Login. silahkan lakukan verifikasi wajah']);
         } else {
-            return response()->json(['status' => 'error', 'message' => 'Email or password anda salah']);
+            return response()->json(['status' => 'error', 'message' => 'Email atau Password anda salah']);
         }
     }
 
+    public function showVerifyFace()
+    {
+        if (!Auth::check()) {
+            return redirect('login');
+        }
+        return view('auth.verify-face');
+    }
 
     public function verifyFace(Request $request)
     {
@@ -54,37 +53,50 @@ class AuthController extends Controller
         $user = Auth::user();
 
         Log::info('Verifying face for user: ' . $user->email);
-        Log::info('Stored image data: ' . $user->profile_pic);
-        Log::info('Uploaded image data: ' . $image);
 
         if (empty($user->profile_pic)) {
             Log::error('No face data available for user: ' . $user->email);
-            return response()->json(['status' => 'error', 'message' => 'No face data available for user'], 401);
+            Auth::logout();
+            return response()->json(['status' => 'error', 'message' => 'Wajah Pengguna Belum Terdaftar'], 401);
         }
 
-        // Kirim data ke API Python untuk perbandingan
+        // Send data to the Python API for comparison
         $response = Http::post('http://127.0.0.1:5000/compare_faces', [
-            'stored_image' => $user->profile_pic,
+            'user_id' => $user->id,
             'uploaded_image' => $image,
         ]);
 
-        if ($response->successful() && $response->json('result') === true) {
+        Log::info('Response from Python API: ' . $response->body());
+
+        if ($response->successful() && $response->json('status') === 'success') {
             Log::info('Face verification success');
-            return response()->json(['status' => 'success', 'redirect_url' => url('/dashboard')]);
+            $redirectUrl = $this->getRedirectUrl($user->user_type);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Melakukan Verifikasi Wajah',
+                'redirect_url' => url($redirectUrl)
+            ]);
         }
 
         Log::error('Face verification failed');
-        return response()->json(['status' => 'error', 'message' => 'Face verification failed'], 401);
+        Auth::logout();
+        return response()->json(['status' => 'error', 'message' => 'Gagal Melakukan Verifikasi Wajah'], 401);
     }
 
-    // Example method for face recognition
-    private function recognizeFace($storedImage, $uploadedImage)
+    private function getRedirectUrl($userType)
     {
-        // Implementasikan logika perbandingan wajah di sini
-        // Mengembalikan true jika wajah cocok, sebaliknya false
-
-        // Contoh dummy untuk ilustrasi
-        return $storedImage === $uploadedImage; // Ganti dengan logika perbandingan sebenarnya
+        switch ($userType) {
+            case 1:
+                return 'admin/dashboard';
+            case 2:
+                return 'dosen/dashboard';
+            case 3:
+                return 'student/dashboard';
+            case 4:
+                return 'ortu/dashboard';
+            default:
+                return 'login';
+        }
     }
 
     public function forgotpassword()
@@ -95,13 +107,13 @@ class AuthController extends Controller
     public function PostForgotPassword(Request $request)
     {
         $user  = User::where('email', $request->email)->first();
-        if (!empty($user)) {
+        if ($user) {
             $user->remember_token = Str::random(30);
             $user->save();
             Mail::to($user->email)->send(new ForgotPasswordMail($user));
             return redirect()->back()->with('error', "Please check your email for password reset instructions.");
         } else {
-            return redirect()->back()->with('error', "Email not found");
+            return redirect()->back()->with('error', "Email tidak ditemukan");
         }
     }
 

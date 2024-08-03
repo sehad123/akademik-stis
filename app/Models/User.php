@@ -216,19 +216,19 @@ class User extends Authenticatable
 
     public function getProfile()
     {
-        if (!empty($this->profile_pic) && file_exists('upload/profile/' . $this->profile_pic)) {
-            return url('upload/profile/' . $this->profile_pic);
+        if (!empty($this->profile_pic) && file_exists('face_recognition_api/upload/profile/' . $this->profile_pic)) {
+            return url('face_recognition_api/upload/profile/' . $this->profile_pic);
         } else {
-            return url('upload/profile/user.png');
+            return url('face_recognition_api/upload/profile/user.png');
         }
     }
 
     public function getProfileDirect()
     {
-        if (!empty($this->profile_pic) && file_exists('upload/profile/' . $this->profile_pic)) {
-            return url('upload/profile/' . $this->profile_pic);
+        if (!empty($this->profile_pic) && file_exists('face_recognition_api/upload/profile/' . $this->profile_pic)) {
+            return url('face_recognition_api/upload/profile/' . $this->profile_pic);
         } else {
-            return url('upload/profile/user.png');
+            return url('face_recognition_api/upload/profile/user.png');
         }
     }
     static public function getSearchStudent()

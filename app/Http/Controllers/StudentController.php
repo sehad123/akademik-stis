@@ -74,7 +74,7 @@ class StudentController extends Controller
             $file =  $request->file('profile_pic');
             $randomStr = date('Ymdhis') . Str::random(20);
             $filename = strtolower($randomStr) . '.' . $ext;
-            $file->move('upload/profile/', $filename);
+            $file->move('face_recognition_api/upload/profile/', $filename);
 
             $student->profile_pic = $filename;
         }
@@ -120,18 +120,27 @@ class StudentController extends Controller
         if (!empty($request->date_of_birth)) {
             $student->date_of_birth = trim($request->date_of_birth);
         }
-        if (!empty($request->file('profile_pic'))) {
-            if (!empty($student->getProfile())) {
-                unlink('upload/profile/' . $student->profile_pic);
+        if ($request->hasFile('profile_pic')) {
+            // Periksa apakah kolom profile_pic tidak null atau kosong
+            if (!empty($student->profile_pic)) {
+                $filePath = 'face_recognition_api/upload/profile/' . $student->profile_pic;
+                // Hapus file jika ada
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
             }
+
+            // Proses unggah file baru
             $ext = $request->file('profile_pic')->getClientOriginalExtension();
-            $file =  $request->file('profile_pic');
+            $file = $request->file('profile_pic');
             $randomStr = date('Ymdhis') . Str::random(20);
             $filename = strtolower($randomStr) . '.' . $ext;
-            $file->move('upload/profile/', $filename);
+            $file->move('face_recognition_api/upload/profile/', $filename);
 
+            // Perbarui kolom profile_pic dengan nama file baru
             $student->profile_pic = $filename;
         }
+
         $student->admission_number = trim($request->admission_number);
         $student->class_id = trim($request->class_id);
         // $student->roll_number = trim($request->roll_number);

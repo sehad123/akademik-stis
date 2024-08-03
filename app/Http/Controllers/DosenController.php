@@ -71,7 +71,7 @@ class DosenController extends Controller
             $file =  $request->file('profile_pic');
             $randomStr = date('Ymdhis') . Str::random(20);
             $filename = strtolower($randomStr) . '.' . $ext;
-            $file->move('upload/profile/', $filename);
+            $file->move('face_recognition_api/upload/profile/', $filename);
 
             $dosen->profile_pic = $filename;
         }
@@ -108,18 +108,27 @@ class DosenController extends Controller
             $dosen->date_of_birth = trim($request->date_of_birth);
         }
 
-        if (!empty($request->file('profile_pic'))) {
-            if (!empty($dosen->getProfile())) {
-                unlink('upload/profile/' . $dosen->profile_pic);
+        if ($request->hasFile('profile_pic')) {
+            // Periksa apakah kolom profile_pic tidak null atau kosong
+            if (!empty($dosen->profile_pic)) {
+                $filePath = 'face_recognition_api/upload/profile/' . $dosen->profile_pic;
+                // Hapus file jika ada
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
             }
+
+            // Proses unggah file baru
             $ext = $request->file('profile_pic')->getClientOriginalExtension();
-            $file =  $request->file('profile_pic');
+            $file = $request->file('profile_pic');
             $randomStr = date('Ymdhis') . Str::random(20);
             $filename = strtolower($randomStr) . '.' . $ext;
-            $file->move('upload/profile/', $filename);
+            $file->move('face_recognition_api/upload/profile/', $filename);
 
+            // Perbarui kolom profile_pic dengan nama file baru
             $dosen->profile_pic = $filename;
         }
+
         if (!empty($request->password)) {
             $dosen->password = Hash::make($request->password);
         }

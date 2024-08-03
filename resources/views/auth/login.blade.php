@@ -5,19 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SIPADU | Log in</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <link rel="stylesheet" href="{{ url('public/plugins/fontawesome-free/css/all.min.css') }}">
-  <link rel="stylesheet" href="{{ url('public/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ url('public/dist/css/adminlte.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('public/plugins/fontawesome-free/css/all.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('public/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('public/dist/css/adminlte.min.css') }}">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="card card-outline card-primary">
-    <div class="card-header text-center">
-      <a href="#" class="h1"><b>SIPADU</b></a>
-    </div>
+    
     <div class="card-body">
       <div id="alert-container"></div>
       <form id="login-form" action="{{ url('login') }}" method="post">
+        <div class="card-header text-center">
+          <a href="#" class="h1"><b>SIPADU</b></a>
+        </div>
         {{ csrf_field() }}
         <div class="input-group mb-3">
           <input type="email" class="form-control" name="email" required placeholder="Email">
@@ -47,9 +48,9 @@
           </div>
         </div>
       </form>
-      <p class="mb-1">
+      {{-- <p class="mb-1">
         <a href="{{ url('forgot-password') }}">I forgot my password</a>
-      </p>
+      </p> --}}
     </div>
   </div>
   <div class="card card-outline card-primary mt-3" id="face-verification-card" style="display: none;">
@@ -57,11 +58,6 @@
       <a href="#" class="h1"><b>Face Verification</b></a>
     </div>
     <div class="card-body">
-      <form id="face-login-form" method="post">
-        <input type="hidden" id="face-image" name="image">
-        <input type="hidden" id="user-id" name="user_id">
-        <button type="button" class="btn btn-primary btn-block" onclick="captureFace()">Verify Face</button>
-      </form>
       <video id="video" width="320" height="240" autoplay></video>
     </div>
   </div>
@@ -83,13 +79,12 @@
     alertContainer.innerHTML = `<div class="alert alert-danger">${message}</div>`;
   }
 
-  function captureFace() {
+  function captureAndVerifyFace(userId) {
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
     const dataURL = canvas.toDataURL('image/png');
-    document.getElementById('face-image').value = dataURL;
 
     fetch('{{ url('verify-face') }}', {
       method: 'POST',
@@ -99,7 +94,7 @@
       },
       body: JSON.stringify({
         image: dataURL,
-        user_id: document.getElementById('user-id').value
+        user_id: userId
       })
     })
     .then(response => response.json())
@@ -125,7 +120,7 @@
       if (data.status === 'success') {
         document.getElementById('login-form').style.display = 'none';
         document.getElementById('face-verification-card').style.display = 'block';
-        document.getElementById('user-id').value = data.user_id; // Set user ID for face verification
+        captureAndVerifyFace(data.user_id); // Capture and verify face immediately
       } else {
         showAlert(data.message);
       }
@@ -133,8 +128,8 @@
     .catch(error => console.error('Error:', error));
   });
 </script>
-<script src="{{ url('public/plugins/jquery/jquery.min.js') }}"></script>
-<script src="{{ url('public/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ url('public/dist/js/adminlte.min.js') }}"></script>
+<script src="{{ asset('public/plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('public/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('public/dist/js/adminlte.min.js') }}"></script>
 </body>
 </html>

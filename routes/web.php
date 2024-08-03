@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AuthController::class, 'login']);
 Route::post('/login', [AuthController::class, 'AuthLogin']);
 Route::post('/verify-face', [AuthController::class, 'verifyFace']);
+Route::get('/verify-face', [AuthController::class, 'showVerifyFace']);
 Route::get('/logout', [AuthController::class, 'logout']);
 Route::get('/forgot-password', [AuthController::class, 'forgotpassword']);
 Route::post('/forgot-password', [AuthController::class, 'PostForgotPassword']);
