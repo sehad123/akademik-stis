@@ -261,7 +261,7 @@ Route::group(['middleware' => 'student'], function () {
     Route::get('student/my_presensi', [PresensiController::class, 'MyPresensiStudent']);
     Route::get('student/presensi/{class_id}/{matkul_id}/{student_id}/{week_id}', [PresensiController::class, 'PresensiStudent']);
     Route::post('student/presensi/save', [PresensiController::class, 'PresensiStudentSave']);
-    Route::post('student/face-recognition', [PresensiController::class, 'faceRecognition']);
+    // Route::post('student/face-recognition', [PresensiController::class, 'faceRecognition']);
 
     Route::get('student/pengumuman', [PengumumanController::class, 'pengumuman_student']);
     Route::get('student/perizinan/{presensi_id}/{student_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'perizinan_student']);

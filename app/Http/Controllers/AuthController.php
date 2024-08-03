@@ -11,8 +11,6 @@ use App\Mail\ForgotPasswordMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
-use Facades\Image; // Assuming you're using Intervention Image package
 
 class AuthController extends Controller
 {
@@ -28,7 +26,7 @@ class AuthController extends Controller
     {
         $remember = !empty($request->remember) ? true : false;
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
-            return response()->json(['status' => 'success', 'message' => 'Berhasil Login. silahkan lakukan verifikasi wajah']);
+            return response()->json(['status' => 'success', 'message' => 'Berhasil Login. silahkan lakukan verifikasi wajah', 'user_id' => Auth::id()]);
         } else {
             return response()->json(['status' => 'error', 'message' => 'Email atau Password anda salah']);
         }
@@ -39,7 +37,7 @@ class AuthController extends Controller
         if (!Auth::check()) {
             return redirect('login');
         }
-        return view('auth.verify-face');
+        return view('auth.login');
     }
 
     public function verifyFace(Request $request)
