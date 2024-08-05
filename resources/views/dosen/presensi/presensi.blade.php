@@ -146,11 +146,16 @@
   }
 
   // Fungsi untuk mendapatkan lokasi pengguna
-  function getLocation() {
+   // Fungsi untuk mendapatkan lokasi pengguna
+   function getLocation() {
       resetLocation(); // Reset lokasi saat halaman dimuat
 
       if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(showPosition, showError);
+          navigator.geolocation.getCurrentPosition(showPosition, showError, {
+              enableHighAccuracy: true, 
+              timeout: 5000, 
+              maximumAge: 0
+          });
       } else {
           document.getElementById("location").innerHTML = "Geolocation tidak didukung oleh browser ini.";
       }
@@ -242,7 +247,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "http://127.0.0.1:5000/verify-presensi",
+                url: "http://127.0.0.1:5000/compare_faces",
                 data: JSON.stringify({
                     user_id: dosen_id,
                     uploaded_image: imageData
@@ -282,10 +287,14 @@
                 });
             } else {
                 alert(response.message || "Verifikasi wajah gagal."); // Handle specific error message
+            location.reload();
+
             }
         },
                 error: function(xhr, status, error) {
                     alert("Terjadi kesalahan saat memverifikasi wajah.");
+            location.reload();
+
                 }
             });
         }

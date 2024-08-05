@@ -326,8 +326,10 @@ class PresensiController extends Controller
         $longitude = $request->input('longitude');
 
         // Titik koordinat target
-        $target_latitude = -7.538293306358516;
-        $target_longitude = 110.62488093809465;
+        $target_latitude = -7.538284413323129;
+        $target_longitude = 110.62490576687038;
+
+
 
         // Fungsi untuk menghitung jarak antara dua titik koordinat
         function haversineGreatCircleeDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000)
@@ -355,9 +357,9 @@ class PresensiController extends Controller
             // Hitung jarak dari lokasi pengguna ke titik koordinat target
             $distance = haversineGreatCircleeDistance($latitude, $longitude, $target_latitude, $target_longitude);
 
-            // Validasi jarak (100 meter)
-            if ($distance > 100) {
-                session()->flash('message', 'Anda berada di luar radius 100 meter dari titik presensi.');
+            // Validasi jarak (5000 meter)
+            if ($distance > 5000) {
+                session()->flash('message', 'Anda berada di luar radius 5000 meter dari titik presensi.');
                 return response()->json(['status' => 'error'], 400);
             }
         }
@@ -489,8 +491,8 @@ class PresensiController extends Controller
         $longitude = $request->input('longitude');
 
         // Titik koordinat target
-        $target_latitude = -7.538293306358516;
-        $target_longitude = 110.62488093809465;
+        $target_latitude = -7.538284413323129;
+        $target_longitude = 110.62490576687038;
 
         // Fungsi untuk menghitung jarak antara dua titik koordinat
         function haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000)
@@ -518,9 +520,9 @@ class PresensiController extends Controller
             // Hitung jarak dari lokasi pengguna ke titik koordinat target
             $distance = haversineGreatCircleDistance($latitude, $longitude, $target_latitude, $target_longitude);
 
-            // Validasi jarak (100 meter)
-            if ($distance > 100) {
-                session()->flash('message', 'Anda berada di luar radius 100 meter dari titik presensi.');
+            // Validasi jarak (5000 meter)
+            if ($distance > 5000) {
+                session()->flash('message', 'Anda berada di luar radius 5000 meter dari titik presensi.');
                 return response()->json(['status' => 'error'], 400);
             }
         }
