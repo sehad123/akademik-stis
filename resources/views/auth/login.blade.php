@@ -100,10 +100,14 @@
     .then(response => response.json())
     .then(data => {
       if (data.status === 'success') {
-        window.location.href = data.redirect_url;
-      } else {
-        showAlert(data.message);
-      }
+    window.location.href = data.redirect_url;
+} else {
+    showAlert(data.message);
+    setTimeout(() => {
+        location.reload();
+    }, 2000); // Timeout selama 3 detik (3000 milidetik)
+}
+
     })
     .catch(error => console.error('Error:', error));
   }
@@ -123,6 +127,8 @@
         captureAndVerifyFace(data.user_id); // Capture and verify face immediately
       } else {
         showAlert(data.message);
+        
+
       }
     })
     .catch(error => console.error('Error:', error));

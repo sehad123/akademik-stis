@@ -99,7 +99,7 @@
             <a href="{{ url('admin/student/list') }}" class="nav-link @if(Request::segment(2) == 'student') active @endif">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Student
+                Mahasiswa
               </p>
             </a>
           </li>
@@ -469,7 +469,7 @@
             <a href="{{ url('student/my_presensi') }}" class="nav-link @if(Request::segment(2) == 'my_presensi') active @endif">
               <i class="nav-icon fa-solid fa-user-pen"></i>
                             <p>
-                Kehadiran 
+                Presensi 
               </p>
             </a>
           </li>
@@ -511,7 +511,7 @@
             <a href="{{ url('ortu/my_student') }}" class="nav-link @if(Request::segment(2) == 'my_student') active @endif">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Data Anak
+                Data Mahasiswa
               </p>
             </a>
           </li>

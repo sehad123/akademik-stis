@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassMatkulModel;
-use App\Models\ClassModel;
-use App\Models\ClassTimeTableModel;
-use App\Models\MatkulDosenModel;
-use App\Models\PerizinanModel;
-use App\Models\presensiModel;
-use App\Models\SubjectModel;
-use App\Models\User;
-use App\Models\WeekModel;
-use Illuminate\Http\Request;
 use Auth;
 use Excel;
+use App\Models\User;
+use App\Models\WeekModel;
+use App\Models\ClassModel;
+use App\Models\SubjectModel;
+use Illuminate\Http\Request;
+use App\Models\presensiModel;
+use App\Models\PerizinanModel;
+use App\Models\ClassMatkulModel;
+use App\Models\MatkulDosenModel;
+use App\Models\ClassTimeTableModel;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class PresensiController extends Controller
@@ -260,7 +262,7 @@ class PresensiController extends Controller
     {
         $data['getClass'] = ClassModel::getSingle($class_id);
         $data['getMatkul'] =  SubjectModel::getSingle($matkul_id);
-        $data['getMahasiswa'] =  User::getSingle($dosen_id);
+        $data['getDosen'] =  User::getSingle($dosen_id);
         $data['getDay'] =  WeekModel::getSingle($week_id);
         $data['getStudent'] = User::getStudentClass($class_id);
         // $data['getMyJadwal'] = $this->getJadwalStudent(Auth::user()->class_id);
@@ -314,7 +316,6 @@ class PresensiController extends Controller
 
     public function presensiStudentSave(Request $request)
     {
-        // $student_id = $request->input('student_id');
         $student_id = Auth::user()->id;
         $class_id = $request->input('class_id');
         $matkul_id = $request->input('matkul_id');
@@ -323,10 +324,44 @@ class PresensiController extends Controller
         $tgl_presensi = now()->toDateString();
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
-        // Validasi input latitude dan longitude
-        if (empty($latitude) || empty($longitude)) {
-            return response()->json(['message' => 'Lokasi tidak ditemukan, harap mengaktifkan GPS Anda.'], 400);
+
+        // Titik koordinat target
+        $target_latitude = -7.538293306358516;
+        $target_longitude = 110.62488093809465;
+
+        // Fungsi untuk menghitung jarak antara dua titik koordinat
+        function haversineGreatCircleeDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000)
+        {
+            $latFrom = deg2rad($latitudeFrom);
+            $lonFrom = deg2rad($longitudeFrom);
+            $latTo = deg2rad($latitudeTo);
+            $lonTo = deg2rad($longitudeTo);
+
+            $latDelta = $latTo - $latFrom;
+            $lonDelta = $lonTo - $lonFrom;
+
+            $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+                cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+            return $angle * $earthRadius;
         }
+
+        // Validasi input latitude dan longitude jika presensi_type == 1 (Hadir)
+        if ($presensi_type == 1) {
+            if (empty($latitude) || empty($longitude)) {
+                session()->flash('message', 'Lokasi tidak ditemukan, harap mengaktifkan GPS Anda.');
+                return response()->json(['status' => 'error'], 400);
+            }
+
+            // Hitung jarak dari lokasi pengguna ke titik koordinat target
+            $distance = haversineGreatCircleeDistance($latitude, $longitude, $target_latitude, $target_longitude);
+
+            // Validasi jarak (100 meter)
+            if ($distance > 100) {
+                session()->flash('message', 'Anda berada di luar radius 100 meter dari titik presensi.');
+                return response()->json(['status' => 'error'], 400);
+            }
+        }
+
         $c = ClassModel::getSingle($class_id);
         $m = SubjectModel::getSingle($matkul_id);
         $d = WeekModel::getSingle($week_id);
@@ -365,16 +400,15 @@ class PresensiController extends Controller
         }
         $getMyJadwal = $result;
 
-        // Assuming you have the necessary models imported
+        // Validate that the necessary models are found
         $getClass = ClassModel::getSingle($class_id);
         $getMatkul = SubjectModel::getSingle($matkul_id);
         $getMahasiswa = User::getSingle($student_id);
         $getDay = WeekModel::getSingle($week_id);
 
-        // Validate that the necessary models are found
         if (!$getMahasiswa || !$getClass || !$getMatkul || !$getDay) {
-            $json['message'] = 'Invalid data provided';
-            return response()->json($json, 400);
+            session()->flash('message', 'Invalid data provided');
+            return response()->json(['status' => 'error'], 400);
         }
 
         $checkKehadiran = presensiModel::checkPresensi($getMahasiswa->id, $getClass->id, now()->toDateString(), $getMatkul->id, $getDay->id);
@@ -383,8 +417,8 @@ class PresensiController extends Controller
             $presensi = $checkKehadiran;
         } else {
             if ($getDay->id != (now()->dayOfWeek + 1) % 7) {
-                $json['message'] = "Anda hanya bisa melakukan presensi pada hari {$getDay->name}";
-                return response()->json($json);
+                session()->flash('message', "Anda hanya bisa melakukan presensi pada hari {$getDay->name}");
+                return response()->json(['status' => 'error']);
             } else {
                 $classSchedule = $getMyJadwal[0]['week'][0];
                 $current_time = now()->hour * 60 + now()->minute;
@@ -392,45 +426,216 @@ class PresensiController extends Controller
                 $end_time = $classSchedule['jam_akhir'] * 60 + $classSchedule['menit_akhir'];
 
                 if ($current_time < $start_time) {
-                    $json['message'] = "Anda hanya bisa melakukan presensi pada jam {$classSchedule['jam_mulai']}";
-                    return response()->json($json);
+                    session()->flash('message', "Anda hanya bisa melakukan presensi pada jam {$classSchedule['jam_mulai']}");
+                    return response()->json(['status' => 'error']);
                 } else if ($current_time > $end_time) {
-                    $json['message'] = 'Anda terlambat lebih dari 40 menit, harap lapor BAAK';
-                    return response()->json($json);
+                    session()->flash('message', 'Anda terlambat lebih dari 40 menit, harap lapor BAAK');
+                    return response()->json(['status' => 'error']);
                 } else {
                     $presensi = new presensiModel;
                     $presensi->student_id = $getMahasiswa->id;
-                    $presensi->dosen_id = $getMahasiswa->id;
                     $presensi->matkul_id = $getMatkul->id;
                     $presensi->class_id = $getClass->id;
                     $presensi->tgl_presensi = $tgl_presensi;
                     $presensi->created_by = $getMahasiswa->name;
-
-
                     $presensi->created_at = now()->format('h:i A');
 
-                    if ($current_time - $start_time > 30 & $presensi_type == 1) {
+                    if ($current_time - $start_time > 30 && $presensi_type == 1) {
                         $presensi->presensi_type = 6; // Tidak Hadir
-                        $json['message'] = 'Anda terlambat lebih dari 30 menit, harap lapor BAAK';
-                    } else if ($current_time - $start_time > 20 & $presensi_type == 1) {
+                        session()->flash('message', 'Anda terlambat lebih dari 30 menit, harap lapor BAAK');
+                        $presensi->save();
+                        return response()->json(['status' => 'success']);
+                    } else if ($current_time - $start_time > 20 && $presensi_type == 1) {
                         $presensi->presensi_type = 3; // Terlambat B
-                        $json['message'] = 'Anda terlambat lebih dari 20 menit';
-                    } else if ($current_time - $start_time > 15 & $presensi_type == 1) {
+                        session()->flash('message', 'Anda terlambat lebih dari 20 menit');
+                        $presensi->save();
+                        return response()->json(['status' => 'success']);
+                    } else if ($current_time - $start_time > 15 && $presensi_type == 1) {
                         $presensi->presensi_type = 2; // Terlambat A
-                        $json['message'] = 'Anda terlambat lebih dari 15 menit';
+                        session()->flash('message', 'Anda terlambat lebih dari 15 menit');
+                        $presensi->save();
+                        return response()->json(['status' => 'success']);
                     } else if ($presensi_type == 4) {
                         $presensi->presensi_type = $presensi_type; // Hadir
-                        $json['message'] = 'harap upload bukti sakit anda';
+                        session()->flash('message', 'Harap upload bukti sakit Anda');
+                        $presensi->save();
+                        return response()->json(['status' => 'success']);
                     } else if ($presensi_type == 5) {
                         $presensi->presensi_type = $presensi_type; // Hadir
-                        $json['message'] = 'harap upload bukti izin anda';
+                        session()->flash('message', 'Harap upload bukti izin Anda');
+                        $presensi->save();
+                        return response()->json(['status' => 'success']);
                     } else {
                         $presensi->presensi_type = $presensi_type; // Hadir
-                        $json['message'] = 'Anda Presensi tepat waktu';
+                        session()->flash('message', 'Anda presensi tepat waktu');
+                        $presensi->save();
+                        return response()->json(['status' => 'success']);
                     }
 
-                    $presensi->save();
-                    return response()->json($json);
+                    // session()->flash('message', 'Anda presensi tepat waktu');
+                }
+            }
+        }
+    }
+    public function presensiDosenSave(Request $request)
+    {
+        $dosen_id = Auth::user()->id;
+        $class_id = $request->input('class_id');
+        $matkul_id = $request->input('matkul_id');
+        $week_id = $request->input('week_id');
+        $presensi_type = $request->input('presensi_type');
+        $tgl_presensi = now()->toDateString();
+        $latitude = $request->input('latitude');
+        $longitude = $request->input('longitude');
+
+        // Titik koordinat target
+        $target_latitude = -7.538293306358516;
+        $target_longitude = 110.62488093809465;
+
+        // Fungsi untuk menghitung jarak antara dua titik koordinat
+        function haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000)
+        {
+            $latFrom = deg2rad($latitudeFrom);
+            $lonFrom = deg2rad($longitudeFrom);
+            $latTo = deg2rad($latitudeTo);
+            $lonTo = deg2rad($longitudeTo);
+
+            $latDelta = $latTo - $latFrom;
+            $lonDelta = $lonTo - $lonFrom;
+
+            $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+                cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+            return $angle * $earthRadius;
+        }
+
+        // Validasi input latitude dan longitude jika presensi_type == 1 (Hadir)
+        if ($presensi_type == 1) {
+            if (empty($latitude) || empty($longitude)) {
+                session()->flash('message', 'Lokasi tidak ditemukan, harap mengaktifkan GPS Anda.');
+                return response()->json(['status' => 'error'], 400);
+            }
+
+            // Hitung jarak dari lokasi pengguna ke titik koordinat target
+            $distance = haversineGreatCircleDistance($latitude, $longitude, $target_latitude, $target_longitude);
+
+            // Validasi jarak (100 meter)
+            if ($distance > 100) {
+                session()->flash('message', 'Anda berada di luar radius 100 meter dari titik presensi.');
+                return response()->json(['status' => 'error'], 400);
+            }
+        }
+
+        $c = ClassModel::getSingle($class_id);
+        $m = SubjectModel::getSingle($matkul_id);
+        $d = WeekModel::getSingle($week_id);
+
+        $result = array();
+        $getRecord = ClassMatkulModel::MySubject($c->id);
+        foreach ($getRecord as $value) {
+            $dataS['name'] = $value->matkul_name;
+
+            $getWeek = WeekModel::getRecord();
+            $week = array();
+            foreach ($getWeek as $valueW) {
+                $dataW = array();
+                $dataW['week_name'] = $valueW->name;
+                $dataW['fullcalendar_day'] = $valueW->fullcalendar_day;
+
+                $classSubject = ClassTimeTableModel::getRecordClassMatkul($c->id, $m->id, $d->id);
+                if (!empty($classSubject)) {
+                    $dataW['start_time'] = $classSubject->start_time;
+                    $dataW['end_time'] = $classSubject->end_time;
+                    $dataW['room_number'] = $classSubject->room_number;
+                    $dataW['dosen_id'] = Auth::user()->id;
+                    $dataW['class_id'] = $classSubject->class_id;
+                    $dataW['matkul_id'] = $classSubject->matkul_id;
+                    $dataW['week_id'] = $classSubject->week_id;
+                    $dataW['tanggal'] = $classSubject->tanggal;
+                    $dataW['jam_mulai'] = $classSubject->jam_mulai;
+                    $dataW['menit_mulai'] = $classSubject->menit_mulai;
+                    $dataW['jam_akhir'] = $classSubject->jam_akhir;
+                    $dataW['menit_akhir'] = $classSubject->menit_akhir;
+                    $week[] = $dataW;
+                }
+            }
+            $dataS['week'] = $week;
+            $result[] = $dataS;
+        }
+        $getMyJadwal = $result;
+
+        // Validate that the necessary models are found
+        $getClass = ClassModel::getSingle($class_id);
+        $getMatkul = SubjectModel::getSingle($matkul_id);
+        $getDosen = User::getSingle($dosen_id);
+        $getDay = WeekModel::getSingle($week_id);
+
+        if (!$getDosen || !$getClass || !$getMatkul || !$getDay) {
+            session()->flash('message', 'Invalid data provided');
+            return response()->json(['status' => 'error'], 400);
+        }
+
+        $checkKehadiran = presensiModel::checkPresensi($getDosen->id, $getClass->id, now()->toDateString(), $getMatkul->id, $getDay->id);
+
+        if (!empty($checkKehadiran)) {
+            $presensi = $checkKehadiran;
+        } else {
+            if ($getDay->id != (now()->dayOfWeek + 1) % 7) {
+                session()->flash('message', "Anda hanya bisa melakukan presensi pada hari {$getDay->name}");
+                return response()->json(['status' => 'error']);
+            } else {
+                $classSchedule = $getMyJadwal[0]['week'][0];
+                $current_time = now()->hour * 60 + now()->minute;
+                $start_time = $classSchedule['jam_mulai'] * 60 + $classSchedule['menit_mulai'];
+                $end_time = $classSchedule['jam_akhir'] * 60 + $classSchedule['menit_akhir'];
+
+                if ($current_time < $start_time) {
+                    session()->flash('message', "Anda hanya bisa melakukan presensi pada jam {$classSchedule['jam_mulai']}");
+                    return response()->json(['status' => 'error']);
+                } else if ($current_time > $end_time) {
+                    session()->flash('message', 'Anda terlambat lebih dari 40 menit, harap lapor BAAK');
+                    return response()->json(['status' => 'error']);
+                } else {
+                    $presensi = new presensiModel;
+                    $presensi->dosen_id = $getDosen->id;
+                    $presensi->matkul_id = $getMatkul->id;
+                    $presensi->class_id = $getClass->id;
+                    $presensi->tgl_presensi = $tgl_presensi;
+                    $presensi->created_by = $getDosen->name;
+                    $presensi->created_at = now()->format('h:i A');
+
+                    if ($current_time - $start_time > 30 && $presensi_type == 1) {
+                        $presensi->presensi_type = 6; // Tidak Hadir
+                        session()->flash('message', 'Anda terlambat lebih dari 30 menit, harap lapor BAAK');
+                        $presensi->save();
+                        return response()->json(['status' => 'success']);
+                    } else if ($current_time - $start_time > 20 && $presensi_type == 1) {
+                        $presensi->presensi_type = 3; // Terlambat B
+                        session()->flash('message', 'Anda terlambat lebih dari 20 menit');
+                        $presensi->save();
+                        return response()->json(['status' => 'success']);
+                    } else if ($current_time - $start_time > 15 && $presensi_type == 1) {
+                        $presensi->presensi_type = 2; // Terlambat A
+                        session()->flash('message', 'Anda terlambat lebih dari 15 menit');
+                        $presensi->save();
+                        return response()->json(['status' => 'success']);
+                    } else if ($presensi_type == 4) {
+                        $presensi->presensi_type = $presensi_type; // Hadir
+                        session()->flash('message', 'Harap upload bukti sakit Anda');
+                        $presensi->save();
+                        return response()->json(['status' => 'success']);
+                    } else if ($presensi_type == 5) {
+                        $presensi->presensi_type = $presensi_type; // Hadir
+                        session()->flash('message', 'Harap upload bukti izin Anda');
+                        $presensi->save();
+                        return response()->json(['status' => 'success']);
+                    } else {
+                        $presensi->presensi_type = $presensi_type; // Hadir
+                        session()->flash('message', 'Anda presensi tepat waktu');
+                        $presensi->save();
+                        return response()->json(['status' => 'success']);
+                    }
+
+                    // session()->flash('message', 'Anda presensi tepat waktu');
                 }
             }
         }

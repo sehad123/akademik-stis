@@ -5,13 +5,14 @@ import logging
 import numpy as np
 from flask import Flask, request, jsonify
 from PIL import Image
-import face_recognition
 import mysql.connector
-import io
-import torch
+import face_recognition
+from flask_cors import CORS
 from facenet_pytorch import MTCNN, InceptionResnetV1
+import uuid
 
 app = Flask(__name__)
+CORS(app)  # This will enable CORS for all routes
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,10 +25,8 @@ db_config = {
     'database': 'stis.com',
 }
 
-# Initialize MTCNN for face detection
-mtcnn = MTCNN(image_size=160, margin=20, keep_all=True, post_process=False)
-# Initialize Inception Resnet V1 for face embeddings
-model = InceptionResnetV1(pretrained='vggface2').eval()
+UPLOAD_FOLDER = 'upload/presensi/'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def get_user_image(user_id):
     conn = mysql.connector.connect(**db_config)
@@ -59,11 +58,8 @@ def save_image_from_base64(image_data, filename):
 
     try:
         image_data = base64.b64decode(image_data)
-        logger.info(f"Base64 decoding successful, data length: {len(image_data)} bytes")
-        image = Image.open(io.BytesIO(image_data)).convert('RGB')  # Convert image to RGB
-
         with open(filename, 'wb') as f:
-            image.save(f, format='JPEG')
+            f.write(image_data)
         logger.info(f"Image saved successfully: {filename}")
 
     except Exception as e:
@@ -81,13 +77,15 @@ def read_image(image_path):
         raise ValueError("Error reading image")
 
 def detect_face_mtcnn(image):
+    mtcnn = MTCNN(keep_all=True)
     image = Image.fromarray(image)
     faces, _ = mtcnn(image, return_prob=True)
-    if faces is not None:
+    if faces is not None and len(faces) > 0:
         return faces[0]
     raise ValueError("No face detected in the image")
 
 def get_face_embedding(face):
+    model = InceptionResnetV1(pretrained='vggface2').eval()
     face = face.unsqueeze(0)
     embedding = model(face)
     return embedding
@@ -96,8 +94,8 @@ def compare_faces(embedding1, embedding2, threshold=0.6):
     distance = (embedding1 - embedding2).norm().item()
     return distance < threshold
 
-@app.route('/compare_faces', methods=['POST'])
-def compare_faces_route():
+@app.route('/verify-presensi', methods=['POST'])
+def verify_presensi():
     data = request.json
     user_id = data.get('user_id')
     uploaded_image_base64 = data.get('uploaded_image')
@@ -107,7 +105,7 @@ def compare_faces_route():
 
     profile_pic_path = get_user_image(user_id)
     if not profile_pic_path:
-        return jsonify({'status': 'error', 'message': 'User profile picture not found'})
+        return jsonify({'status': 'error', 'message': 'User profile picture not found'}), 404
 
     logger.info(f"Profile picture path: {profile_pic_path}")
 
@@ -116,7 +114,7 @@ def compare_faces_route():
     try:
         save_image_from_base64(uploaded_image_base64, uploaded_image_filename)
     except ValueError as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': str(e)}), 400
 
     try:
         profile_pic_path = os.path.abspath(profile_pic_path)
@@ -124,11 +122,11 @@ def compare_faces_route():
 
         if not os.path.exists(profile_pic_path):
             logger.error(f"User image file does not exist: {profile_pic_path}")
-            return jsonify({'status': 'error', 'message': 'User image file not found'})
+            return jsonify({'status': 'error', 'message': 'User image file not found'}), 404
 
         if not os.path.exists(uploaded_image_filename):
             logger.error(f"Uploaded image file does not exist: {uploaded_image_filename}")
-            return jsonify({'status': 'error', 'message': 'Uploaded image file not found'})
+            return jsonify({'status': 'error', 'message': 'Uploaded image file not found'}), 404
 
         user_image = read_image(profile_pic_path)
         uploaded_image = read_image(uploaded_image_filename)
@@ -147,10 +145,67 @@ def compare_faces_route():
         return jsonify(result)
     except Exception as e:
         logger.error(f"Error in face verification: {e}")
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+    finally:
+        if os.path.exists(uploaded_image_filename):
+            os.remove(uploaded_image_filename)
+
+            
+@app.route('/compare_faces', methods=['POST'])
+def compare_faces_route():
+    data = request.json
+    user_id = data.get('user_id')
+    uploaded_image_base64 = data.get('uploaded_image')
+
+    logger.info(f"Received user_id: {user_id}")
+    logger.info(f"Received uploaded_image_base64: {uploaded_image_base64[:30]}...")
+
+    profile_pic_path = get_user_image(user_id)
+    if not profile_pic_path:
+        return jsonify({'status': 'error', 'message': 'User profile picture not found'}), 404
+
+    logger.info(f"Profile picture path: {profile_pic_path}")
+
+    uploaded_image_filename = 'uploaded_image.jpg'
+
+    try:
+        save_image_from_base64(uploaded_image_base64, uploaded_image_filename)
+    except ValueError as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 400
+
+    try:
+        profile_pic_path = os.path.abspath(profile_pic_path)
+        logger.info(f"Absolute profile picture path: {profile_pic_path}")
+
+        if not os.path.exists(profile_pic_path):
+            logger.error(f"User image file does not exist: {profile_pic_path}")
+            return jsonify({'status': 'error', 'message': 'User image file not found'}), 404
+
+        if not os.path.exists(uploaded_image_filename):
+            logger.error(f"Uploaded image file does not exist: {uploaded_image_filename}")
+            return jsonify({'status': 'error', 'message': 'Uploaded image file not found'}), 404
+
+        user_image = read_image(profile_pic_path)
+        uploaded_image = read_image(uploaded_image_filename)
+
+        user_face = detect_face_mtcnn(user_image)
+        uploaded_face = detect_face_mtcnn(uploaded_image)
+
+        user_embedding = get_face_embedding(user_face)
+        uploaded_embedding = get_face_embedding(uploaded_face)
+
+        if compare_faces(user_embedding, uploaded_embedding):
+            result = {'status': 'success', 'message': 'Face verified successfully'}
+        else:
+            result = {'status': 'error', 'message': 'Face verification failed'}
+
+        return jsonify(result)
+    except Exception as e:
+        logger.error(f"Error in face verification: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
     finally:
         if os.path.exists(uploaded_image_filename):
             os.remove(uploaded_image_filename)
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(debug=True)

@@ -19,20 +19,19 @@ class presensiModel extends Model
         'week_id',
         'presensi_type',
         'tgl_presensi',
-        'image',
+        'face_image',
         'latitude',  // Menambahkan latitude
         'longitude'  // Menambahkan longitude
     ];
 
     // Metode yang lain tetap sama
-
-    static public function checkPresensi($student_id, $class_id, $tgl_presensi, $matkul_id, $week_id)
+    public static function checkPresensi($student_id, $class_id, $tgl_presensi, $matkul_id, $week_id)
     {
-        return presensiModel::where('student_id', '=', $student_id)
-            ->where('class_id', '=', $class_id)
-            ->where('tgl_presensi', '=', $tgl_presensi)
-            ->where('matkul_id', '=', $matkul_id)
-            ->where('week_id', '=', $week_id)
+        return self::where('student_id', $student_id)
+            ->where('class_id', $class_id)
+            ->where('tgl_presensi', $tgl_presensi)
+            ->where('matkul_id', $matkul_id)
+            ->where('week_id', $week_id)
             ->first();
     }
 
