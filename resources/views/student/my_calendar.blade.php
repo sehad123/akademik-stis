@@ -48,7 +48,8 @@
                 endTime: '{{ $week['end_time'] }}',
                 extendedProps: {
                     className: '{{ $value['class_name'] }}',
-                    roomNumber: '{{ $week['room_number'] }}'
+                    roomNumber: '{{ $week['room_number'] }}',
+                    status: '{{ $week['status'] }}'
                 },
                 url: "{{ url('http://localhost:85/akademik.stis/student/presensi') }}" + '/' + {{ $week['class_id'] }} + '/' + {{ $week['matkul_id'] }} + '/' + {{ $week['student_id'] }} + '/' + {{ $week['week_id'] }},
             });
@@ -73,13 +74,15 @@
             var startTime = arg.event.startStr.split('T')[1].slice(0, 5);
             var endTime = arg.event.endStr.split('T')[1].slice(0, 5);
             var roomNumber = arg.event.extendedProps.roomNumber;
+            var status = arg.event.extendedProps.status;
 
             var customHtml = `
                 <div>
                     <b>${matkulName}</b><br>
                     ${className}<br>
                     ${startTime} - ${endTime}<br>
-                    Ruangan : ${roomNumber}
+                    Ruangan : ${roomNumber}<br>
+                    <b>${status}</b>
                 </div>
             `;
             return { html: customHtml };

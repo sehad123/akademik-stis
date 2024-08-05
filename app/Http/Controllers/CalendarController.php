@@ -60,6 +60,7 @@ class CalendarController extends Controller
                     $dataW['class_id'] = $classSubject->class_id;
                     $dataW['matkul_id'] = $classSubject->matkul_id;
                     $dataW['week_id'] = $classSubject->week_id;
+                    $dataW['status'] = $classSubject->status;
                     $week[] = $dataW;
                 }
             }

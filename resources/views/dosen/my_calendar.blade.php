@@ -47,7 +47,8 @@
             endTime: '{{ $value->end_time }}', // Adjust as needed
             extendedProps: {
                 className: '{{ $value->class_name }}',
-                roomNumber: '{{ $value->room_number }}'
+                roomNumber: '{{ $value->room_number }}',
+                status: '{{ $value->status }}'
             },
             url: "{{ url('http://localhost:85/akademik.stis/dosen/presensi') }}" + '/' + {{ $value['class_id'] }} + '/' + {{ $value['matkul_id'] }} + '/' + {{ Auth::user()->id }} + '/' + {{ $value['week_id'] }},
         });
@@ -71,13 +72,15 @@
             var startTime = arg.event.startStr.split('T')[1].slice(0, 5);
             var endTime = arg.event.endStr.split('T')[1].slice(0, 5);
             var roomNumber = arg.event.extendedProps.roomNumber;
+            var status = arg.event.extendedProps.status;
 
             var customHtml = `
                 <div>
                     <b>${matkulName}</b><br>
                     ${className}<br>
                     ${startTime} - ${endTime}<br>
-                    Ruangan : ${roomNumber}
+                    Ruangan : ${roomNumber}<br>
+                   <b> ${status}<b>
                 </div>
             `;
             return { html: customHtml };

@@ -78,14 +78,14 @@
                                             <thead>
                                                 <tr>
                                                     <th>Hari</th>
-                                                    <th>Waktu Mulai</th>
-                                                    <th>Waktu Akhir</th>
                                                     <th>Ruangan</th>
                                                     <th>Tanggal</th>
                                                     <th>Jam Mulai</th>
                                                     <th>Menit Mulai</th>
                                                     <th>Jam Akhir</th>
                                                     <th>Menit Akhir</th>
+                                                    <th>Status</th>
+                                                    <th>Link Zoom</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -99,14 +99,6 @@
                                                             {{ $item['week_name'] }}
                                                         </th>
                                                         <td>
-                                                            <input  name="timetable[{{ $i }}][start_time]" type="time" class="form-control text-center" id=""
-                                                            value="{{ $item['start_time'] }}">
-                                                        </td>
-                                                        <td>
-                                                            <input  name="timetable[{{ $i }}][end_time]" type="time" class="form-control text-center" id=""
-                                                            value="{{ $item['end_time'] }}">
-                                                        </td>
-                                                        <td>
                                                             <input  name="timetable[{{ $i }}][room_number]" type="number" style="width: 100px;" class="form-control text-center" id=""
                                                             value="{{ $item['room_number'] }}">
                                                         </td>
@@ -115,21 +107,29 @@
                                                             value="{{ $item['tanggal'] }}">
                                                         </td>
                                                         <td>
-                                                            <input  name="timetable[{{ $i }}][jam_mulai]" max="16" min="7" type="number" style="width: 100px;" class="form-control text-center" id=""
-                                                            value="{{ $item['jam_mulai'] }}">
+                                                            <input  name="timetable[{{ $i }}][jam_mulai]" max="16" min="7" type="number" style="width: 100px;" class="form-control text-center jam_mulai" data-index="{{ $i }}" value="{{ $item['jam_mulai'] }}">
                                                         </td>
                                                         <td>
-                                                            <input  name="timetable[{{ $i }}][menit_mulai]" max="60" min="0" type="number" style="width: 100px;" class="form-control text-center" id=""
-                                                            value="{{ $item['menit_mulai'] }}">
+                                                            <input  name="timetable[{{ $i }}][menit_mulai]" max="60" min="0" type="number" style="width: 100px;" class="form-control text-center menit_mulai" data-index="{{ $i }}" value="{{ $item['menit_mulai'] }}">
                                                         </td>
                                                         <td>
-                                                            <input  name="timetable[{{ $i }}][jam_akhir]"  max="18" min="7"  type="number" style="width: 100px;" class="form-control text-center" id=""
-                                                            value="{{ $item['jam_akhir'] }}">
+                                                            <input  name="timetable[{{ $i }}][jam_akhir]" max="18" min="7" type="number" style="width: 100px;" class="form-control text-center jam_akhir" data-index="{{ $i }}" value="{{ $item['jam_akhir'] }}">
                                                         </td>
                                                         <td>
-                                                            <input  name="timetable[{{ $i }}][menit_akhir]"max="60" min="0" type="number" style="width: 100px;" class="form-control text-center" id=""
-                                                            value="{{ $item['menit_akhir'] }}">
+                                                            <input  name="timetable[{{ $i }}][menit_akhir]" max="60" min="0" type="number" style="width: 100px;" class="form-control text-center menit_akhir" data-index="{{ $i }}" value="{{ $item['menit_akhir'] }}">
                                                         </td>
+                                                        <td>
+                                                            <select name="timetable[{{ $i }}][status]" class="form-control statusSelect" data-index="{{ $i }}">
+                                                                <option value="Offline" {{ $item['status'] == 'Offline' ? 'selected' : '' }}>Offline</option>
+                                                                <option value="Online" {{ $item['status'] == 'Online' ? 'selected' : '' }}>Online</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <textarea name="timetable[{{ $i }}][link]" class="form-control linkInput" data-index="{{ $i }}" style="display: {{ $item['status'] == 'Online' ? 'block' : 'none' }};">{{ $item['link'] }}</textarea>
+                                                        </td>
+                                                        <!-- Hidden start_time and end_time inputs -->
+                                                        <input  name="timetable[{{ $i }}][start_time]" type="hidden" class="form-control text-center" id="start_time_{{ $i }}" value="">
+                                                        <input  name="timetable[{{ $i }}][end_time]" type="hidden" class="form-control text-center" id="end_time_{{ $i }}" value="">
                                                     </tr>
                                                     @php
                                                         $i++;
@@ -188,6 +188,26 @@ $('#deleteButton').click(function() {
     if(confirm('Are you sure you want to delete all entries?')) {
         $('#timetableForm').attr('action', '{{ url('admin/class_timetable/delete') }}').submit();
     }
+});
+
+$('.statusSelect').change(function() {
+    var index = $(this).data('index');
+    if ($(this).val() === 'Online') {
+        $('.linkInput[data-index="'+index+'"]').show();
+    } else {
+        $('.linkInput[data-index="'+index+'"]').hide();
+    }
+});
+
+$('.jam_mulai, .menit_mulai, .jam_akhir, .menit_akhir').on('input', function() {
+    var index = $(this).data('index');
+    var jam_mulai = $('.jam_mulai[data-index="'+index+'"]').val().padStart(2, '0');
+    var menit_mulai = $('.menit_mulai[data-index="'+index+'"]').val().padStart(2, '0');
+    var jam_akhir = $('.jam_akhir[data-index="'+index+'"]').val().padStart(2, '0');
+    var menit_akhir = $('.menit_akhir[data-index="'+index+'"]').val().padStart(2, '0');
+    
+    $('#start_time_' + index).val(jam_mulai + ':' + menit_mulai);
+    $('#end_time_' + index).val(jam_akhir + ':' + menit_akhir);
 });
 </script>
 

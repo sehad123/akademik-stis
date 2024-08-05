@@ -37,6 +37,8 @@ class ClassTimeTableController extends Controller
                     $dataW['menit_mulai'] = $classSubject->menit_mulai;
                     $dataW['jam_akhir'] = $classSubject->jam_akhir;
                     $dataW['menit_akhir'] = $classSubject->menit_akhir;
+                    $dataW['status'] = $classSubject->status;
+                    $dataW['link'] = $classSubject->link;
                 } else {
                     $dataW['start_time'] = '';
                     $dataW['end_time'] = '';
@@ -46,6 +48,8 @@ class ClassTimeTableController extends Controller
                     $dataW['menit_mulai'] = '';
                     $dataW['jam_akhir'] = '';
                     $dataW['menit_akhir'] = '';
+                    $dataW['status'] = '';
+                    $dataW['link'] = '';
                 }
             } else {
 
@@ -57,6 +61,8 @@ class ClassTimeTableController extends Controller
                 $dataW['menit_mulai'] = '';
                 $dataW['jam_akhir'] = '';
                 $dataW['menit_akhir'] = '';
+                $dataW['status'] = '';
+                $dataW['link'] = '';
             }
             $week[] = $dataW;
         }
@@ -80,7 +86,7 @@ class ClassTimeTableController extends Controller
     {
         ClassTimeTableModel::where('class_id', '=', $request->class_id)->where('matkul_id', '=', $request->matkul_id)->delete();
         foreach ($request->timetable as $timetable) {
-            if (!empty($timetable['week_id']) && !empty($timetable['start_time']) && !empty($timetable['end_time']) && !empty($timetable['room_number']) && !empty($timetable['tanggal']) && !empty($timetable['jam_mulai']) && !empty($timetable['menit_mulai']) && !empty($timetable['jam_akhir']) && !empty($timetable['menit_akhir'])) {
+            if (!empty($timetable['week_id']) && !empty($timetable['start_time']) && !empty($timetable['end_time']) && !empty($timetable['room_number']) && !empty($timetable['tanggal']) && !empty($timetable['jam_mulai']) && !empty($timetable['status']) && !empty($timetable['menit_mulai'])  && !empty($timetable['jam_akhir']) && !empty($timetable['menit_akhir'])) {
                 $save = new ClassTimeTableModel;
                 $save->class_id = $request->class_id;
                 $save->matkul_id = $request->matkul_id;
@@ -93,6 +99,8 @@ class ClassTimeTableController extends Controller
                 $save->menit_mulai = $timetable['menit_mulai'];
                 $save->jam_akhir = $timetable['jam_akhir'];
                 $save->menit_akhir = $timetable['menit_akhir'];
+                $save->status = $timetable['status'];
+                $save->link = $timetable['link'];
                 $save->save();
             }
         }
@@ -126,10 +134,14 @@ class ClassTimeTableController extends Controller
                     $dataW['start_time'] = $classSubject->start_time;
                     $dataW['end_time'] = $classSubject->end_time;
                     $dataW['room_number'] = $classSubject->room_number;
+                    $dataW['status'] = $classSubject->status;
+                    $dataW['link'] = $classSubject->link;
                 } else {
                     $dataW['start_time'] = '';
                     $dataW['end_time'] = '';
                     $dataW['room_number'] = '';
+                    $dataW['status'] = '';
+                    $dataW['link'] = '';
                 }
                 $week[] = $dataW;
             }
@@ -155,10 +167,14 @@ class ClassTimeTableController extends Controller
                 $dataW['start_time'] = $classSubject->start_time;
                 $dataW['end_time'] = $classSubject->end_time;
                 $dataW['room_number'] = $classSubject->room_number;
+                $dataW['status'] = $classSubject->status;
+                $dataW['link'] = $classSubject->link;
             } else {
                 $dataW['start_time'] = '';
                 $dataW['end_time'] = '';
                 $dataW['room_number'] = '';
+                $dataW['status'] = '';
+                $dataW['link'] = '';
             }
             $result[] = $dataW;
         }
@@ -185,10 +201,14 @@ class ClassTimeTableController extends Controller
                 $dataW['start_time'] = $classSubject->start_time;
                 $dataW['end_time'] = $classSubject->end_time;
                 $dataW['room_number'] = $classSubject->room_number;
+                $dataW['status'] = $classSubject->status;
+                $dataW['link'] = $classSubject->link;
             } else {
                 $dataW['start_time'] = '';
                 $dataW['end_time'] = '';
                 $dataW['room_number'] = '';
+                $dataW['status'] = '';
+                $dataW['link'] = '';
             }
             $result[] = $dataW;
         }

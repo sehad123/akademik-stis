@@ -242,6 +242,8 @@ class PresensiController extends Controller
                     $dataW['menit_mulai'] = $classSubject->menit_mulai;
                     $dataW['jam_akhir'] = $classSubject->jam_akhir;
                     $dataW['menit_akhir'] = $classSubject->menit_akhir;
+                    $dataW['status'] = $classSubject->status;
+                    $dataW['link'] = $classSubject->link;
                     $week[] = $dataW;
                 }
             }
@@ -296,6 +298,8 @@ class PresensiController extends Controller
                     $dataW['menit_mulai'] = $classSubject->menit_mulai;
                     $dataW['jam_akhir'] = $classSubject->jam_akhir;
                     $dataW['menit_akhir'] = $classSubject->menit_akhir;
+                    $dataW['status'] = $classSubject->status;
+                    $dataW['link'] = $classSubject->link;
                     $week[] = $dataW;
                 }
             }
@@ -357,9 +361,9 @@ class PresensiController extends Controller
             // Hitung jarak dari lokasi pengguna ke titik koordinat target
             $distance = haversineGreatCircleeDistance($latitude, $longitude, $target_latitude, $target_longitude);
 
-            // Validasi jarak (5000 meter)
-            if ($distance > 5000) {
-                session()->flash('message', 'Anda berada di luar radius 5000 meter dari titik presensi.');
+            // Validasi jarak (100 meter)
+            if ($distance > 100) {
+                session()->flash('message', 'Anda berada di luar radius 100 meter dari titik presensi.');
                 return response()->json(['status' => 'error'], 400);
             }
         }
@@ -394,6 +398,8 @@ class PresensiController extends Controller
                     $dataW['menit_mulai'] = $classSubject->menit_mulai;
                     $dataW['jam_akhir'] = $classSubject->jam_akhir;
                     $dataW['menit_akhir'] = $classSubject->menit_akhir;
+                    $dataW['status'] = $classSubject->status;
+                    $dataW['link'] = $classSubject->link;
                     $week[] = $dataW;
                 }
             }
@@ -520,9 +526,9 @@ class PresensiController extends Controller
             // Hitung jarak dari lokasi pengguna ke titik koordinat target
             $distance = haversineGreatCircleDistance($latitude, $longitude, $target_latitude, $target_longitude);
 
-            // Validasi jarak (5000 meter)
-            if ($distance > 5000) {
-                session()->flash('message', 'Anda berada di luar radius 5000 meter dari titik presensi.');
+            // Validasi jarak (100 meter)
+            if ($distance > 100) {
+                session()->flash('message', 'Anda berada di luar radius 100 meter dari titik presensi.');
                 return response()->json(['status' => 'error'], 400);
             }
         }
@@ -557,6 +563,8 @@ class PresensiController extends Controller
                     $dataW['menit_mulai'] = $classSubject->menit_mulai;
                     $dataW['jam_akhir'] = $classSubject->jam_akhir;
                     $dataW['menit_akhir'] = $classSubject->menit_akhir;
+                    $dataW['status'] = $classSubject->status;
+                    $dataW['link'] = $classSubject->link;
                     $week[] = $dataW;
                 }
             }
