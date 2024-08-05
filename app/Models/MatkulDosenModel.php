@@ -166,14 +166,28 @@ class MatkulDosenModel extends Model
 
     static public function getFirstAlready($matkul_id, $dosen_id)
     {
-        return
-            self::where('matkul_id', '=', $matkul_id)
+        return self::where('matkul_id', '=', $matkul_id)
             ->where('dosen_id', '=', $dosen_id)->first();
     }
+
     static public function getTimeTable($class_id, $matkul_id)
     {
         $getWeek = WeekModel::getWeekByName(date('l'));
         return ClassTimeTableModel::getRecordClassMatkul($class_id, $matkul_id, $getWeek->id);
         // return date('');
+    }
+
+    static public function MySubjectDosen($class_id, $matkul_id)
+    {
+        return self::select('matkul_dosen.*', 'matkul.name as matkul_name', 'matkul.id as matkul_id', 'class.name as class_name', 'users.name as dosen_name')
+            ->join('matkul', 'matkul.id', '=', 'matkul_dosen.matkul_id')
+            ->join('class', 'class.id', '=', 'matkul_dosen.class_id')
+            ->join('users', 'users.id', '=', 'matkul_dosen.dosen_id')
+            ->where('matkul_dosen.matkul_id', '=', $matkul_id)
+            ->where('matkul_dosen.class_id', '=', $class_id)
+            ->where('matkul_dosen.is_delete', '=', 0)
+            ->where('matkul_dosen.status', '=', 0)
+            ->orderBy('matkul_dosen.id', 'desc')
+            ->get();
     }
 }

@@ -16,6 +16,7 @@ use App\Models\MatkulDosenModel;
 use App\Models\ClassTimeTableModel;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class PresensiController extends Controller
@@ -37,16 +38,30 @@ class PresensiController extends Controller
     public function presensi_dosen(Request $request)
     {
         $data['getClass'] = ClassModel::getClass();
+
         if (!empty($request->class_id)) {
-            $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id);
+            $data['getSubject'] = ClassMatkulModel::MySubject($request->class_id);
+        } else {
+            $data['getSubject'] = [];
         }
-        if (!empty($request->get('class_id')) && !empty($request->get('tgl_presensi')) && !empty($request->get('matkul_id'))) {
-            $data['getDosen'] = User::getDosenClass($request->get('class_id'));
+
+        if (!empty($request->class_id) && !empty($request->matkul_id)) {
+            $data['getDosenn'] = MatkulDosenModel::MySubjectDosen($request->class_id, $request->matkul_id);
+        } else {
+            $data['getDosenn'] = [];
         }
-        $data['header_title'] = "Presensi Dosen ";
+
+        if (!empty($request->class_id) && !empty($request->tgl_presensi) && !empty($request->matkul_id) && !empty($request->dosen_id)) {
+            $data['getDosen'] = presensiModel::getRecordDosennn($request->class_id, $request->matkul_id, $request->dosen_id);
+        } else {
+            $data['getDosen'] = [];
+        }
+
+        $data['header_title'] = "Presensi Dosen";
 
         return view('admin.presensi.dosen', $data);
     }
+
 
 
     public function get_subject(Request $request)
@@ -62,44 +77,85 @@ class PresensiController extends Controller
 
     public function presensi_mahasiswa_save(Request $request)
     {
-        $checkKehadiran = presensiModel::checkPresensi($request->student_id, $request->class_id, $request->tgl_presensi, $request->matkul_id, $request->week_id);
-        if (!empty($checkKehadiran)) {
-            $presensi = $checkKehadiran;
-        } else {
+        // Retrieve the existing record
+        $presensi = presensiModel::where('student_id', $request->student_id)
+            ->where('class_id', $request->class_id)
+            ->where('tgl_presensi', $request->tgl_presensi)
+            ->where('matkul_id', $request->matkul_id)
+            // ->where('week_id', $request->week_id)
+            ->first();
+
+        // If no record exists, create a new one
+        if (empty($presensi)) {
             $presensi = new presensiModel;
             $presensi->student_id = $request->student_id;
             $presensi->matkul_id = $request->matkul_id;
             $presensi->class_id = $request->class_id;
-            $presensi->week_id = $request->week_id;
+            // $presensi->week_id = $request->week_id;
             $presensi->tgl_presensi = $request->tgl_presensi;
             $presensi->created_by = Auth::user()->id;
         }
+
+        // Update the presensi_type
         $presensi->presensi_type = $request->presensi_type;
         $presensi->save();
 
+        // Return the response
         $json['message'] = 'Presensi Berhasil Disimpan';
-        echo json_encode($json);
+        $json['presensi_status'] = $this->getPresensiStatus($presensi->presensi_type);
+        return response()->json($json);
     }
+    private function getPresensiStatus($presensi_type)
+    {
+        switch ($presensi_type) {
+            case 1:
+                return 'Hadir';
+            case 2:
+                return 'Terlambat A';
+            case 3:
+                return 'Terlambat B';
+            case 4:
+                return 'Sakit';
+            case 5:
+                return 'Izin';
+            case 6:
+                return 'Tidak Hadir';
+            default:
+                return '';
+        }
+    }
+
     public function presensi_dosen_save(Request $request)
     {
-        $checkKehadiran = presensiModel::checkPresensiDosen($request->dosen_id, $request->class_id, $request->tgl_presensi, $request->matkul_id, $request->week_id);
-        if (!empty($checkKehadiran)) {
-            $presensi = $checkKehadiran;
-        } else {
+        // Retrieve the existing record
+        $presensi = presensiModel::where('dosen_id', $request->dosen_id)
+            ->where('class_id', $request->class_id)
+            ->where('tgl_presensi', $request->tgl_presensi)
+            ->where('matkul_id', $request->matkul_id)
+            // ->where('week_id', $request->week_id)
+            ->first();
+
+        // If no record exists, create a new one
+        if (empty($presensi)) {
             $presensi = new presensiModel;
             $presensi->dosen_id = $request->dosen_id;
             $presensi->matkul_id = $request->matkul_id;
             $presensi->class_id = $request->class_id;
-            $presensi->week_id = $request->week_id;
+            // $presensi->week_id = $request->week_id;
             $presensi->tgl_presensi = $request->tgl_presensi;
             $presensi->created_by = Auth::user()->id;
         }
+
+        // Update the presensi_type
         $presensi->presensi_type = $request->presensi_type;
         $presensi->save();
 
+        // Return the response
         $json['message'] = 'Presensi Berhasil Disimpan';
-        echo json_encode($json);
+        $json['presensi_status'] = $this->getPresensiStatus($presensi->presensi_type);
+        return response()->json($json);
     }
+
     public function presensi_mahasiswa_self(Request $request)
     {
         $checkKehadiran = presensiModel::checkPresensi($request->student_id, $request->class_id, $request->tgl_presensi, $request->matkul_id, $request->week_id);
@@ -146,6 +202,14 @@ class PresensiController extends Controller
         $data['getRecord'] = presensiModel::getRecord();
         $data['header_title'] = "Laporan Presensi Mahasiswa ";
         return view('admin.presensi.laporan', $data);
+    }
+    public function laporan_presensiDosen()
+    {
+        $data['getClass'] = ClassModel::getClass();
+        $data['getSubject'] = SubjectModel::getSubject();
+        $data['getRecord'] = presensiModel::getRecordDosenn();
+        $data['header_title'] = "Laporan Presensi Dosen ";
+        return view('admin.presensi.laporan_dosen', $data);
     }
 
     public function laporan_presensi_excel(Request $request)
@@ -328,12 +392,13 @@ class PresensiController extends Controller
         $tgl_presensi = now()->toDateString();
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
+        $status = $request->input('status'); // Ambil status dari request
+
+        $face_image_name = $request->input('face_image');
 
         // Titik koordinat target
         $target_latitude = -7.538284413323129;
         $target_longitude = 110.62490576687038;
-
-
 
         // Fungsi untuk menghitung jarak antara dua titik koordinat
         function haversineGreatCircleeDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000)
@@ -351,8 +416,8 @@ class PresensiController extends Controller
             return $angle * $earthRadius;
         }
 
-        // Validasi input latitude dan longitude jika presensi_type == 1 (Hadir)
-        if ($presensi_type == 1) {
+        // Validasi input latitude dan longitude jika presensi_type == 1 (Hadir) dan status == "Offline"
+        if ($status == "Offline" && $presensi_type == 1) {
             if (empty($latitude) || empty($longitude)) {
                 session()->flash('message', 'Lokasi tidak ditemukan, harap mengaktifkan GPS Anda.');
                 return response()->json(['status' => 'error'], 400);
@@ -444,8 +509,12 @@ class PresensiController extends Controller
                     $presensi->student_id = $getMahasiswa->id;
                     $presensi->matkul_id = $getMatkul->id;
                     $presensi->class_id = $getClass->id;
+                    $presensi->week_id = $getDay->id;
                     $presensi->tgl_presensi = $tgl_presensi;
                     $presensi->created_by = $getMahasiswa->name;
+                    $presensi->latitude = $latitude;
+                    $presensi->longtitude = $longitude;
+                    $presensi->face_image = $face_image_name;
                     $presensi->created_at = now()->format('h:i A');
 
                     if ($current_time - $start_time > 30 && $presensi_type == 1) {
@@ -464,12 +533,12 @@ class PresensiController extends Controller
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     } else if ($presensi_type == 4) {
-                        $presensi->presensi_type = $presensi_type; // Hadir
+                        $presensi->presensi_type = $presensi_type; // Sakit
                         session()->flash('message', 'Harap upload bukti sakit Anda');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     } else if ($presensi_type == 5) {
-                        $presensi->presensi_type = $presensi_type; // Hadir
+                        $presensi->presensi_type = $presensi_type; // Izin
                         session()->flash('message', 'Harap upload bukti izin Anda');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
@@ -479,12 +548,11 @@ class PresensiController extends Controller
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     }
-
-                    // session()->flash('message', 'Anda presensi tepat waktu');
                 }
             }
         }
     }
+
     public function presensiDosenSave(Request $request)
     {
         $dosen_id = Auth::user()->id;
@@ -495,6 +563,8 @@ class PresensiController extends Controller
         $tgl_presensi = now()->toDateString();
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
+        $status = $request->input('status'); // Ambil status dari request
+        $face_image_name = $request->input('face_image');
 
         // Titik koordinat target
         $target_latitude = -7.538284413323129;
@@ -517,7 +587,7 @@ class PresensiController extends Controller
         }
 
         // Validasi input latitude dan longitude jika presensi_type == 1 (Hadir)
-        if ($presensi_type == 1) {
+        if ($status == "Offline" && $presensi_type == 1) {
             if (empty($latitude) || empty($longitude)) {
                 session()->flash('message', 'Lokasi tidak ditemukan, harap mengaktifkan GPS Anda.');
                 return response()->json(['status' => 'error'], 400);
@@ -609,8 +679,12 @@ class PresensiController extends Controller
                     $presensi->dosen_id = $getDosen->id;
                     $presensi->matkul_id = $getMatkul->id;
                     $presensi->class_id = $getClass->id;
+                    $presensi->week_id = $getDay->id;
                     $presensi->tgl_presensi = $tgl_presensi;
                     $presensi->created_by = $getDosen->name;
+                    $presensi->latitude = $latitude;
+                    $presensi->longtitude = $longitude;
+                    $presensi->face_image = $face_image_name;
                     $presensi->created_at = now()->format('h:i A');
 
                     if ($current_time - $start_time > 30 && $presensi_type == 1) {

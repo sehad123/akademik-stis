@@ -77,7 +77,8 @@ class AuthController extends Controller
         }
 
         Log::error('Face verification failed');
-        Auth::logout();
+        // Auth::logout();
+
         return response()->json(['status' => 'error', 'message' => 'Gagal Melakukan Verifikasi Wajah'], 401);
     }
 

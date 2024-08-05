@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Log;
 use Request;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class presensiModel extends Model
 {
@@ -37,13 +38,14 @@ class presensiModel extends Model
 
     static public function checkPresensiDosen($dosen_id, $class_id, $tgl_presensi, $matkul_id, $week_id)
     {
-        return presensiModel::where('dosen_id', '=', $dosen_id)
-            ->where('class_id', '=', $class_id)
-            ->where('tgl_presensi', '=', $tgl_presensi)
-            ->where('matkul_id', '=', $matkul_id)
-            ->where('week_id', '=', $week_id)
+        return self::where('dosen_id', $dosen_id)
+            ->where('class_id', $class_id)
+            ->where('tgl_presensi', $tgl_presensi)
+            ->where('matkul_id', $matkul_id)
+            ->where('week_id', $week_id)
             ->first();
     }
+
 
     static public function getRecord()
     {
@@ -68,7 +70,6 @@ class presensiModel extends Model
         $return = $return->orderBy('presensi_mahasiswa.id', 'desc')->paginate(20);
         return $return;
     }
-
     static public function getRecordDosenn()
     {
         $return =  presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'class.name as class_name', 'matkul.name as matkul_name',  'dosen.name as dosen_name',  'dosen.id as dosen_id', 'matkul.id as matkul_id', 'class.id as class_id')
@@ -92,6 +93,23 @@ class presensiModel extends Model
         $return = $return->orderBy('presensi_mahasiswa.id', 'desc')->paginate(20);
         return $return;
     }
+
+    static public function getRecordDosennn($class_id, $matkul_id, $dosen_id)
+    {
+        $query = presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'class.name as class_name', 'users.name as dosen_name')
+            ->join('matkul', 'matkul.id', '=', 'presensi_mahasiswa.matkul_id')
+            ->join('class', 'class.id', '=', 'presensi_mahasiswa.class_id')
+            ->join('users', 'users.id', '=', 'presensi_mahasiswa.dosen_id')
+            ->where('presensi_mahasiswa.class_id', '=', $class_id)
+            ->where('presensi_mahasiswa.matkul_id', '=', $matkul_id)
+            ->where('presensi_mahasiswa.dosen_id', '=', $dosen_id);
+
+        // Debug log
+
+        return $query->orderBy('presensi_mahasiswa.id', 'desc')->paginate(20);
+    }
+
+
 
     static public function getRecordDosen($class_id)
     {
@@ -166,5 +184,24 @@ class presensiModel extends Model
             ->where('presensi_mahasiswa.student_id', '=', $student_id);
         $return = $return->count();
         return $return;
+    }
+    public function getProfilePresensi()
+    {
+        $path = 'face_recognition_api/upload/presensi/' . $this->face_image;
+        if (!empty($this->face_image) && file_exists($path)) {
+            return url($path);
+        } else {
+            // Log the path or an error message
+            return url('face_recognition_api/upload/profile/user.png');
+        }
+    }
+
+    public static function getPresensi($dosen_id, $class_id, $tgl_presensi, $matkul_id)
+    {
+        return presensiModel::where('dosen_id', '=', $dosen_id)
+            ->where('class_id', '=', $class_id)
+            ->where('tgl_presensi', '=', $tgl_presensi)
+            ->where('matkul_id', '=', $matkul_id)
+            ->first();
     }
 }

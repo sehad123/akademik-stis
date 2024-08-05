@@ -32,6 +32,8 @@
             $start_time = '';
             $end_time = '';
             $room_number = '';
+            $status = '';
+            $link = '';
             if (!empty($getMyJadwal)) {
                 $week = $getMyJadwal[0]['week'][0];
                 $tanggal = $week['tanggal'];
@@ -211,15 +213,19 @@
     var class_id = {{ $getClass->id }};
     var matkul_id = {{ $getMatkul->id }};
     var week_id = {{ $getDay->id }};
+    var status = "{{ $status }}";
     var presensi_type = $(this).data('value');
     var tgl_presensi = "{{ now()->toDateString() }}";
     var latitude = document.getElementById("latitude").innerText;
     var longitude = document.getElementById("longitude").innerText;
 
+    if (status === "Offline" && presensi_type === 1) 
+        {
     if (!latitude || !longitude) {
         alert("Anda harus menghidupkan GPS untuk melakukan presensi.");
         return;
     }
+}
 
     if (presensi_type === 1 || presensi_type === 4 || presensi_type === 5) { // Hanya verifikasi wajah untuk presensi hadir
         document.getElementById('camera-container').style.display = 'block';
@@ -263,6 +269,8 @@
         dataType: "json",
         success: function(response) {
             if (response.status === 'success') {
+                var face_image_name = response.face_image_name; // Nama file gambar yang dihasilkan API
+
                 $.ajax({
                     type: "POST",
                     url: "{{ url('student/presensi/save') }}",
@@ -275,7 +283,8 @@
                         week_id: week_id,
                         tgl_presensi: tgl_presensi,
                         latitude: latitude,
-                        longitude: longitude
+                        longitude: longitude,
+                        face_image:face_image_name
                     },
                     dataType: "json",
                     success: function(response) {

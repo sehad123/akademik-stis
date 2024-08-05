@@ -3,15 +3,14 @@
 @section('content')
     
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Presensi Mahasiswa </h1>
+            <h1>Presensi Mahasiswa</h1>
           </div>
         </div>
-      </div><!-- /.container-fluid -->
+      </div>
     </section>
 
     @include('_message')
@@ -19,7 +18,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-12">
-            <div class="card ">
+            <div class="card">
               <form method="get" action="">
                 <div class="card-body">
                   <div class="row">
@@ -28,7 +27,7 @@
                       <select id="getClass" name="class_id" class="form-control getClass" required>
                           <option value="">Select</option>
                           @foreach ($getClass as $class)
-                              <option {{ (Request::get('class_id') == $class->id) ? 'selected':'' }}  value="{{ $class->id }}">{{ $class->name }}</option>
+                              <option {{ (Request::get('class_id') == $class->id) ? 'selected':'' }} value="{{ $class->id }}">{{ $class->name }}</option>
                           @endforeach
                       </select>
                   </div>
@@ -38,19 +37,19 @@
                           <option value="">Select</option>
                           @if (!empty($getSubject))
                               @foreach ($getSubject as $matkul)
-                                  <option {{ (Request::get('matkul_id') == $matkul->matkul_id) ? 'selected':'' }}  value="{{ $matkul->matkul_id }}">{{ $matkul->matkul_name }}</option>
+                                  <option {{ (Request::get('matkul_id') == $matkul->matkul_id) ? 'selected':'' }} value="{{ $matkul->matkul_id }}">{{ $matkul->matkul_name }}</option>
                               @endforeach
                           @endif
                       </select>
                   </div>
 
                     <div class="form-group col-md-3">
-                      <label >Tanggal Presensi </label>
+                      <label>Tanggal Presensi</label>
                       <input type="date" id="getPresensiDate" value="{{ Request::get('tgl_presensi') }}" name="tgl_presensi" class="form-control" required>
                     </div>
                     <div class="form-group col-md-3">
                       <button class="btn btn-primary mt-4" type="submit">Search</button>
-                      <a href="{{ url('admin/presensi/student') }}" class="btn btn-success mt-4" type="submit">clear</a>
+                      <a href="{{ url('admin/presensi/student') }}" class="btn btn-success mt-4" type="submit">Clear</a>
                     </div>
                   </div>
                 </div>
@@ -58,7 +57,7 @@
             </div>
           </div>
 
-          @if (!empty(Request::get('class_id')) && !empty(Request::get('tgl_presensi')) && !empty(Request::get('matkul_id')) ) 
+          @if (!empty(Request::get('class_id')) && !empty(Request::get('tgl_presensi')) && !empty(Request::get('matkul_id')))
             <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
@@ -76,87 +75,80 @@
                     </thead>
                     <tbody>
                         @if (!empty($getStudent) && !empty($getStudent->count()))
-                        @php
-                            $i = 1;
-                        @endphp
+                        @php $i = 1; @endphp
                         @foreach ($getStudent as $value)
                         @php
                         $presensi_type = '';
-                            $getPresensi = $value->getPresensi($value->id,Request::get('class_id'),Request::get('tgl_presensi'),Request::get('matkul_id'));
-                            if(!empty($getPresensi->presensi_type))
-                            {
-                                $presensi_type = $getPresensi->presensi_type;
-                            }
+                        $getPresensi = $value->getPresensi($value->id,Request::get('class_id'),Request::get('tgl_presensi'),Request::get('matkul_id'));
+                        if(!empty($getPresensi) && !empty($getPresensi->presensi_type))
+                        {
+                            $presensi_type = $getPresensi->presensi_type;
+                        }
                         @endphp
                             <tr>
                                 <td>{{ $i++ }}</td>
-                                <td>{{ $value->name }} {{ $value->last_name }}</td>
+                                <td>{{ $value->name }}</td>
                                 <td>
                                     <button class="SavePresensi btn btn-primary m-2" data-value="1" id="{{ $value->id }}">Hadir</button>
-                                    <button class="SavePresensi btn btn-warning m-2" data-value="2" id="{{ $value->id }}">Terlambat</button>
-                                    <button class="SavePresensi btn btn-danger m-2" data-value="3" id="{{ $value->id }}">Sakit</button>
-                                    <button class="SavePresensi btn btn-success m-2" data-value="4" id="{{ $value->id }}">Izin</button>
-                                    <button class="SavePresensi btn btn-secondary m-2" data-value="5" id="{{ $value->id }}">Tidak Hadir</button>
+                                    <button class="SavePresensi btn btn-info m-2" data-value="2" id="{{ $value->id }}">Terlambat A</button>
+                                    <button class="SavePresensi btn btn-danger m-2" data-value="4" id="{{ $value->id }}">Sakit</button>
+                                    <button class="SavePresensi btn btn-success m-2" data-value="5" id="{{ $value->id }}">Izin</button>
+                                    <button class="SavePresensi btn btn-secondary m-2" data-value="6" id="{{ $value->id }}">Tidak Hadir</button>
                                 </td>
                                 <td id="status{{ $value->id }}">
-                                    @switch($presensi_type)
-                                        @case(1)
-                                            Hadir
-                                            @break
-                                        @case(2)
-                                            Terlambat
-                                            @break
-                                        @case(3)
-                                            Sakit
-                                            @break
-                                        @case(4)
-                                            Izin
-                                            @break
-                                        @case(5)
-                                            Tidak Hadir
-                                            @break
-                                        @default
-                                            -
-                                    @endswitch
-                                </td>
+                                  @if (!empty($getPresensi->presensi_type))
+                                  @switch($presensi_type)
+                                      @case(1) Hadir @break
+                                      @case(2) Terlambat A @break
+                                      @case(3) Terlambat B @break
+                                      @case(4) Sakit @break
+                                      @case(5) Izin @break
+                                      @case(6) Tidak Hadir @break
+                                      @default {{ " " }}
+                                  @endswitch
+                                  @else
+                                  {{ " " }}
+                                  @endif
+                              </td>
                             </tr>
                         @endforeach
-                        <tr></tr>
+                        @else
+                        <tr>
+                          <td colspan="4">Tidak Ditemukan</td>
+                        </tr>
                         @endif
                     </tbody>
                   </table>
-          </div>
+                </div>
             </div>
           @endif
         </div>
     </div>
-
     </section>
-  </div>
+</div>
 
 @endsection
 
 @section('script')
-
 <script type="text/javascript">
-$('#getClass').change(function()
-{
+$('#getClass').change(function() {
     var class_id = $(this).val();
     $.ajax({
-        url:"{{ url('admin/presensi/get_subject') }}",
+        url: "{{ url('admin/presensi/get_subject') }}",
         type: "POST",
-        data:{
-            "_token":"{{ csrf_token() }}",
-            class_id:class_id,
+        data: {
+            "_token": "{{ csrf_token() }}",
+            class_id: class_id,
         },
-        dataType:"json",
-        success:function(response){
+        dataType: "json",
+        success: function(response) {
             $('.getSubject').html(response.html);
         },
     });
 });
 
 $('.SavePresensi').click(function(e) {
+    e.preventDefault();
     var student_id = $(this).attr('id');
     var presensi_type = $(this).data('value');
     var class_id = $('#getClass').val();
@@ -179,14 +171,11 @@ $('.SavePresensi').click(function(e) {
             alert(data.message);
             $('#status' + student_id).text(data.presensi_status);
             location.reload();
-
         },
         error: function(xhr, status, error) {
             console.error(xhr.responseText);
         }
     });
 });
-
 </script>
-
 @endsection

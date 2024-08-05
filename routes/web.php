@@ -149,10 +149,13 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/presensi/student', [PresensiController::class, 'presensi_mahasiswa']);
     Route::get('admin/presensi/dosen', [PresensiController::class, 'presensi_dosen']);
     Route::get('admin/presensi/report', [PresensiController::class, 'laporan_presensi']);
+    Route::get('admin/presensi/report_dosen', [PresensiController::class, 'laporan_presensiDosen']);
     Route::post('admin/presensi/report_excel', [PresensiController::class, 'laporan_presensi_excel']);
     Route::post('admin/presensi/student/save', [PresensiController::class, 'presensi_mahasiswa_save']);
     Route::post('admin/presensi/dosen/save', [PresensiController::class, 'presensi_dosen_save']);
+    Route::post('admin/presensi/get_subjects', [ClassTimeTableController::class, 'get_subjects']);
     Route::post('admin/presensi/get_subject', [ClassTimeTableController::class, 'get_subject']);
+    Route::post('admin/presensi/get_dosen', [ClassTimeTableController::class, 'get_dosen']);
 
     // Komunikasi
     Route::get('admin/komunikasi/pengumuman', [PengumumanController::class, 'Pengumuman']);

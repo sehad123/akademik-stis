@@ -306,12 +306,11 @@ class User extends Authenticatable
             ->get();
         return $return;
     }
-    static public function getDosenClass($class_id)
+    static public function getDosenClass()
     {
         $return =  self::select('users.*', 'users.name')
             ->where('users.user_type', '=', 2)
             ->where('users.is_delete', '=', 0)
-            ->where('users.class_id', '=', $class_id)
             ->orderBy('users.id', 'desc')
             ->get();
         return $return;

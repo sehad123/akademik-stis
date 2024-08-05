@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Laporan Presensi Mahasiswa ({{ $getRecord->total() }})</h1>
+            <h1>Laporan Presensi Dosen ({{ $getRecord->total() }})</h1>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -94,7 +94,7 @@
                       <thead>
                           <tr>
                               <th>#</th>
-                              <th>Nama Mahasiswa</th>
+                              <th>Nama Dosen</th>
                               <th>Kelas</th>
                               <th>Mata Kuliah</th>
                               <th>Presensi</th>
@@ -110,7 +110,7 @@
                           @forelse($getRecord as $value)
                           <tr>
                               <td>{{ $i++ }}</td>
-                              <td>{{ $value->student_name }} {{ $value->student_last_name }}</td>
+                              <td>{{ $value->dosen_name }} </td>
                               <td>{{ $value->class_name }}</td>
                               <td>{{ $value->matkul_name }}</td>
                               <td>

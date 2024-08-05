@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassMatkulModel;
-use App\Models\ClassModel;
-use App\Models\ClassTimeTableModel;
-use App\Models\SubjectModel;
+use Auth;
 use App\Models\User;
 use App\Models\WeekModel;
+use App\Models\ClassModel;
+use App\Models\SubjectModel;
 use Illuminate\Http\Request;
-use Auth;
+use App\Models\ClassMatkulModel;
+use App\Models\MatkulDosenModel;
+use App\Models\ClassTimeTableModel;
 
 class ClassTimeTableController extends Controller
 {
@@ -71,6 +72,9 @@ class ClassTimeTableController extends Controller
         $data['header_title'] = "CLass Timetable";
         return view('admin.class_timetable.list', $data);
     }
+
+
+
     public function get_subject(Request $request)
     {
         $getSubject =  ClassMatkulModel::MySubject($request->class_id);
@@ -81,6 +85,34 @@ class ClassTimeTableController extends Controller
         $json['html'] = $html;
         echo json_encode($json);
     }
+
+    public function get_subjects(Request $request)
+    {
+        $subjects = ClassMatkulModel::MySubject($request->class_id);
+        $subject_html = '<option value="">Select</option>';
+        foreach ($subjects as $subject) {
+            $subject_html .= '<option value="' . $subject->matkul_id . '">' . $subject->matkul_name . '</option>';
+        }
+        return response()->json(['subject_html' => $subject_html]);
+    }
+
+    public function get_dosen(Request $request)
+    {
+        // Pastikan class_id dan matkul_id ada
+        if (!$request->has('class_id') || !$request->has('matkul_id')) {
+            return response()->json(['dosen_html' => '<option value="">Select</option>']);
+        }
+
+        $dosenn = MatkulDosenModel::MySubjectDosen($request->class_id, $request->matkul_id);
+        $dosen_html = '<option value="">Select</option>';
+
+        foreach ($dosenn as $dosen) {
+            $dosen_html .= '<option value="' . $dosen->id . '">' . $dosen->dosen_name . '</option>';
+        }
+
+        return response()->json(['dosen_html' => $dosen_html]);
+    }
+
 
     public function insert_update(Request $request)
     {

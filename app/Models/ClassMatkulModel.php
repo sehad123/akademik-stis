@@ -38,7 +38,7 @@ class ClassMatkulModel extends Model
     }
     static public function MySubject($class_id)
     {
-        return self::select('matkul_class.*',  'matkul.name as matkul_name', 'matkul.type as matkul_type', 'class.name as class_name')
+        return self::select('matkul_class.*', 'matkul.name as matkul_name', 'matkul_id as matkul_id', 'matkul.type as matkul_type', 'class.name as class_name')
             ->join('matkul', 'matkul.id', 'matkul_class.matkul_id')
             ->join('class', 'class.id', 'matkul_class.class_id')
             ->join('users', 'users.id', 'matkul_class.created_by')
@@ -48,6 +48,21 @@ class ClassMatkulModel extends Model
             ->orderBy('matkul_class.id', 'desc')
             ->get();
     }
+
+    static public function MySubjectDosen($matkul_id)
+    {
+        return self::select('matkul_class.*', 'matkul.name as matkul_name', 'matkul.type as matkul_type', 'class.name as class_name')
+            ->join('matkul', 'matkul.id', '=', 'matkul_class.matkul_id')
+            ->join('class', 'class.id', '=', 'matkul_class.class_id')
+            ->join('users', 'users.id', '=', 'matkul_class.created_by')
+            ->where('matkul_class.matkul_id', '=', $matkul_id)
+            ->where('matkul_class.is_delete', '=', 0)
+            ->where('matkul_class.status', '=', 0)
+            ->orderBy('matkul_class.id', 'desc')
+            ->get();
+    }
+
+
 
     static public function getTotalMatkulStudent($class_id)
     {

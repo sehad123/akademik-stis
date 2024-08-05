@@ -76,8 +76,10 @@
                             <th>Mata Kuliah</th>
                             <th>Status </th>
                             <th>Tgl Presensi</th>
-                            <th>Action </th>
-                        </tr>
+                            <th>Image</th>
+                            @if ($getRecord->firstWhere('presensi_type', 4) || $getRecord->firstWhere('presensi_type', 5))
+                            <th>Action</th>
+                            @endif                           </tr>
                     </thead>
                <tbody>
                 @forelse ($getRecord as $value)
@@ -100,6 +102,11 @@
                               @endif
                             </td>
                             <td>{{ date('d-m-Y',strtotime($value->tgl_presensi))  }}</td>
+                            <td>
+                              @if (!empty($value->getProfilePresensi()))
+                              <img src="{{ $value->getProfilePresensi() }}" class="img-thumbnail" style="width: 50px; height: 50px; border-radius: 50px;" alt="">
+                              @endif
+                            </td>
                             @if ($value->presensi_type == 4 || $value->presensi_type == 5)
                             <td>
                               <a href="{{ url('dosen/perizinan/'.$value->id.'/'. Auth::user()->id .'/'. $value->class_id.'/'.$value->matkul_id) }}" class="btn btn-warning">Upload bukti sakit / izin</a>

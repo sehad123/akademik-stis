@@ -8,6 +8,7 @@ from PIL import Image
 import mysql.connector
 from flask_cors import CORS
 from facenet_pytorch import MTCNN, InceptionResnetV1
+import uuid
 
 app = Flask(__name__)
 CORS(app)  # Ini akan mengaktifkan CORS untuk semua rute
@@ -48,7 +49,7 @@ def save_image_from_base64(image_data, filename):
     if ',' in image_data:
         image_data = image_data.split(',')[1]
     image_data = re.sub(r'[^A-Za-z0-9+/]', '', image_data)
-    
+
     # Tambahkan padding jika perlu
     missing_padding = len(image_data) % 4
     if missing_padding:
@@ -58,11 +59,15 @@ def save_image_from_base64(image_data, filename):
         image_data = base64.b64decode(image_data)
         with open(filename, 'wb') as f:
             f.write(image_data)
-        logger.info(f"Gambar berhasil disimpan: {filename}")
+        print(f"Image successfully saved: {filename}")
 
     except Exception as e:
-        logger.error(f"Kesalahan saat menyimpan gambar: {e}")
-        raise ValueError("Kesalahan saat menyimpan gambar")
+        print(f"Error saving image: {e}")
+        raise ValueError("Error saving image")
+
+
+
+
 
 def read_image(image_path):
     try:
@@ -107,7 +112,10 @@ def compare_faces_route():
 
     logger.info(f"Path foto profil: {profile_pic_path}")
 
-    uploaded_image_filename = 'uploaded_image.jpg'
+    unique_filename = f"{uuid.uuid4().hex}.jpg"  # Generate a unique filename
+    uploaded_image_filename = os.path.join(UPLOAD_FOLDER, unique_filename)  # Save to the presensi folder
+    unique_filename = f"{uuid.uuid4().hex}.jpg"
+    save_image_from_base64(uploaded_image_base64, os.path.join('upload', 'presensi', unique_filename))
 
     try:
         save_image_from_base64(uploaded_image_base64, uploaded_image_filename)
@@ -136,7 +144,7 @@ def compare_faces_route():
         uploaded_embedding = get_face_embedding(uploaded_face)
 
         if compare_faces(user_embedding, uploaded_embedding):
-            result = {'status': 'success', 'message': 'Wajah berhasil diverifikasi'}
+            result = {'status': 'success', 'message': 'Wajah berhasil diverifikasi', 'face_image_name': unique_filename}
         else:
             result = {'status': 'error', 'message': 'Verifikasi wajah gagal'}
 
@@ -147,6 +155,5 @@ def compare_faces_route():
     finally:
         if os.path.exists(uploaded_image_filename):
             os.remove(uploaded_image_filename)
-
 if __name__ == '__main__':
     app.run(debug=True)

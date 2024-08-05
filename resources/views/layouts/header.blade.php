@@ -249,30 +249,30 @@
               <li class="nav-item ">
                 <a href="{{ url('admin/presensi/student') }}" class="nav-link @if(Request::segment(3) == 'student') active @endif" >
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Presensi Mahasiswa</p>
+                  <p> Mahasiswa</p>
                 </a>
               </li>
               <li class="nav-item ">
                 <a href="{{ url('admin/presensi/dosen') }}" class="nav-link @if(Request::segment(3) == 'dosen') active @endif" >
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Presensi Dosen</p>
+                  <p> Dosen</p>
                 </a>
               </li>
               <li class="nav-item ">
                 <a href="{{ url('admin/presensi/report') }}" class="nav-link @if(Request::segment(3) == 'report') active @endif" >
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Laporan Presensi</p>
+                  <p>Rekap Mahasiswa</p>
+                </a>
+              </li>
+              <li class="nav-item ">
+                <a href="{{ url('admin/presensi/report_dosen') }}" class="nav-link @if(Request::segment(3) == 'report_dosen') active @endif" >
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Rekap Dosen</p>
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item ">
-            <a href="{{ url('admin/komunikasi/pengumuman') }}" class="nav-link @if(Request::segment(3) == 'pengumuman') active @endif" >
-              <i class="nav-icon fa-regular fa-comment"></i>
-              <p>Papan Pengumuman</p>
-            </a>
-          </li>
-
+       
           <li class="nav-item">
             <a href="{{ url('admin/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
               <i class="nav-icon fa-solid fa-gear"></i>
@@ -281,6 +281,13 @@
               </p>
             </a>
           </li>
+          <li class="nav-item ">
+            <a href="{{ url('admin/komunikasi/pengumuman') }}" class="nav-link @if(Request::segment(3) == 'pengumuman') active @endif" >
+              <i class="nav-icon fa-regular fa-comment"></i>
+              <p>Papan Pengumuman</p>
+            </a>
+          </li>
+
           <li class="nav-item">
             <a href="{{ url('admin/change_password') }}" class="nav-link @if(Request::segment(2) == 'change_password') active @endif">
               <i class="nav-icon fas fa-key"></i>
