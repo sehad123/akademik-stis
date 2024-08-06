@@ -15,7 +15,6 @@
       </div><!-- /.container-fluid -->
     </section>
 
-    <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -38,15 +37,6 @@
                     
                     </div>
                     </div>
-                    {{-- <div class="form-group col-md-6">
-                      <label >Last Name<span style="color:red;">*</span></label>
-                      <input type="text" class="form-control" required value="{{ old('last_name') }}" name="last_name" required placeholder=" last name">
-                      <div style="color:red;">
-                        {{ $errors->first('last_name') }}
-                    
-                    </div>
-                    </div> --}}
-                  
                     <div class="form-group col-md-6">
                       <label >Jenis Kelamin<span style="color:red;">*</span></label>
                       <select name="gender" required class="form-control" id="">
@@ -141,19 +131,7 @@
                         {{ $errors->first('note') }}
                     </div>
                     </div>
-                   
-                    <div class="form-group col-md-6">
-                      <label >Status<span style="color:red;">*</span></label>
-                      <select name="status" required class="form-control" id="">
-                        <option value="">Select Status</option>
-                        <option value="0" {{ (old('status') ==0)?'selected':'' }}>Active</option>
-                        <option value="1" {{ (old('status') ==1)?'selected':'' }}>Inactive</option>
-                      </select>
-                      <div style="color:red;">
-                        {{ $errors->first('status') }}
-                    
-                    </div>
-                    </div>
+                  
                   </div>
 <hr>
                   <div class="form-group">

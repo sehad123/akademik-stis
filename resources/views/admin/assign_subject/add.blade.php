@@ -1,7 +1,19 @@
 @extends('layouts.app')
-
+<style>
+  .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 2fr));
+      gap: 10px;
+  }
+  
+  .checkbox-item {
+      display: flex;
+      align-items: center;
+  }
+  </style>
+  
 @section('content')
-    
+
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -10,7 +22,6 @@
           <div class="col-sm-6">
             <h1>Tambah Kelas & Mata Kuliah  </h1>
           </div>
-          
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -23,15 +34,13 @@
           <div class="col-md-12">
             <!-- general form elements -->
             <div class="card card-primary">
-           
-              <!-- /.card-header -->
               <!-- form start -->
               <form method="post" action="">
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label >Nama Kelas</label>
-                    <select name="class_id" class="form-control" id="">
+                    <label>Nama Kelas</label>
+                    <select name="class_id" class="form-control">
                       <option value="">Pilih Kelas</option>
                       @foreach ($getClass as $class)
                       <option value="{{ $class->id }}">{{ $class->name }}</option>
@@ -41,41 +50,26 @@
 
                   <div class="form-group">
                     <label>Nama Mata Kuliah</label>
-                    @foreach ($getSubject as $subject)
-                    <div>
-                        <label style="font-weight: normal">
-                            <input type="checkbox" value="{{ $subject->id }}" name="matkul_id[]">{{ $subject->name }}
-                        </label>
+                    <div class="checkbox-grid">
+                      @foreach ($getSubject as $subject)
+                      <label class="checkbox-item">
+                          <input type="checkbox" value="{{ $subject->id }}" name="matkul_id[]">{{ $subject->name }}
+                      </label>
+                      @endforeach
                     </div>
-                    @endforeach
-                </div>
-                
-                  <div class="form-group">
-                    <label >Status</label>
-                    <select name="status" class="form-control" id="">
-                      <option value="0">Active</option>
-                      <option value="1">Inactive</option>
-                    </select>
                   </div>
-                  
-                 
-                <!-- /.card-body -->
-
+                
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
               </form>
             </div>
-          
           </div>
-          <!--/.col (left) -->
-          <!-- right column -->
-      
-          <!--/.col (right) -->
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-  </div>
+</div>
+
 @endsection

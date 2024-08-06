@@ -14,7 +14,7 @@ class SubmitTugasModel extends Model
 
     static public function getRecord($tugas_id)
     {
-        $return = SubmitTugasModel::select('submit_tugas.*', 'users.name as first_name', 'users.last_name as last_name')
+        $return = SubmitTugasModel::select('submit_tugas.*', 'users.name as first_name')
             ->join('users', 'users.id', '=', 'submit_tugas.student_id');
         if (!empty(Request::get('first_name'))) {
             $return = $return->where('users.name', 'like', '%' . Request::get('first_name') . '%');
@@ -64,7 +64,7 @@ class SubmitTugasModel extends Model
 
     static public function getRecordTugas()
     {
-        $return = SubmitTugasModel::select('submit_tugas.*', 'matkul.name as matkul_name', 'class.name as class_name', 'users.name as first_name', 'users.last_name as last_name', 'tugas.tanggal as tanggal')
+        $return = SubmitTugasModel::select('submit_tugas.*', 'matkul.name as matkul_name', 'class.name as class_name', 'users.name as first_name', 'tugas.tanggal as tanggal')
             ->join('users', 'users.id', '=', 'submit_tugas.student_id')
             ->join('tugas', 'tugas.id', '=', 'submit_tugas.tugas_id')
             ->join('class', 'class.id', '=', 'tugas.class_id')

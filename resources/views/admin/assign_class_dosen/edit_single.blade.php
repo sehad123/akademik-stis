@@ -29,30 +29,31 @@
               <form method="post" action="">
                 {{ csrf_field() }}
                 <div class="card-body">
+
                   <div class="form-group">
-                    <label >Mata Kuliah</label>
-                      <select name="matkul_id" class="form-control" required>
+                    <label>Nama Kelas</label>
+                    <select name="class_id" id="getClass" class="form-control">
+                        <option value="">Pilih Kelas</option>
+                        @foreach ($getClass as $class)
+                        <option value="{{ $class->id }}" {{ (Request::get('class_id') == $class->id || (isset($getRecord) && $getRecord->class_id == $class->id)) ? 'selected' : '' }}>
+                            {{ $class->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mata Kuliah</label>
+                    <select id="getMatkul" name="matkul_id" class="form-control getSubject">
                         <option value="">Mata Kuliah</option>
                         @foreach ($getSubject as $subject)
-                        <option value="{{ $subject->id }}" {{ ($getRecord->matkul_id == $subject->id)? 'selected' :'' }}>
-                          {{ $subject->name }}</option>
-                          
-                          @endforeach
-                        </select>
-                      </div>
-
-                      <div class="form-group">
-                        <label >Nama Kelas</label>
-                        <select name="class_id" class="form-control" required>
-                          <option value="">Pilih Kelas</option>
-                          @foreach ($getClass as $class)
-                          <option value="{{ $class->id }}" {{ ($getRecord->class_id == $class->id)? 'selected' :'' }}>
-                            {{ $class->name }}</option>
-                            @endforeach
-                          </select>
-                        </div>
-
-
+                        <option value="{{ $subject->id }}" {{ (Request::get('matkul_id') == $subject->id || (isset($getRecord) && $getRecord->matkul_id == $subject->id)) ? 'selected' : '' }}>
+                            {{ $subject->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+                
                       <div class="form-group">
                           <label >Nama Dosen </label>
                           <select name="dosen_id" class="form-control" required>
@@ -98,3 +99,22 @@
     <!-- /.content -->
   </div>
 @endsection
+
+@section('script')
+<script>
+    $('#getClass').change(function() {
+    var class_id = $(this).val();
+    $.ajax({
+        url: "{{ url('admin/presensi/get_subjects') }}",
+        type: "POST",
+        data: {
+            "_token": "{{ csrf_token() }}",
+            class_id: class_id,
+        },
+        dataType: "json",
+        success: function(response) {
+            $('#getMatkul').html(response.subject_html);
+        },
+    });
+});
+</script>

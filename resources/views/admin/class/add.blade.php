@@ -33,29 +33,14 @@
                     <label >Nama Kelas</label>
                     <input type="text" class="form-control"  name="name" required placeholder="Nama Kelas">
                   </div>
-                  <div class="form-group">
-                    <label >Status</label>
-                    <select name="status" class="form-control" id="">
-                      <option value="0">Active</option>
-                      <option value="1">Inactive</option>
-                    </select>
-                  </div>
-                 
-                <!-- /.card-body -->
 
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
               </form>
             </div>
-          
           </div>
-          <!--/.col (left) -->
-          <!-- right column -->
-      
-          <!--/.col (right) -->
         </div>
-        <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

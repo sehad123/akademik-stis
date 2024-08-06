@@ -39,7 +39,7 @@ class SubjectController extends Controller
     {
         $save = new SubjectModel;
         $save->name = $request->name;
-        $save->status = $request->status;
+        $save->status = "Active";
         $save->type = $request->type;
         $save->created_by = Auth::user()->id;
         $save->save();

@@ -24,7 +24,7 @@ class ClassController extends Controller
     {
         $save = new ClassModel;
         $save->name = $request->name;
-        $save->status = $request->status;
+        $save->status = "Active";
         $save->created_by = Auth::user()->id;
         $save->save();
 

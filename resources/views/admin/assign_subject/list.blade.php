@@ -45,11 +45,6 @@
                                             name="matkul_name" placeholder="Mata Kuliah">
                                     </div>
                                    
-                                    {{-- <div class="form-group col-md-3">
-                                        <label>Date</label>
-                                        <input type="date" class="form-control" value="{{ Request::get('date') }}"
-                                            name="date" placeholder="Enter Date">
-                                    </div> --}}
                                     <div class="form-group col-md-3">
                                         <button class="btn btn-primary mt-4" type="submit">Search</button>
                                         <a href="{{ url('admin/assign_subject/list') }}" class="btn btn-success mt-4"
@@ -99,12 +94,14 @@
                                         @endif
                                     </td>
                                     </td>
-                                    {{-- <td>{{ $value->created_by_name }}</td> --}}
-                                    {{-- <td>{{ date('d-m-Y H:i A', strtotime($value->created_at)) }}</td> --}}
                                         <td>
-                                            <a href="{{ url('admin/assign_subject/edit/'. $value->id) }}" class="btn btn-primary">Edit</a>
-                                            <a href="{{ url('admin/assign_subject/edit_single/'. $value->id) }}" class="btn btn-warning">Edit Single</a>
-                                            <a href="{{ url('admin/assign_subject/delete/'. $value->id) }}" class="btn btn-danger">Delete</a>
+                                            <a href="{{ url('admin/assign_subject/edit/'. $value->id) }}" class="btn btn-primary">
+                              <i class="fas fa-edit"></i>
+                                            </a>
+                                            {{-- <a href="{{ url('admin/assign_subject/edit_single/'. $value->id) }}" class="btn btn-warning">Edit Single</a> --}}
+                                            <a href="{{ url('admin/assign_subject/delete/'. $value->id) }}" class="btn btn-danger">
+                              <i class="fas fa-trash-alt"></i>
+                                            </a>
                                           </td>
                                     </td>
                                 </tr>

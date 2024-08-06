@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Materi</h1>
+                    <h1>Materi Perkuliahan</h1>
                 </div>
                 <div class="col-sm-6" style="text-align: right;">
                     <a href="{{ url('dosen/tugas/materi/add') }}" class="btn btn-primary mb-2">

@@ -147,8 +147,8 @@ class presensiModel extends Model
             ->join('matkul', 'matkul.id', '=', 'presensi_mahasiswa.matkul_id')
             ->join('class', 'class.id', '=', 'presensi_mahasiswa.class_id')
             ->where('presensi_mahasiswa.student_id', '=', $student_id);
-        if (!empty(Request::get('matkul_id'))) {
-            $return = $return->where('presensi_mahasiswa.matkul_id', '=', Request::get('matkul_id'));
+        if (!empty(Request::get('matkul_name'))) {
+            $return = $return->where('matkul.name', 'like', '%' . Request::get('matkul_name') . '%');
         }
 
         if (!empty(Request::get('tgl_presensi'))) {

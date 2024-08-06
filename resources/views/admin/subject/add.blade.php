@@ -33,13 +33,7 @@
                     <label >Mata Kuliah</label>
                     <input type="text" class="form-control"  name="name" required placeholder="Mata Kuliah">
                   </div>
-                  <div class="form-group">
-                    <label >Status</label>
-                    <select name="status" class="form-control" id="">
-                      <option value="0">Active</option>
-                      <option value="1">Inactive</option>
-                    </select>
-                  </div>
+               
                   <div class="form-group">
                     <label >Type</label>
                     <select name="type" class="form-control" id="">

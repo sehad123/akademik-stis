@@ -10,228 +10,11 @@ use App\Models\SubjectModel;
 use Illuminate\Http\Request;
 use App\Models\presensiModel;
 use App\Models\PerizinanModel;
-use App\Models\PresensiExport;
 use App\Models\ClassMatkulModel;
-use App\Models\MatkulDosenModel;
 use App\Models\ClassTimeTableModel;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Facades\Excel as excel;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class PresensiController extends Controller
 {
-    public function presensi_mahasiswa(Request $request)
-    {
-        $data['getClass'] = ClassModel::getClass();
-        if (!empty($request->class_id)) {
-            $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id);
-        }
-        if (!empty($request->get('class_id')) && !empty($request->get('tgl_presensi')) && !empty($request->get('matkul_id'))) {
-            $data['getStudent'] = User::getStudentClass($request->get('class_id'));
-        }
-        $data['header_title'] = "Presensi Mahasiswa ";
-
-        return view('admin.presensi.mahasiswa', $data);
-    }
-
-    public function presensi_dosen(Request $request)
-    {
-        $data['getClass'] = ClassModel::getClass();
-
-        if (!empty($request->class_id)) {
-            $data['getSubject'] = ClassMatkulModel::MySubject($request->class_id);
-        } else {
-            $data['getSubject'] = [];
-        }
-
-        if (!empty($request->class_id) && !empty($request->matkul_id)) {
-            $data['getDosenn'] = MatkulDosenModel::MySubjectDosen($request->class_id, $request->matkul_id);
-        } else {
-            $data['getDosenn'] = [];
-        }
-
-        if (!empty($request->class_id) && !empty($request->tgl_presensi) && !empty($request->matkul_id) && !empty($request->dosen_id)) {
-            $data['getDosen'] = presensiModel::getRecordDosennn($request->class_id, $request->matkul_id, $request->dosen_id);
-        } else {
-            $data['getDosen'] = [];
-        }
-
-        $data['header_title'] = "Presensi Dosen";
-
-        return view('admin.presensi.dosen', $data);
-    }
-
-
-
-    public function get_subject(Request $request)
-    {
-        $getSubject =  ClassMatkulModel::MySubject($request->class_id);
-        $html = "<option value=''>Select </option>";
-        foreach ($getSubject as $value) {
-            $html .= "<option value='" . $value->matkul_id . "'>" . $value->matkul_name . " </option>";
-        }
-        $json['html'] = $html;
-        echo json_encode($json);
-    }
-
-    public function presensi_mahasiswa_save(Request $request)
-    {
-        // Retrieve the existing record
-        $presensi = presensiModel::where('student_id', $request->student_id)
-            ->where('class_id', $request->class_id)
-            ->where('tgl_presensi', $request->tgl_presensi)
-            ->where('matkul_id', $request->matkul_id)
-            // ->where('week_id', $request->week_id)
-            ->first();
-
-        // If no record exists, create a new one
-        if (empty($presensi)) {
-            $presensi = new presensiModel;
-            $presensi->student_id = $request->student_id;
-            $presensi->matkul_id = $request->matkul_id;
-            $presensi->class_id = $request->class_id;
-            // $presensi->week_id = $request->week_id;
-            $presensi->tgl_presensi = $request->tgl_presensi;
-            $presensi->created_by = Auth::user()->id;
-        }
-
-        // Update the presensi_type
-        $presensi->presensi_type = $request->presensi_type;
-        if ($presensi->presensi_type === 1) {
-            $presensi->bobot = 100;
-        } else if ($presensi->presensi_type === 2) {
-            $presensi->bobot = 75;
-        } else if ($presensi->presensi_type === 3) {
-            $presensi->bobot = 75;
-        } else if ($presensi->presensi_type === 4 || $presensi->presensi_type === 5) {
-            $presensi->bobot = 60;
-        } else {
-            $presensi->bobot = 75;
-        }
-
-        $presensi->save();
-
-        // Return the response
-        $json['message'] = 'Presensi Berhasil Disimpan';
-        $json['presensi_status'] = $this->getPresensiStatus($presensi->presensi_type);
-        return response()->json($json);
-    }
-    private function getPresensiStatus($presensi_type)
-    {
-        switch ($presensi_type) {
-            case 1:
-                return 'Hadir';
-            case 2:
-                return 'Terlambat A';
-            case 3:
-                return 'Terlambat B';
-            case 4:
-                return 'Sakit';
-            case 5:
-                return 'Izin';
-            case 6:
-                return 'Tidak Hadir';
-            default:
-                return '';
-        }
-    }
-
-    public function presensi_dosen_save(Request $request)
-    {
-        // Retrieve the existing record
-        $presensi = presensiModel::where('dosen_id', $request->dosen_id)
-            ->where('class_id', $request->class_id)
-            ->where('tgl_presensi', $request->tgl_presensi)
-            ->where('matkul_id', $request->matkul_id)
-            // ->where('week_id', $request->week_id)
-            ->first();
-
-        // If no record exists, create a new one
-        if (empty($presensi)) {
-            $presensi = new presensiModel;
-            $presensi->dosen_id = $request->dosen_id;
-            $presensi->matkul_id = $request->matkul_id;
-            $presensi->class_id = $request->class_id;
-            // $presensi->week_id = $request->week_id;
-            $presensi->tgl_presensi = $request->tgl_presensi;
-            $presensi->created_by = Auth::user()->id;
-        }
-
-        // Update the presensi_type
-        $presensi->presensi_type = $request->presensi_type;
-        $presensi->presensi_type = $request->presensi_type;
-        if ($presensi->presensi_type === 1) {
-            $presensi->bobot = 100;
-        } else if ($presensi->presensi_type === 2) {
-            $presensi->bobot = 75;
-        } else if ($presensi->presensi_type === 3) {
-            $presensi->bobot = 75;
-        } else if ($presensi->presensi_type === 4 || $presensi->presensi_type === 5) {
-            $presensi->bobot = 60;
-        } else {
-            $presensi->bobot = 75;
-        }
-        $presensi->save();
-
-        // Return the response
-        $json['message'] = 'Presensi Berhasil Disimpan';
-        $json['presensi_status'] = $this->getPresensiStatus($presensi->presensi_type);
-        return response()->json($json);
-    }
-
-    public function presensi_mahasiswa_self(Request $request)
-    {
-        $checkKehadiran = presensiModel::checkPresensi($request->student_id, $request->class_id, $request->tgl_presensi, $request->matkul_id, $request->week_id);
-        if (!empty($checkKehadiran)) {
-            $presensi = $checkKehadiran;
-        } else {
-            $presensi = new presensiModel;
-            $presensi->student_id = $request->student_id;
-            $presensi->matkul_id = $request->matkul_id;
-            $presensi->class_id = $request->class_id;
-            $presensi->tgl_presensi = $request->tgl_presensi;
-            $presensi->created_by = Auth::user()->id;
-        }
-        $presensi->presensi_type = $request->presensi_type;
-        $presensi->presensi_type = $request->presensi_type;
-        if ($presensi->presensi_type === 1 || $presensi->presensi_type === 4 || $presensi->presensi_type === 5) {
-            $presensi->bobot = 100;
-        } else if ($presensi->presensi_type === 2) {
-            $presensi->bobot = 75;
-        } else if ($presensi->presensi_type === 3) {
-            $presensi->bobot = 75;
-        } else {
-            $presensi->bobot = 75;
-        }
-        $presensi->save();
-
-        $json['message'] = 'Presensi Berhasil Disimpan';
-        echo json_encode($json);
-    }
-    public function presensi_dosen_self(Request $request)
-    {
-        $checkKehadiran = presensiModel::checkPresensi($request->student_id, $request->class_id, $request->tgl_presensi, $request->matkul_id, $request->week_id);
-        if (!empty($checkKehadiran)) {
-            $presensi = $checkKehadiran;
-        } else {
-            $presensi = new presensiModel;
-            $presensi->dosen_id = $request->student_id;
-            $presensi->matkul_id = $request->matkul_id;
-            $presensi->class_id = $request->class_id;
-            $presensi->tgl_presensi = $request->tgl_presensi;
-            $presensi->created_by = Auth::user()->id;
-        }
-        $presensi->presensi_type = $request->presensi_type;
-        $presensi->save();
-
-        $json['message'] = 'Presensi Berhasil Disimpan';
-        echo json_encode($json);
-    }
-
     public function laporan_presensi()
     {
         $data['getClass'] = ClassModel::getClass();
@@ -240,6 +23,16 @@ class PresensiController extends Controller
         $data['header_title'] = "Laporan Presensi Mahasiswa ";
         return view('admin.presensi.laporan', $data);
     }
+
+    public function laporan_presensiDosen()
+    {
+        $data['getClass'] = ClassModel::getClass();
+        $data['getSubject'] = SubjectModel::getSubject();
+        $data['getRecord'] = presensiModel::getRecordDosenn();
+        $data['header_title'] = "Laporan Presensi Dosen ";
+        return view('admin.presensi.laporan_dosen', $data);
+    }
+
 
     public function updateBobot($id, Request $request)
     {
@@ -254,42 +47,30 @@ class PresensiController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function laporan_presensiDosen()
+    public function updatePresensi($id, Request $request)
     {
-        $data['getClass'] = ClassModel::getClass();
-        $data['getSubject'] = SubjectModel::getSubject();
-        $data['getRecord'] = presensiModel::getRecordDosenn();
-        $data['header_title'] = "Laporan Presensi Dosen ";
-        return view('admin.presensi.laporan_dosen', $data);
-    }
+        $request->validate([
+            'presensi_type' => 'required|integer|between:1,6',
+        ]);
 
-    public function laporan_presensi_excel(Request $request)
-    { {
-            $filter = $request->only('class_id', 'matkul_id', 'tgl_presensi', 'presensi_type');
-            $data = presensiModel::getPresensiDataForExport($filter);
-            return excel::download(new PresensiExport($data), 'presensi.xlsx');
+        $presensi = presensiModel::findOrFail($id);
+        $presensi->presensi_type = $request->presensi_type;
+
+        if ($presensi->presensi_type == 1) {
+            $presensi->bobot = 100;
+        } else if ($presensi->presensi_type == 2) {
+            $presensi->bobot = 60;
+        } else if ($presensi->presensi_type == 3) {
+            $presensi->bobot = 50;
+        } else if ($presensi->presensi_type == 4 || $presensi->presensi_type == 5) {
+            $presensi->bobot = 60;
+        } else if ($presensi->presensi_type == 6) {
+            $presensi->bobot = 0;
         }
-    }
 
-    public function presensi_mahasiswa_dosen(Request $request)
-    {
-        $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(FacadesAuth::user()->id);
-        if (!empty($request->get('class_id')) && !empty($request->get('tgl_presensi'))) {
-            $data['getStudent'] = User::getStudentClass($request->get('class_id'));
-        }
-        $data['header_title'] = "Presensi Mahasiswa ";
-        return view('dosen.presensi.mahasiswa', $data);
-    }
+        $presensi->save();
 
-    public function laporan_presensi_dosen()
-    {
-        $data['header_title'] = "Laporan Presensi Mahasiswa ";
-        $data['perizinan'] = PerizinanModel::getRecord(Auth::user()->id);
-        $data['getRecord'] = presensiModel::getRecordDosen(Auth::user()->id);
-        // $data['getSubject'] = SubjectModel::getSubject();
-        $data['header_title'] = "My Presensi ";
-
-        return view('dosen.presensi.laporan', $data);
+        return response()->json(['success' => true, 'bobot' => $presensi->bobot]);
     }
 
     public function MyPresensiStudent()
@@ -308,8 +89,6 @@ class PresensiController extends Controller
 
         return view('dosen.presensi.my_presensi', $data);
     }
-
-
 
     public function PresensiStudent($class_id, $matkul_id, $student_id, $week_id)
     {

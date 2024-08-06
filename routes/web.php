@@ -146,14 +146,10 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/penilaian/single_submit_mark', [OlahNilaiController::class, 'single_submit_nilai']);
 
     // presensi
-    Route::get('admin/presensi/student', [PresensiController::class, 'presensi_mahasiswa']);
-    Route::get('admin/presensi/dosen', [PresensiController::class, 'presensi_dosen']);
     Route::get('admin/presensi/report', [PresensiController::class, 'laporan_presensi']);
     Route::post('admin/presensi/update-bobot/{id}', [PresensiController::class, 'updateBobot']);
+    Route::post('admin/presensi/update-presensi/{id}', [PresensiController::class, 'updatePresensi']);
     Route::get('admin/presensi/report_dosen', [PresensiController::class, 'laporan_presensiDosen']);
-    Route::get('admin/presensi/report_export', [PresensiController::class, 'laporan_presensi_excel'])->name('presensi.export');
-    Route::post('admin/presensi/student/save', [PresensiController::class, 'presensi_mahasiswa_save']);
-    Route::post('admin/presensi/dosen/save', [PresensiController::class, 'presensi_dosen_save']);
     Route::post('admin/presensi/get_subjects', [ClassTimeTableController::class, 'get_subjects']);
     Route::post('admin/presensi/get_subject', [ClassTimeTableController::class, 'get_subject']);
     Route::post('admin/presensi/get_dosen', [ClassTimeTableController::class, 'get_dosen']);
@@ -217,9 +213,7 @@ Route::group(['middleware' => 'dosen'], function () {
     Route::post('dosen/single_submit_mark', [OlahNilaiController::class, 'single_submit_nilai']);
 
     // presensi 
-    Route::get('dosen/presensi/student', [PresensiController::class, 'presensi_mahasiswa_dosen']);
     Route::get('dosen/presensi/my_presensi', [PresensiController::class, 'MyPresensiDosen']);
-    // Route::post('dosen/presensi/save', [PresensiController::class, 'presensi_dosen_save']);
     Route::get('dosen/perizinan/{presensi_id}/{dosen_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'perizinan_dosen']);
     Route::post('dosen/perizinan/{presensi_id}/{dosen_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'SubmitPerizinanInsertDosen']);
     Route::get('dosen/detail_perizinan/{presensi_id}/{dosen_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'perizinan_dosenID']);

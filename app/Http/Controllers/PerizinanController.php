@@ -3,24 +3,11 @@
 namespace App\Http\Controllers;
 
 use Str;
-use Auth;
-use App\Models\User;
-use App\Models\ClassModel;
-use App\Models\SubjectModel;
 use Illuminate\Http\Request;
-use App\Models\presensiModel;
 use App\Models\PerizinanModel;
-use App\Models\ClassMatkulModel;
 
 class PerizinanController extends Controller
 {
-    public function list_izin_student()
-    {
-
-        // $data['getRecord'] = TugasModel::getRecordMateriStudent(Auth::user()->class_id, Auth::user()->id);
-        $data['header_title'] = "Perizinan  ";
-        return view('student.list_izin', $data);
-    }
     public function perizinan_studentID($presensi_id)
     {
         $data['getData'] = PerizinanModel::getRecord($presensi_id);
@@ -34,12 +21,9 @@ class PerizinanController extends Controller
         return view('dosen.perizinan_detail', $data);
     }
 
-    public function perizinan_student($presensi_id, $class_id, $matkul_id, $student_id)
+    public function perizinan_student($presensi_id, $class_id, $matkul_id)
     {
-        // $data['getClass'] = ClassModel::getSingle($class_id);
-        // $data['getMatkul'] =  SubjectModel::getSingle($matkul_id);
-        // $data['getMahasiswa'] =  User::getSingle($student_id);
-        $classSubject =   PerizinanModel::getRecordClassMatkul($presensi_id, $class_id, $matkul_id, $student_id);
+        $classSubject =   PerizinanModel::getRecordClassMatkul($presensi_id, $class_id, $matkul_id);
         $data['getIzin'] = $classSubject;
         $data['header_title'] = "add Perizinan";
         return view('student.submit_izin', $data);
@@ -53,10 +37,6 @@ class PerizinanController extends Controller
     }
     public function SubmitPerizinanInsert(Request $request, $presensi_id, $student_id, $class_id, $matkul_id)
     {
-
-        // $studentId =  Auth::user()->id;
-
-
         $save = new PerizinanModel;
         $save->student_id = $student_id;
         $save->presensi_id = $presensi_id;
@@ -78,10 +58,6 @@ class PerizinanController extends Controller
     }
     public function SubmitPerizinanInsertDosen(Request $request, $presensi_id, $dosen_id, $class_id, $matkul_id)
     {
-
-        // $studentId =  Auth::user()->id;
-
-
         $save = new PerizinanModel;
         $save->dosen_id = $dosen_id;
         $save->presensi_id = $presensi_id;
