@@ -64,13 +64,13 @@ class PerizinanModel extends Model
         if (!empty($this->bukti) && file_exists('upload/perizinan/' . $this->bukti)) {
             return url('upload/perizinan/' . $this->bukti);
         } else {
-            return "";
+            return "Tidak ada bukti";
         }
     }
 
-    static public function getRecordClassMatkul($presensi_id, $class_id, $matkul_id, $student_id)
+    static public function getRecordClassMatkul($presensi_id, $class_id, $matkul_id)
     {
-        return self::where('presensi_id', '=', $presensi_id)->where('class_id', '=', $class_id)->where('matkul_id', '=', $matkul_id)->where('student_id', '=', $student_id)->first();
+        return self::where('presensi_id', '=', $presensi_id)->where('class_id', '=', $class_id)->where('matkul_id', '=', $matkul_id)->first();
     }
     static public function getRecordClassMatkulDosen($presensi_id, $class_id, $matkul_id, $dosen_id)
     {

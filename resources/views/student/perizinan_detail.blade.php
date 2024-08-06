@@ -36,19 +36,26 @@
                         <p>Kelas : {{ $item->class_name }}</p>
                         <p>matkul : {{ $item->matkul_name }}</p>
                     </div>
-                    <div class="form-group">
-                        @if (!empty($item->getDocument()))
-                        Bukti :  <a href="{{ $item->getDocument() }}" download="" class="btn btn-warning">Download</a>
-                        @endif
-                    </div>
+                   
                  
                     <div class="form-group">
                         <p> <span>Status : </span>{{ $item->status }}</p>
                     </div>
-
                     <div class="form-group">
-                        Alasan : <p> {!! $item->alasan !!}</p>
+                        <p> <span>Alasan : </span>{{ $item->alasan }}</p>
                     </div>
+                    {{-- <div class="form-group">
+                        <p> <span>Keterangan : </span>{{ $item->keterangan }}</p>
+                    </div> --}}
+                    <div class="form-group">
+                      @if (!empty($item->getDocument()))
+                      Bukti :  <a href="{{ $item->getDocument() }}" download="" class="btn btn-warning">Download</a>
+                      @endif
+                  </div>
+
+                    {{-- <div class="form-group">
+                        Alasan : <p> {!! $item->alasan !!}</p>
+                    </div> --}}
                     @endforeach
                  
                 

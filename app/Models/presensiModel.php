@@ -22,7 +22,8 @@ class presensiModel extends Model
         'tgl_presensi',
         'face_image',
         'latitude',  // Menambahkan latitude
-        'longitude'  // Menambahkan longitude
+        'longitude',  // Menambahkan longitude
+        'bobot'  // Menambahkan bobot
     ];
 
     // Metode yang lain tetap sama
@@ -49,7 +50,7 @@ class presensiModel extends Model
 
     static public function getRecord()
     {
-        $return =  presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'class.name as class_name', 'matkul.name as matkul_name', 'student.name as student_name',  'student.id as student_id', 'matkul.id as matkul_id', 'class.id as class_id')
+        $return = presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'class.name as class_name', 'student.name as student_name', 'student.id as student_id', 'matkul.id as matkul_id', 'class.id as class_id')
             ->join('matkul', 'matkul.id', '=', 'presensi_mahasiswa.matkul_id')
             ->join('class', 'class.id', '=', 'presensi_mahasiswa.class_id')
             ->join('users as student', 'student.id', '=', 'presensi_mahasiswa.student_id');
@@ -64,12 +65,15 @@ class presensiModel extends Model
         if (!empty(Request::get('tgl_presensi'))) {
             $return = $return->where('presensi_mahasiswa.tgl_presensi', '=', Request::get('tgl_presensi'));
         }
-        if (!empty(Request::get('presensi_type'))) {
-            $return = $return->where('presensi_mahasiswa.presensi_type', '=', Request::get('presensi_type'));
+
+        if (!empty(Request::get('student_name'))) {
+            $return = $return->where('student.name', 'like', '%' . Request::get('student_name') . '%');
         }
+
         $return = $return->orderBy('presensi_mahasiswa.id', 'desc')->paginate(20);
         return $return;
     }
+
     static public function getRecordDosenn()
     {
         $return =  presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'class.name as class_name', 'matkul.name as matkul_name',  'dosen.name as dosen_name',  'dosen.id as dosen_id', 'matkul.id as matkul_id', 'class.id as class_id')
@@ -87,8 +91,8 @@ class presensiModel extends Model
         if (!empty(Request::get('tgl_presensi'))) {
             $return = $return->where('presensi_mahasiswa.tgl_presensi', '=', Request::get('tgl_presensi'));
         }
-        if (!empty(Request::get('presensi_type'))) {
-            $return = $return->where('presensi_mahasiswa.presensi_type', '=', Request::get('presensi_type'));
+        if (!empty(Request::get('dosen_name'))) {
+            $return = $return->where('dosen.name', 'like', '%' . Request::get('dosen_name') . '%');
         }
         $return = $return->orderBy('presensi_mahasiswa.id', 'desc')->paginate(20);
         return $return;
@@ -203,5 +207,36 @@ class presensiModel extends Model
             ->where('tgl_presensi', '=', $tgl_presensi)
             ->where('matkul_id', '=', $matkul_id)
             ->first();
+    }
+
+    public static function getPresensiDataForExport($filter)
+    {
+        $query = self::select(
+            'presensi_mahasiswa.id',
+            'student.name as student_name',
+            'class.name as class_name',
+            'matkul.name as matkul_name',
+            'presensi_mahasiswa.presensi_type',
+            'presensi_mahasiswa.tgl_presensi',
+            'presensi_mahasiswa.bobot'
+        )
+            ->join('matkul', 'matkul.id', '=', 'presensi_mahasiswa.matkul_id')
+            ->join('class', 'class.id', '=', 'presensi_mahasiswa.class_id')
+            ->join('users as student', 'student.id', '=', 'presensi_mahasiswa.student_id');
+
+        if (!empty($filter['class_id'])) {
+            $query = $query->where('presensi_mahasiswa.class_id', '=', $filter['class_id']);
+        }
+        if (!empty($filter['matkul_id'])) {
+            $query = $query->where('presensi_mahasiswa.matkul_id', '=', $filter['matkul_id']);
+        }
+        if (!empty($filter['tgl_presensi'])) {
+            $query = $query->where('presensi_mahasiswa.tgl_presensi', '=', $filter['tgl_presensi']);
+        }
+        if (!empty($filter['presensi_type'])) {
+            $query = $query->where('presensi_mahasiswa.presensi_type', '=', $filter['presensi_type']);
+        }
+
+        return $query->get();
     }
 }

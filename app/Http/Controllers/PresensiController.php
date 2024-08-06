@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use Excel;
 use App\Models\User;
 use App\Models\WeekModel;
 use App\Models\ClassModel;
@@ -11,12 +10,16 @@ use App\Models\SubjectModel;
 use Illuminate\Http\Request;
 use App\Models\presensiModel;
 use App\Models\PerizinanModel;
+use App\Models\PresensiExport;
 use App\Models\ClassMatkulModel;
 use App\Models\MatkulDosenModel;
 use App\Models\ClassTimeTableModel;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Facades\Excel as excel;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class PresensiController extends Controller
@@ -98,6 +101,18 @@ class PresensiController extends Controller
 
         // Update the presensi_type
         $presensi->presensi_type = $request->presensi_type;
+        if ($presensi->presensi_type === 1) {
+            $presensi->bobot = 100;
+        } else if ($presensi->presensi_type === 2) {
+            $presensi->bobot = 75;
+        } else if ($presensi->presensi_type === 3) {
+            $presensi->bobot = 75;
+        } else if ($presensi->presensi_type === 4 || $presensi->presensi_type === 5) {
+            $presensi->bobot = 60;
+        } else {
+            $presensi->bobot = 75;
+        }
+
         $presensi->save();
 
         // Return the response
@@ -148,6 +163,18 @@ class PresensiController extends Controller
 
         // Update the presensi_type
         $presensi->presensi_type = $request->presensi_type;
+        $presensi->presensi_type = $request->presensi_type;
+        if ($presensi->presensi_type === 1) {
+            $presensi->bobot = 100;
+        } else if ($presensi->presensi_type === 2) {
+            $presensi->bobot = 75;
+        } else if ($presensi->presensi_type === 3) {
+            $presensi->bobot = 75;
+        } else if ($presensi->presensi_type === 4 || $presensi->presensi_type === 5) {
+            $presensi->bobot = 60;
+        } else {
+            $presensi->bobot = 75;
+        }
         $presensi->save();
 
         // Return the response
@@ -170,6 +197,16 @@ class PresensiController extends Controller
             $presensi->created_by = Auth::user()->id;
         }
         $presensi->presensi_type = $request->presensi_type;
+        $presensi->presensi_type = $request->presensi_type;
+        if ($presensi->presensi_type === 1 || $presensi->presensi_type === 4 || $presensi->presensi_type === 5) {
+            $presensi->bobot = 100;
+        } else if ($presensi->presensi_type === 2) {
+            $presensi->bobot = 75;
+        } else if ($presensi->presensi_type === 3) {
+            $presensi->bobot = 75;
+        } else {
+            $presensi->bobot = 75;
+        }
         $presensi->save();
 
         $json['message'] = 'Presensi Berhasil Disimpan';
@@ -203,6 +240,20 @@ class PresensiController extends Controller
         $data['header_title'] = "Laporan Presensi Mahasiswa ";
         return view('admin.presensi.laporan', $data);
     }
+
+    public function updateBobot($id, Request $request)
+    {
+        $request->validate([
+            'bobot' => 'required|integer|between:0,100',
+        ]);
+
+        $presensi = presensiModel::findOrFail($id);
+        $presensi->bobot = $request->bobot;
+        $presensi->save();
+
+        return response()->json(['success' => true]);
+    }
+
     public function laporan_presensiDosen()
     {
         $data['getClass'] = ClassModel::getClass();
@@ -213,12 +264,11 @@ class PresensiController extends Controller
     }
 
     public function laporan_presensi_excel(Request $request)
-    {
-        $data['getClass'] = ClassModel::getClass();
-        $data['getSubject'] = SubjectModel::getSubject();
-        $data['getRecord'] = presensiModel::getRecord();
-        $data['header_title'] = "Laporan Presensi Mahasiswa ";
-        return view('admin.presensi.laporan', $data);
+    { {
+            $filter = $request->only('class_id', 'matkul_id', 'tgl_presensi', 'presensi_type');
+            $data = presensiModel::getPresensiDataForExport($filter);
+            return excel::download(new PresensiExport($data), 'presensi.xlsx');
+        }
     }
 
     public function presensi_mahasiswa_dosen(Request $request)
@@ -233,13 +283,6 @@ class PresensiController extends Controller
 
     public function laporan_presensi_dosen()
     {
-        // $getClass = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
-        // $c = array();
-        // foreach ($getClass as $val) {
-        //     $c[] = $val->class_id;
-        // }
-        // $data['getClass'] = $getClass;
-        // $data['getRecord'] = presensiModel::getRecordDosen($c);
         $data['header_title'] = "Laporan Presensi Mahasiswa ";
         $data['perizinan'] = PerizinanModel::getRecord(Auth::user()->id);
         $data['getRecord'] = presensiModel::getRecordDosen(Auth::user()->id);
@@ -519,31 +562,37 @@ class PresensiController extends Controller
 
                     if ($current_time - $start_time > 30 && $presensi_type == 1) {
                         $presensi->presensi_type = 6; // Tidak Hadir
+                        $presensi->bobot = 0;
                         session()->flash('message', 'Anda terlambat lebih dari 30 menit, harap lapor BAAK');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     } else if ($current_time - $start_time > 20 && $presensi_type == 1) {
                         $presensi->presensi_type = 3; // Terlambat B
+                        $presensi->bobot = 50;
                         session()->flash('message', 'Anda terlambat lebih dari 20 menit');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     } else if ($current_time - $start_time > 15 && $presensi_type == 1) {
                         $presensi->presensi_type = 2; // Terlambat A
+                        $presensi->bobot = 75;
                         session()->flash('message', 'Anda terlambat lebih dari 15 menit');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     } else if ($presensi_type == 4) {
                         $presensi->presensi_type = $presensi_type; // Sakit
+                        $presensi->bobot = 60;
                         session()->flash('message', 'Harap upload bukti sakit Anda');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     } else if ($presensi_type == 5) {
                         $presensi->presensi_type = $presensi_type; // Izin
+                        $presensi->bobot = 60;
                         session()->flash('message', 'Harap upload bukti izin Anda');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     } else {
                         $presensi->presensi_type = $presensi_type; // Hadir
+                        $presensi->bobot = 100;
                         session()->flash('message', 'Anda presensi tepat waktu');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
@@ -686,34 +735,39 @@ class PresensiController extends Controller
                     $presensi->longtitude = $longitude;
                     $presensi->face_image = $face_image_name;
                     $presensi->created_at = now()->format('h:i A');
-
                     if ($current_time - $start_time > 30 && $presensi_type == 1) {
                         $presensi->presensi_type = 6; // Tidak Hadir
+                        $presensi->bobot = 0;
                         session()->flash('message', 'Anda terlambat lebih dari 30 menit, harap lapor BAAK');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     } else if ($current_time - $start_time > 20 && $presensi_type == 1) {
                         $presensi->presensi_type = 3; // Terlambat B
+                        $presensi->bobot = 50;
                         session()->flash('message', 'Anda terlambat lebih dari 20 menit');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     } else if ($current_time - $start_time > 15 && $presensi_type == 1) {
                         $presensi->presensi_type = 2; // Terlambat A
+                        $presensi->bobot = 75;
                         session()->flash('message', 'Anda terlambat lebih dari 15 menit');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     } else if ($presensi_type == 4) {
-                        $presensi->presensi_type = $presensi_type; // Hadir
+                        $presensi->presensi_type = $presensi_type; // Sakit
+                        $presensi->bobot = 60;
                         session()->flash('message', 'Harap upload bukti sakit Anda');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     } else if ($presensi_type == 5) {
-                        $presensi->presensi_type = $presensi_type; // Hadir
+                        $presensi->presensi_type = $presensi_type; // Izin
+                        $presensi->bobot = 60;
                         session()->flash('message', 'Harap upload bukti izin Anda');
                         $presensi->save();
                         return response()->json(['status' => 'success']);
                     } else {
                         $presensi->presensi_type = $presensi_type; // Hadir
+                        $presensi->bobot = 100;
                         session()->flash('message', 'Anda presensi tepat waktu');
                         $presensi->save();
                         return response()->json(['status' => 'success']);

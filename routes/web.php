@@ -149,8 +149,9 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/presensi/student', [PresensiController::class, 'presensi_mahasiswa']);
     Route::get('admin/presensi/dosen', [PresensiController::class, 'presensi_dosen']);
     Route::get('admin/presensi/report', [PresensiController::class, 'laporan_presensi']);
+    Route::post('admin/presensi/update-bobot/{id}', [PresensiController::class, 'updateBobot']);
     Route::get('admin/presensi/report_dosen', [PresensiController::class, 'laporan_presensiDosen']);
-    Route::post('admin/presensi/report_excel', [PresensiController::class, 'laporan_presensi_excel']);
+    Route::get('admin/presensi/report_export', [PresensiController::class, 'laporan_presensi_excel'])->name('presensi.export');
     Route::post('admin/presensi/student/save', [PresensiController::class, 'presensi_mahasiswa_save']);
     Route::post('admin/presensi/dosen/save', [PresensiController::class, 'presensi_dosen_save']);
     Route::post('admin/presensi/get_subjects', [ClassTimeTableController::class, 'get_subjects']);
@@ -185,8 +186,8 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('admin/penilaian/mark_grade/edit/{id}', [OlahNilaiController::class, 'mark_grade_update']);
     Route::get('admin/penilaian/mark_grade/delete/{id}', [OlahNilaiController::class, 'mark_grade_delete']);
 
-    Route::get('admin/perizinan/{presensi_id}/{class_id}/{matkul_id}/{student_id}', [PerizinanController::class, 'admin_perizinan_studentID']);
-    Route::post('admin/perizinan/{presensi_id}/{class_id}/{matkul_id}/{student_id}', [PerizinanController::class, 'SubmitPerizinanUpdate']);
+    Route::get('admin/perizinan/{presensi_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'admin_perizinan_studentID']);
+    Route::post('admin/perizinan/{presensi_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'SubmitPerizinanUpdate']);
 
 
     // change password

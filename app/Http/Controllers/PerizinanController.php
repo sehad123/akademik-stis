@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassMatkulModel;
-use App\Models\ClassModel;
-use App\Models\PerizinanModel;
-use App\Models\SubjectModel;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Auth;
 use Str;
+use Auth;
+use App\Models\User;
+use App\Models\ClassModel;
+use App\Models\SubjectModel;
+use Illuminate\Http\Request;
+use App\Models\presensiModel;
+use App\Models\PerizinanModel;
+use App\Models\ClassMatkulModel;
 
 class PerizinanController extends Controller
 {
@@ -45,9 +46,6 @@ class PerizinanController extends Controller
     }
     public function perizinan_dosen($presensi_id, $class_id, $matkul_id, $dosen_id)
     {
-        // $data['getClass'] = ClassModel::getSingle($class_id);
-        // $data['getMatkul'] =  SubjectModel::getSingle($matkul_id);
-        // $data['getMahasiswa'] =  User::getSingle($student_id);
         $classSubject =   PerizinanModel::getRecordClassMatkulDosen($presensi_id, $class_id, $matkul_id, $dosen_id);
         $data['getIzin'] = $classSubject;
         $data['header_title'] = "add Perizinan";
@@ -104,23 +102,30 @@ class PerizinanController extends Controller
         return redirect('dosen/presensi/my_presensi')->with('success', "Perizinan Berhasil Disubmit");
     }
 
-    public function admin_perizinan_studentID($presensi_id, $class_id, $matkul_id, $student_id)
+    public function admin_perizinan_studentID($presensi_id, $class_id, $matkul_id)
     {
-
-        // $data['getId'] = PerizinanModel::getSingle($presensi_id);
-        // $data['getClass'] = ClassModel::getSingle($class_id);
-        // $data['getMatkul'] =  SubjectModel::getSingle($matkul_id);
-        // $data['getStudent'] =  User::getSingle($student_id);
-        $classSubject =   PerizinanModel::getRecordClassMatkul($presensi_id, $class_id, $matkul_id, $student_id);
+        $classSubject =   PerizinanModel::getRecordClassMatkul($presensi_id, $class_id, $matkul_id);
         $data['getIzin'] = $classSubject;
         $data['header_title'] = "Perizinan  ";
         return view('admin.perizinan.detail', $data);
     }
-    public function SubmitPerizinanUpdate($presensi_id, $class_id, $matkul_id, $student_id, Request $request)
+    public function SubmitPerizinanUpdate($presensi_id, $class_id, $matkul_id, Request $request)
     {
-        $getIzin = PerizinanModel::getRecordClassMatkul($presensi_id, $class_id, $matkul_id, $student_id);
+        $getIzin = PerizinanModel::getRecordClassMatkul($presensi_id, $class_id, $matkul_id);
+        if (!$getIzin) {
+            return redirect()->back()->with('error', 'Perizinan not found');
+        }
 
-        // Check if $getIzin is not null before proceeding
+        $getIzin->status = $request->status;
+
+        $getIzin->save();
+
+        return redirect('admin/presensi/report')->with('success', 'Perizinan Berhasil Diupdate');
+    }
+
+    public function SubmitPerizinanUpdateDosen($presensi_id, $class_id, $matkul_id, Request $request)
+    {
+        $getIzin = PerizinanModel::getRecordClassMatkul($presensi_id, $class_id, $matkul_id);
         if (!$getIzin) {
             return redirect()->back()->with('error', 'Perizinan not found');
         }

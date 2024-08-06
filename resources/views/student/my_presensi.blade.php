@@ -77,6 +77,7 @@
                             <th>Status </th>
                             <th>Tgl Presensi</th>
                             <th>Image </th>
+                            <th>Bobot Kehadiran </th>
                             @if ($getRecord->firstWhere('presensi_type', 4) || $getRecord->firstWhere('presensi_type', 5))
                             <th>Action</th>
                             @endif                        </tr>
@@ -107,6 +108,7 @@
                               <img src="{{ $value->getProfilePresensi() }}" class="img-thumbnail" style="width: 50px; height: 50px; border-radius: 50px;" alt="">
                               @endif
                             </td>
+                            <td>{{ $value->bobot }}% </td>
                             @if ($value->presensi_type == 4 || $value->presensi_type == 5)
                             <td>
                               <a href="{{ url('student/perizinan/'.$value->id.'/'. Auth::user()->id .'/'. $value->class_id.'/'.$value->matkul_id) }}" class="btn btn-warning">Upload bukti sakit / izin</a>

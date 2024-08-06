@@ -35,6 +35,17 @@
                                     <label>Alasan<span style="color: red;">*</span></label>
                                     <textarea name="alasan" id="compose-textarea" class="form-control" style="height: 300px;"></textarea>
                                 </div>
+                                {{-- <div class="form-group">
+                                    <label>Keterangan</label>
+                                    <select class="form-control" name="keterangan" required>
+                                      <option value="rawat inap">Rawat Inap</option>
+                                      <option value="rawat jalan">Rawat Jalan</option>
+                                      <option value="acara keluarga">Acara Keluarga</option>
+                                      <option value="kematian">Kematian</option>
+                                      <option value="Tanpa Keterangan">Tanpa Keterangan</option>
+                                    </select>
+                                  </div>
+                                </div> --}}
                             </div>
                             <!-- /.card-body -->
 
