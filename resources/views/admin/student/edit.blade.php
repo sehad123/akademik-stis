@@ -63,6 +63,20 @@
                     </div>
                     </div> --}}
                     <div class="form-group col-md-6">
+                      <label >Semester<span style="color:red;">*</span></label>
+                      <select name="semester_id" required class="form-control" id="">
+                        <option value="">Pilih Semester</option>
+                        @foreach ($getSemester as $item)
+                            <option {{ (old('semester_id',$getRecord->semester_id) ==$item->id)?'selected':'' }} value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                      </select>
+                      <div style="color:red;">
+                        {{ $errors->first('class_id') }}
+                    
+                    </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
                       <label >Kelas<span style="color:red;">*</span></label>
                       <select name="class_id" required class="form-control" id="">
                         <option value="">Pilih Kelas</option>
@@ -75,6 +89,7 @@
                     
                     </div>
                     </div>
+                   
                     <div class="form-group col-md-6">
                       <label >Jenis Kelamin<span style="color:red;">*</span></label>
                       <select name="gender" required class="form-control" id="">

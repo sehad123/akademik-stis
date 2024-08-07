@@ -36,10 +36,10 @@ class CalendarController extends Controller
         return view('student.my_calendar', $data);
     }
 
-    public function getJadwalStudent($class_id)
+    public function getJadwalStudent()
     {
         $result = array();
-        $getRecord = ClassMatkulModel::MySubject($class_id);
+        $getRecord = ClassMatkulModel::MySubject(Auth::user()->class_id, Auth::user()->semester_id);
         foreach ($getRecord as $value) {
             $dataS['name'] = $value->matkul_name;
             $dataS['class_name'] = $value->class_name; // Add class_name
@@ -99,7 +99,7 @@ class CalendarController extends Controller
     public function ChildrenCalendar($student_id)
     {
         $getStudent = User::getSingle($student_id);
-        $data['getMyJadwal'] = $this->getJadwalStudent($getStudent->class_id);
+        $data['getMyJadwal'] = $this->getJadwalStudent($getStudent);
         $data['getStudent'] = $getStudent;
         $data['header_title'] = "My Children Calendar";
         return view('ortu.student_calendar', $data);

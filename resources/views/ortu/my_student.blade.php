@@ -62,15 +62,15 @@
                                                 <td>{{ $value->gender }}</td>
                                                 <td>{{ $value->mobile_number }}</td>
                                                 <td style="width: 250px;">
-                                                    <a href="{{ url('ortu/my_student/subject/'.$value->id) }}" class="btn btn-success btn-sm mb-1">
-                                                        <i class="fas fa-book"></i> Matkul
+                                                    <a href="{{ url('ortu/my_student/subject/'.$value->id) }}" class="btn btn-info btn-sm mb-1">
+                                                        <i class="fas fa-book"></i> Mata Kuliah
                                                     </a>
                                                     <a href="{{ url('ortu/my_student/exam_student/'.$value->id) }}" class="btn btn-primary btn-sm mb-1">
                                                         <i class="fas fa-calendar-check"></i> Jadwal Ujian
                                                     </a>
-                                                    <a href="{{ url('ortu/my_student/calendar/'.$value->id) }}" class="btn btn-warning btn-sm">
+                                                    {{-- <a href="{{ url('ortu/my_student/calendar/'.$value->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-calendar-alt"></i> Calendar
-                                                    </a>
+                                                    </a> --}}
                                                     <a href="{{ url('ortu/my_student/exam_result/'.$value->id) }}" class="btn btn-danger btn-sm">
                                                         <i class="fas fa-graduation-cap"></i> Nilai
                                                     </a>

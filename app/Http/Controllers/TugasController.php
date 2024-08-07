@@ -2,114 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassMatkulModel;
+use Str;
+use Auth;
+use App\Models\ExamModel;
 use App\Models\ClassModel;
-use App\Models\MatkulDosenModel;
-use App\Models\SubmitTugasModel;
 use App\Models\TugasModel;
 use Illuminate\Http\Request;
-use Auth;
-use Str;
+use App\Models\ClassMatkulModel;
+use App\Models\MatkulDosenModel;
+use App\Models\SubmitTugasModel;
+use App\Models\SemesterClassModel;
 
 class TugasController extends Controller
 {
-    public function PenugasanReport()
-    {
-        $data['getRecord'] = SubmitTugasModel::getRecordTugas();
-        $data['header_title'] = "Laporan Penugasan";
-        return view('admin.penugasan.laporan', $data);
-    }
-    public function Penugasan()
-    {
-        $data['getRecord'] = TugasModel::getRecord();
-        $data['header_title'] = "Penugasan  ";
-        return view('admin.penugasan.list', $data);
-    }
-    public function AddPenugasan()
-    {
-        $data['getClass'] = ClassModel::getClass();
-        $data['header_title'] = "Add Penugasan  ";
-        return view('admin.penugasan.add', $data);
-    }
-    public function ajax_get_matkul(Request $request)
-    {
-        $class_id = $request->class_id;
-        $getMatkul = ClassMatkulModel::MySubject($class_id);
-        $html = '';
-        $html .= '<option value="">Select Matkul </option>';
-        foreach ($getMatkul as $value) {
-            $html .= '<option value="' . $value->matkul_id . '">' . $value->matkul_name . ' </option>';
-        }
-        $json['success'] = $html;
-        echo json_encode($json);
-    }
-
-    public function InsertPenugasan(Request $request)
-    {
-        $save = new TugasModel;
-        $save->class_id = $request->class_id;
-        $save->matkul_id = $request->matkul_id;
-        $save->tanggal = $request->tanggal;
-        $save->deadline = $request->deadline;
-        $save->description = $request->description;
-        $save->created_by = Auth::user()->id;
-
-        if (!empty($request->file('document'))) {
-            $ext = $request->file('document')->getClientOriginalExtension();
-            $file =  $request->file('document');
-            $randomStr = date('Ymdhis') . Str::random(20);
-            $filename = strtolower($randomStr) . '.' . $ext;
-            $file->move('upload/tugas/', $filename);
-
-            $save->document = $filename;
-        }
-
-        $save->save();
-        return redirect('admin/tugas/penugasan')->with('success', "Penugasan Berhasil Ditambahkan");
-    }
-
-    public function EditPenugasan($id)
-    {
-        $getRecord = TugasModel::getSingle($id);
-        $data['getRecord'] = $getRecord;
-        $data['getClass'] = ClassModel::getClass();
-        $data['getMatkul'] = ClassMatkulModel::MySubject($getRecord->class_id);
-        $data['header_title'] = "Edit Penugasan  ";
-        return view('admin.penugasan.edit', $data);
-    }
-
-    public function UpdatePenugasan($id, Request $request)
-    {
-        $save = TugasModel::getSingle($id);
-        $save->class_id = $request->class_id;
-        $save->matkul_id = $request->matkul_id;
-        $save->tanggal = $request->tanggal;
-        $save->deadline = $request->deadline;
-        $save->description = $request->description;
-
-        if (!empty($request->file('document'))) {
-            $ext = $request->file('document')->getClientOriginalExtension();
-            $file =  $request->file('document');
-            $randomStr = date('Ymdhis') . Str::random(20);
-            $filename = strtolower($randomStr) . '.' . $ext;
-            $file->move('upload/tugas/', $filename);
-
-            $save->document = $filename;
-        }
-
-        $save->save();
-        return redirect('admin/tugas/penugasan')->with('success', "Penugasan Berhasil Diedit");
-    }
-
-
-    public function DeletePenugasan($id)
-    {
-        $save = TugasModel::getSingle($id);
-
-        $save->delete();
-        return redirect('admin/tugas/penugasan')->with('success', "Penugasan Berhasil Dihapus");
-    }
-
     public function PenugasanDosen()
     {
         $getClass = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
@@ -121,9 +26,17 @@ class TugasController extends Controller
         $data['header_title'] = "Penugasan  ";
         return view('dosen.penugasan.list', $data);
     }
-    public function AddPenugasanDosen()
+    public function AddPenugasanDosen(Request $request)
     {
-        $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
+        $data['getSemester'] = ExamModel::getSemester();
+
+        // $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
+        $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
+
+        if (!empty($request->class_id && !empty($request->semester_id))) {
+
+            $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id, $request->semester_id);
+        }
 
         $data['header_title'] = "Add Penugasan  ";
         return view('dosen.penugasan.add', $data);
@@ -133,7 +46,8 @@ class TugasController extends Controller
 
 
         $class_id = $request->class_id;
-        $getMatkul = ClassMatkulModel::MySubject($class_id);
+        $semester_id = $request->semester_id;
+        $getMatkul = ClassMatkulModel::MySubject($class_id, $semester_id);
         $html = '';
         $html .= '<option value="">Select Matkul </option>';
         foreach ($getMatkul as $value) {
@@ -172,8 +86,13 @@ class TugasController extends Controller
     {
         $getRecord = TugasModel::getSingle($id);
         $data['getRecord'] = $getRecord;
+        // $data['getSemester'] = ExamModel::getSemester();
+
+        // $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
+        // $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
+
         $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
-        $data['getMatkul'] = ClassMatkulModel::MySubject($getRecord->class_id);
+        $data['getMatkul'] = ClassMatkulModel::MySubjectMatkul($getRecord->class_id);
         $data['header_title'] = "Edit Penugasan  ";
         return view('dosen.penugasan.edit', $data);
     }
@@ -292,9 +211,19 @@ class TugasController extends Controller
         $data['header_title'] = "materi  ";
         return view('dosen.materi.list', $data);
     }
-    public function AddmateriDosen()
+    public function AddmateriDosen(Request $request)
     {
-        $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
+        // $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
+
+        $data['getSemester'] = ExamModel::getSemester();
+
+        // $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
+        $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
+
+        if (!empty($request->class_id && !empty($request->semester_id))) {
+
+            $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id, $request->semester_id);
+        }
 
         $data['header_title'] = "Add materi  ";
         return view('dosen.materi.add', $data);
@@ -322,7 +251,7 @@ class TugasController extends Controller
         }
 
         $save->save();
-        return redirect('dosen/tugas/materi')->with('success', "materi Berhasil Ditambahkan");
+        return redirect('dosen/tugas/materi')->with('success', "Materi Berhasil Ditambahkan");
     }
 
     public function EditmateriDosen($id)
@@ -330,7 +259,7 @@ class TugasController extends Controller
         $getRecord = TugasModel::getSingle($id);
         $data['getRecord'] = $getRecord;
         $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
-        $data['getMatkul'] = ClassMatkulModel::MySubject($getRecord->class_id);
+        $data['getMatkul'] = ClassMatkulModel::MySubjectMatkul($getRecord->class_id);
         $data['header_title'] = "Edit materi  ";
         return view('dosen.materi.edit', $data);
     }
@@ -356,15 +285,15 @@ class TugasController extends Controller
         }
 
         $save->save();
-        return redirect('dosen/tugas/materi')->with('success', "materi Berhasil Diedit");
+        return redirect('dosen/tugas/materi')->with('success', "Materi Berhasil Diedit");
     }
 
 
-    public function DeletemateriDosen($id)
+    public function DeletMmateriDosen($id)
     {
         $save = TugasModel::getSingle($id);
 
         $save->delete();
-        return redirect('dosen/tugas/materi')->with('success', "materi Berhasil Dihapus");
+        return redirect('dosen/tugas/materi')->with('success', "Materi Berhasil Dihapus");
     }
 }

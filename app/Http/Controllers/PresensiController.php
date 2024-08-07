@@ -12,6 +12,7 @@ use App\Models\presensiModel;
 use App\Models\PerizinanModel;
 use App\Models\ClassMatkulModel;
 use App\Models\ClassTimeTableModel;
+use App\Models\ExamModel;
 
 class PresensiController extends Controller
 {
@@ -103,7 +104,7 @@ class PresensiController extends Controller
         $d = WeekModel::getSingle($week_id);
 
         $result = array();
-        $getRecord = ClassMatkulModel::MySubject($c->id);
+        $getRecord = ClassMatkulModel::MySubject($c->id, Auth::user()->semester_id);
         foreach ($getRecord as $value) {
             $dataS['name'] = $value->matkul_name;
 
@@ -159,7 +160,7 @@ class PresensiController extends Controller
         $d = WeekModel::getSingle($week_id);
 
         $result = array();
-        $getRecord = ClassMatkulModel::MySubject($c->id);
+        $getRecord = ClassMatkulModel::MySubjectDosen($m->id);
         foreach ($getRecord as $value) {
             $dataS['name'] = $value->matkul_name;
 
@@ -260,7 +261,7 @@ class PresensiController extends Controller
         $d = WeekModel::getSingle($week_id);
 
         $result = array();
-        $getRecord = ClassMatkulModel::MySubject($c->id);
+        $getRecord = ClassMatkulModel::MySubject($c->id, Auth::user()->semester_id);
         foreach ($getRecord as $value) {
             $dataS['name'] = $value->matkul_name;
 
@@ -436,7 +437,7 @@ class PresensiController extends Controller
         $d = WeekModel::getSingle($week_id);
 
         $result = array();
-        $getRecord = ClassMatkulModel::MySubject($c->id);
+        $getRecord = ClassMatkulModel::MySubjectDosen($m->id);
         foreach ($getRecord as $value) {
             $dataS['name'] = $value->matkul_name;
 

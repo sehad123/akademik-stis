@@ -31,11 +31,12 @@ class ExamScheduleModel extends Model
             ->orderBy('jadwal_ujian.id', 'desc')
             ->get();
     }
-    static public function getExamStudent($class_id)
+    static public function getExamStudent($class_id, $semester_id)
     {
         return ExamScheduleModel::select('jadwal_ujian.*', 'kurikulum.name as kurikulum_name')
             ->join('kurikulum', 'kurikulum.id', '=', 'jadwal_ujian.exam_id')
             ->where('jadwal_ujian.class_id', '=', $class_id)
+            ->where('jadwal_ujian.semester_id', '=', $semester_id)
             ->where('kurikulum.status', '=', 1)
             ->groupBy('jadwal_ujian.exam_id')
             ->orderBy('jadwal_ujian.id', 'desc')

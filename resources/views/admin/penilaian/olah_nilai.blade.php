@@ -32,16 +32,16 @@
                   <div class="row">
                     <div class="form-group col-md-3">
                       <label >Semester </label>
-                      <select name="exam_id" required id="" class="form-control">
+                      <select name="semester_id" required id="" class="form-control getSemester">
                           <option value="">Select</option>
-                          @foreach ($getExam as $exam)
-                          <option {{ (Request::get('exam_id') == $exam->id)?'selected':'' }}  value="{{ $exam->id }}">{{ $exam->name }}</option>
+                          @foreach ($getSemester as $semester)
+                          <option {{ (Request::get('semester_id') == $semester->id)?'selected':'' }}  value="{{ $semester->id }}">{{ $semester->name }}</option>
                           @endforeach
                       </select>
                     </div>
                     <div class="form-group col-md-3">
                       <label >Class </label>
-                      <select name="class_id" required id="" class="form-control">
+                      <select name="class_id" required id="" class="form-control getClass">
                           <option value="">Select</option>
                           @foreach ($getClass as $class)
                           <option {{ (Request::get('class_id') == $class->id)?'selected':''  }} value="{{ $class->id }}">{{ $class->name }}</option>
@@ -64,6 +64,7 @@
             <form action="{{ url('admin/penilaian/penilaian_insert') }}" method="post">
                 {{ csrf_field() }}
                 <input type="hidden" name="exam_id" value="{{ Request::get('exam_id') }}">
+                <input type="hidden" name="semester_id" value="{{ Request::get('semester_id') }}">
                 <input type="hidden" name="class_id" value="{{ Request::get('class_id') }}">
              
               <div class="card">
@@ -89,19 +90,19 @@
                           <td>{{ $item['matkul_name'] }}
                             <input type="hidden" name="schedule[{{ $i }}][matkul_id]" value="{{ $item['matkul_id'] }}" class="form-control">
                         </td>
-                          @if ($item['matkul_type'] == 'Teori & Praktikum')
-                          <td>
-                            <input readonly type="text" name="schedule[{{ $i }}][full_mark]"  value="400"class="form-control">
-                          </td>
-                          <td>
-                            <input readonly type="text" name="schedule[{{ $i }}][passing_mark]"  value="275"class="form-control">
-                          </td>   
-                          @else
+                          @if ($item['matkul_type'] == 'Teori')
                           <td>
                             <input readonly type="text" name="schedule[{{ $i }}][full_mark]"  value="300"class="form-control">
                           </td>
                           <td>
-                            <input readonly type="text" name="schedule[{{ $i }}][passing_mark]"  value="225"class="form-control">
+                            <input readonly type="text" name="schedule[{{ $i }}][passing_mark]"  value="150"class="form-control">
+                          </td>   
+                          @else
+                          <td>
+                            <input readonly type="text" name="schedule[{{ $i }}][full_mark]"  value="400"class="form-control">
+                          </td>
+                          <td>
+                            <input readonly type="text" name="schedule[{{ $i }}][passing_mark]"  value="200"class="form-control">
                           </td>   
                           @endif
                         
@@ -129,4 +130,26 @@
     <!-- /.content -->
   </div>
 
+@endsection
+
+@section('script')
+    <script type="text/javascript">
+    $('.getSemester').change(function()
+{
+    var semester_id = $(this).val();
+    $.ajax({
+      url: "{{ url('admin/semester_class/get_semester') }}",
+      type: "POST",
+        data:{
+            "_token":"{{ csrf_token() }}",
+            semester_id:semester_id,
+        },
+        dataType:"json",
+        success:function(response){
+            $('.getClass').html(response.html);
+        },
+    });
+});
+
+    </script>
 @endsection

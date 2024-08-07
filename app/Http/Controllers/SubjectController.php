@@ -18,7 +18,7 @@ class SubjectController extends Controller
     }
     public function mySubjectStudent()
     {
-        $data['getRecord'] = ClassMatkulModel::MySubject(Auth::user()->class_id);
+        $data['getRecord'] = ClassMatkulModel::MySubject(Auth::user()->class_id, Auth::user()->semester_id);
         $data['header_title'] = 'My Subject';
         return view('student.my_subject', $data);
     }
@@ -26,7 +26,7 @@ class SubjectController extends Controller
     {
         $user = User::getSingle($student_id);
         $data['getUser'] = $user;
-        $data['getRecord'] = ClassMatkulModel::MySubject($user->class_id);
+        $data['getRecord'] = ClassMatkulModel::MySubject($user->class_id, $user->semester_id);
         $data['header_title'] = 'My Parent Subject';
         return view('ortu.my_student_subject', $data);
     }

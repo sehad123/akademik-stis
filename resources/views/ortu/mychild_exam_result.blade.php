@@ -23,7 +23,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h2 class="card-title">{{ $value['exam_name'] }} </h2>
+                            <h2 class="card-title">{{ $value['kurikulum_name'] }} </h2>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body p-0 table-responsive">

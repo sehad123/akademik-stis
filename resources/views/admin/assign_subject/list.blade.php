@@ -35,6 +35,12 @@
                                 <div class="row">
 
                                     <div class="form-group col-md-3">
+                                        <label> Semester</label>
+                                        <input type="text" class="form-control" value="{{ Request::get('semester_name') }}"
+                                            name="semester_name" placeholder="Semester">
+                                    </div>
+
+                                    <div class="form-group col-md-3">
                                         <label> Kelas</label>
                                         <input type="text" class="form-control" value="{{ Request::get('class_name') }}"
                                             name="class_name" placeholder="Kelas">
@@ -69,11 +75,10 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Semester</th>
                                     <th>Kelas</th>
                                     <th>Mata Kuliah</th>
                                     <th>Status</th>
-                                    {{-- <th>Created By</th> --}}
-                                    {{-- <th>Created Date</th> --}}
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -84,6 +89,7 @@
                                 @foreach ($getRecord as $value)
                                 <tr>
                                     <td>{{ $i++ }}</td>
+                                    <td>{{ $value->semester_name }}</td>
                                     <td>{{ $value->class_name }}</td>
                                     <td>{{ $value->matkul_name }}</td>
                                     <td>

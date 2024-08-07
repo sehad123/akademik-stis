@@ -24,7 +24,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h2 class="card-title">{{ $value['kurikulum_name'] }} </h2>
-                            <a class="btn btn-primary btn-sm ml-3" target="_blank" style="float: right;" href="{{ url('student/my_exam_result/print?exam_id='.$value['exam_id'].'&student_id='.Auth::user()->id) }}">Print</a>
+                            <a class="btn btn-primary btn-sm ml-3" target="_blank" style="float: right;" href="{{ url('student/my_exam_result/print?semester_id='.$value['semester_id'].'&student_id='.Auth::user()->id) }}">Print</a>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body p-0 table-responsive">
@@ -141,7 +141,7 @@
                                             <b>Total Keseluruhan: {{ $total_score }} / {{ $full_mark }}</b>
                                         </td>
                                         <td colspan="2">
-                                            <b>IP: {{ round($ip, 2) }}</b>
+                                            <b>IP: {{ round($ip, 3) }}</b>
                                         </td>
                                         <td colspan="2">
                                             <b>Grade: 

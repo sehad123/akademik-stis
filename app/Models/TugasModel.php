@@ -69,7 +69,7 @@ class TugasModel extends Model
             ->join('users', 'users.id', '=', 'tugas.created_by')
             ->join('class', 'class.id', '=', 'tugas.class_id')
             ->join('matkul', 'matkul.id', '=', 'tugas.matkul_id')
-            // ->where('tugas.class_id', '=', $class_id)
+            ->where('tugas.class_id', '=', $class_id)
             ->where('tugas.created_by', '=', Auth::user()->id)
             ->where('tugas.status', '=', 0);
         if (!empty(Request::get('class_name'))) {
@@ -97,7 +97,7 @@ class TugasModel extends Model
             ->join('users', 'users.id', '=', 'tugas.created_by')
             ->join('class', 'class.id', '=', 'tugas.class_id')
             ->join('matkul', 'matkul.id', '=', 'tugas.matkul_id')
-            // ->where('tugas.class_id', '=', $class_id)
+            ->where('tugas.class_id', '=', $class_id)
             ->where('tugas.created_by', '=', Auth::user()->id)
             ->where('tugas.status', '=', 1);
         if (!empty(Request::get('class_name'))) {

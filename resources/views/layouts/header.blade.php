@@ -134,6 +134,12 @@
                   <p>Kelas</p>
                 </a>
               </li>
+              <li class="nav-item ">
+                <a href="{{ url('admin/semester_class/list') }}" class="nav-link @if(Request::segment(2) == 'class_semester') active @endif" >
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Semester & Kelas</p>
+                </a>
+              </li>
               <li class="nav-item">
                 <a href="{{ url('admin/subject/list') }}" class="nav-link @if(Request::segment(2) == 'subject') active @endif">
                   <i class="far fa-circle nav-icon"></i>

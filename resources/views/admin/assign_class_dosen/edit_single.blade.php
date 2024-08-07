@@ -31,6 +31,17 @@
                 <div class="card-body">
 
                   <div class="form-group">
+                    <label>Semester</label>
+                    <select name="semester_id" id="getClass" class="form-control">
+                        <option value="">Pilih Semester</option>
+                        @foreach ($getSemester as $semester)
+                        <option value="{{ $semester->id }}" {{ (Request::get('semester_id') == $semester->id || (isset($getRecord) && $getRecord->semester_id == $semester->id)) ? 'selected' : '' }}>
+                            {{ $semester->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+                  <div class="form-group">
                     <label>Nama Kelas</label>
                     <select name="class_id" id="getClass" class="form-control">
                         <option value="">Pilih Kelas</option>

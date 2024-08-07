@@ -2,35 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassMatkulModel;
-use App\Models\ClassModel;
-use App\Models\ExamModel;
-use App\Models\ExamScheduleModel;
-use App\Models\GradeModel;
-use App\Models\MatkulDosenModel;
-use App\Models\NilaiModel;
-use App\Models\OlahNilaiModel;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Auth;
+use App\Models\User;
+use App\Models\ExamModel;
+use App\Models\ClassModel;
+use App\Models\GradeModel;
+use App\Models\NilaiModel;
+use Illuminate\Http\Request;
+use App\Models\OlahNilaiModel;
+use App\Models\ClassMatkulModel;
+use App\Models\MatkulDosenModel;
+use App\Models\ExamScheduleModel;
+use App\Models\SemesterClassModel;
 
 class OlahNilaiController extends Controller
 {
     public function olah_nilai(Request $request)
     {
-        $data['getClass'] = ClassModel::getClass();
-        $data['getExam'] = ExamModel::getSemester();
+        $data['getSemester'] = ExamModel::getSemester();
+
+        // $data['getClass'] = ClassModel::getClass();
+        $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
 
         $result = array();
-        if (!empty($request->get('exam_id')) && !empty($request->get('class_id'))) {
-            $getMatkul = ClassMatkulModel::MySubject($request->get('class_id'));
+        if (!empty($request->get('semester_id')) && !empty($request->get('class_id'))) {
+            $getMatkul = ClassMatkulModel::SubjectSemester($request->get('semester_id'), $request->get('class_id'));
             foreach ($getMatkul as $value) {
                 $dataS = array();
+                $dataS['semester_id'] = $value->semester_id;
                 $dataS['matkul_id'] = $value->matkul_id;
                 $dataS['class_id'] = $value->class_id;
                 $dataS['matkul_name'] = $value->matkul_name;
                 $dataS['matkul_type'] = $value->matkul_type;
-                $ExamSchedule = OlahNilaiModel::getRecordSingle($request->get('exam_id'), $request->get('class_id'), $value->matkul_id);
+                $ExamSchedule = OlahNilaiModel::getRecordSingle($request->get('semester_id'), $request->get('class_id'), $value->matkul_id);
 
                 if (!empty($ExamSchedule)) {
                     $dataS['full_mark'] = $ExamSchedule->full_mark;
@@ -52,13 +56,13 @@ class OlahNilaiController extends Controller
     // admin side
     public function nilai_insert(Request $request)
     {
-        OlahNilaiModel::deleteRecord($request->exam_id, $request->class_id);
+        OlahNilaiModel::deleteRecord($request->semester_id, $request->class_id);
 
         if (!empty($request->schedule)) {
             foreach ($request->schedule as $schedule) {
                 if (!empty($schedule['matkul_id']) && !empty($schedule['full_mark']) && !empty($schedule['passing_mark'])) {
                     $exam = new OlahNilaiModel;
-                    $exam->exam_id = $request->exam_id;
+                    $exam->semester_id = $request->semester_id;
                     $exam->class_id = $request->class_id;
                     $exam->matkul_id = $schedule['matkul_id'];
                     $exam->full_mark = $schedule['full_mark'];
@@ -73,11 +77,14 @@ class OlahNilaiController extends Controller
 
     public function mark_register(Request $request)
     {
-        $data['getClass'] = ClassModel::getClass();
-        $data['getExam'] = ExamModel::getSemester();
+        $data['getSemester'] = ExamModel::getSemester();
 
-        if (!empty($request->get('exam_id')) && !empty($request->get('class_id'))) {
-            $data['getMatkul'] =  OlahNilaiModel::getSubject($request->get('exam_id'), $request->get('class_id'));
+        // $data['getClass'] = ClassModel::getClass();
+        $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
+
+
+        if (!empty($request->get('semester_id')) && !empty($request->get('class_id'))) {
+            $data['getMatkul'] =  OlahNilaiModel::getSubject($request->get('semester_id'), $request->get('class_id'));
             $data['getStudent'] =  User::getStudentClass($request->get('class_id'));
         }
 
@@ -87,11 +94,11 @@ class OlahNilaiController extends Controller
     public function mark_register_dosen(Request $request)
     {
         $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
-        $data['getExam'] = OlahNilaiModel::getExamDosen(Auth::user()->id);
+        $data['getSemester'] = OlahNilaiModel::getExamDosen(Auth::user()->id);
 
 
-        if (!empty($request->get('exam_id')) && !empty($request->get('class_id'))) {
-            $data['getMatkul'] =  OlahNilaiModel::getSubject($request->get('exam_id'), $request->get('class_id'));
+        if (!empty($request->get('semester_id')) && !empty($request->get('class_id'))) {
+            $data['getMatkul'] =  OlahNilaiModel::getSubject($request->get('semester_id'), $request->get('class_id'));
             $data['getStudent'] =  User::getStudentClass($request->get('class_id'));
             // dd($data['getStudent']);
         }
@@ -117,7 +124,7 @@ class OlahNilaiController extends Controller
 
         $total_mark = $tugas + $praktikum + $uas + $uts;
         if ($full_mark >= $total_mark) {
-            $getMark = NilaiModel::CheckAlreadyMark($request->student_id, $request->exam_id, $request->class_id, $request->matkul_id);
+            $getMark = NilaiModel::CheckAlreadyMark($request->student_id, $request->semester_id, $request->class_id, $request->matkul_id);
             if (!empty($getMark)) {
                 $save = $getMark;
             } else {
@@ -125,7 +132,7 @@ class OlahNilaiController extends Controller
                 $save->created_by = Auth::user()->id;
             }
             $save->student_id = $request->student_id;
-            $save->exam_id = $request->exam_id;
+            $save->semester_id = $request->semester_id;
             $save->class_id = $request->class_id;
             $save->matkul_id = $request->matkul_id;
             $save->tugas = $tugas;
@@ -152,12 +159,13 @@ class OlahNilaiController extends Controller
     public function ExamStudent()
     {
         $class_id = Auth::user()->class_id;
-        $getExam =  ExamScheduleModel::getExamStudent($class_id);
+        $semester_id = Auth::user()->semester_id;
+        $getExam =  ExamScheduleModel::getExamStudent($class_id, $semester_id);
         $result = array();
         foreach ($getExam as $value) {
             $dataE = array();
             $dataE['name'] = $value->exam_name;
-            $getExamTime = ExamScheduleModel::getExamTimeTable($value->exam_id, $class_id);
+            $getExamTime = ExamScheduleModel::getExamTimeTable($value->semester_id, $class_id);
             $resultS = array();
             foreach ($getExamTime as $valueS) {
                 $dataS = array();
@@ -192,7 +200,7 @@ class OlahNilaiController extends Controller
             foreach ($getExam as $exam) {
                 $dataE = array();
                 $data['exam_name'] = $exam->exam_name;
-                $getExamTime = ExamScheduleModel::getExamTimeTable($exam->exam_id, $class->matkul_id);
+                $getExamTime = ExamScheduleModel::getExamTimeTable($exam->semester_id, $class->matkul_id);
                 $resultSS = array();
                 foreach ($getExamTime as $valueS) {
                     $dataS = array();
@@ -227,7 +235,7 @@ class OlahNilaiController extends Controller
         foreach ($getExam as $value) {
             $dataE = array();
             $dataE['name'] = $value->exam_name;
-            $getExamTime = ExamScheduleModel::getExamTimeTable($value->exam_id, $class_id);
+            $getExamTime = ExamScheduleModel::getExamTimeTable($value->semester_id, $class_id);
             $resultS = array();
             foreach ($getExamTime as $valueS) {
                 $dataS = array();
@@ -255,8 +263,8 @@ class OlahNilaiController extends Controller
         foreach ($getExam as $exam) {
             $dataE = array();
             $dataE['kurikulum_name'] = $exam->kurikulum_name;
-            $dataE['exam_id'] = $exam->exam_id;
-            $getExamMatkul = NilaiModel::getExamMatkul($exam->exam_id, Auth::user()->id);
+            $dataE['semester_id'] = $exam->semester_id;
+            $getExamMatkul = NilaiModel::getExamMatkul($exam->semester_id, Auth::user()->id);
             $dataSubjet = array();
             foreach ($getExamMatkul as $value) {
                 $total_score = ($value['tugas'] + $value['praktikum'] + $value['uts'] + $value['uas']);
@@ -288,8 +296,8 @@ class OlahNilaiController extends Controller
         $getExam = NilaiModel::getExam($student_id);
         foreach ($getExam as $exam) {
             $dataE = array();
-            $dataE['exam_name'] = $exam->exam_name;
-            $getExamMatkul = NilaiModel::getExamMatkul($exam->exam_id, $student_id);
+            $dataE['kurikulum_name'] = $exam->kurikulum_name;
+            $getExamMatkul = NilaiModel::getExamMatkul($exam->semester_id, $student_id);
             $dataSubjet = array();
             foreach ($getExamMatkul as $value) {
                 $total_score = ($value['tugas'] + $value['praktikum'] + $value['uts'] + $value['uas']);
@@ -368,14 +376,14 @@ class OlahNilaiController extends Controller
     }
     public function ExamResultStudentPrint(Request $request)
     {
-        $exam_id = $request->exam_id;
+        $semester_id = $request->semester_id;
         $student_id = $request->student_id;
 
-        $data['getExam'] = ExamModel::getSingle($exam_id);
+        $data['getExam'] = ExamModel::getSingle($semester_id);
         $data['getStudent'] = User::getSingle($student_id);
 
-        $data['getClass'] = NilaiModel::getClassStudent($exam_id, $student_id);
-        $getExamMatkul = NilaiModel::getExamMatkul($exam_id, $student_id);
+        $data['getClass'] = NilaiModel::getClassStudent($semester_id, $student_id);
+        $getExamMatkul = NilaiModel::getExamMatkul($semester_id, $student_id);
         $dataSubjet = array();
         foreach ($getExamMatkul as $value) {
             $total_score = ($value['tugas'] + $value['praktikum'] + $value['uts'] + $value['uas']);

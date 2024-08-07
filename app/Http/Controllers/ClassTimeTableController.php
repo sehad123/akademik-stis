@@ -4,21 +4,27 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Models\User;
+use App\Models\ExamModel;
 use App\Models\WeekModel;
 use App\Models\ClassModel;
 use App\Models\SubjectModel;
 use Illuminate\Http\Request;
 use App\Models\ClassMatkulModel;
 use App\Models\MatkulDosenModel;
+use App\Models\SemesterClassModel;
 use App\Models\ClassTimeTableModel;
 
 class ClassTimeTableController extends Controller
 {
     public function list(Request $request)
     {
-        $data['getClass'] = ClassModel::getClass();
-        if (!empty($request->class_id)) {
-            $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id);
+        $data['getSemester'] = ExamModel::getSemester();
+
+        // $data['getClass'] = ClassModel::getClass();
+        $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
+        if (!empty($request->class_id && !empty($request->semester_id))) {
+            $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id, $request->semester_id);
+            // $data['getSubject'] =  ClassMatkulModel::SubjectSemester($request->semester_id, $request->class_id);;
         }
         $getWeek = WeekModel::getRecord();
         $week = array();
@@ -77,7 +83,7 @@ class ClassTimeTableController extends Controller
 
     public function get_subject(Request $request)
     {
-        $getSubject =  ClassMatkulModel::MySubject($request->class_id);
+        $getSubject =  ClassMatkulModel::MySubjectMatkul($request->class_id);
         $html = "<option value=''>Select </option>";
         foreach ($getSubject as $value) {
             $html .= "<option value='" . $value->matkul_id . "'>" . $value->matkul_name . " </option>";
@@ -88,13 +94,36 @@ class ClassTimeTableController extends Controller
 
     public function get_subjects(Request $request)
     {
-        $subjects = ClassMatkulModel::MySubject($request->class_id);
+        $subjects = ClassMatkulModel::MySubjectMatkul($request->class_id);
         $subject_html = '<option value="">Select</option>';
         foreach ($subjects as $subject) {
             $subject_html .= '<option value="' . $subject->matkul_id . '">' . $subject->matkul_name . '</option>';
         }
         return response()->json(['subject_html' => $subject_html]);
     }
+    public function get_semester(Request $request)
+    {
+        $class = SemesterClassModel::MySubjectSemester($request->semester_id);
+        $html = "<option value=''>Select </option>";
+        foreach ($class as $value) {
+            $html .= '<option value="' . $value->class_id . '">' . $value->class_name . '</option>';
+        }
+        $json['html'] = $html;
+        echo json_encode($json);
+    }
+    public function get_semester_subject(Request $request)
+    {
+        $matkul = ClassMatkulModel::SubjectSemester($request->semester_id, $request->class_id);
+        $html = "<option value=''>Select </option>";
+        foreach ($matkul as $value) {
+            $html .= '<option value="' . $value->matkul_id . '">' . $value->matkul_name . '</option>';
+        }
+        $json['html'] = $html;
+        return response()->json($json); // gunakan response()->json() untuk mengembalikan JSON
+    }
+
+
+
 
     public function get_dosen(Request $request)
     {
@@ -116,12 +145,13 @@ class ClassTimeTableController extends Controller
 
     public function insert_update(Request $request)
     {
-        ClassTimeTableModel::where('class_id', '=', $request->class_id)->where('matkul_id', '=', $request->matkul_id)->delete();
+        ClassTimeTableModel::where('class_id', '=', $request->class_id)->where('matkul_id', '=', $request->matkul_id)->where('semester_id', '=', $request->semester_id)->delete();
         foreach ($request->timetable as $timetable) {
             if (!empty($timetable['week_id']) && !empty($timetable['start_time']) && !empty($timetable['end_time']) && !empty($timetable['room_number']) && !empty($timetable['tanggal']) && !empty($timetable['jam_mulai']) && !empty($timetable['status']) && !empty($timetable['menit_mulai'])  && !empty($timetable['jam_akhir']) && !empty($timetable['menit_akhir'])) {
                 $save = new ClassTimeTableModel;
                 $save->class_id = $request->class_id;
                 $save->matkul_id = $request->matkul_id;
+                $save->semester_id = $request->semester_id;
                 $save->week_id = $timetable['week_id'];
                 $save->start_time = $timetable['start_time'];
                 $save->end_time = $timetable['end_time'];
@@ -152,7 +182,7 @@ class ClassTimeTableController extends Controller
     public function myClassStudent()
     {
         $result = array();
-        $getRecord = ClassMatkulModel::MySubject(Auth::user()->class_id);
+        $getRecord = ClassMatkulModel::MySubject(Auth::user()->class_id, Auth::user()->semester_id);
         foreach ($getRecord as $value) {
             $dataS['name'] = $value->matkul_name;
             $getWeek = WeekModel::getRecord();

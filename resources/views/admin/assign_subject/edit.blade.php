@@ -41,8 +41,19 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
+                    <label>Semester</label>
+                    <select name="semester_id"  class="form-control getSemester">
+                      <option value="">Select</option>
+                      @foreach ($getSemester as $semester)
+                      <option value="{{ $semester->id }}" {{ ($getRecord->semester_id == $semester->id)? 'selected' :'' }}>
+                        {{ $semester->name }}</option>                      @endforeach
+                  </select>
+                  
+                  </div>
+
+                  <div class="form-group">
                       <label>Pilih Kelas</label>
-                      <select name="class_id" class="form-control" required>
+                      <select name="class_id" class="form-control getClass" required>
                         <option value="">Pilih Kelas</option>
                         @foreach ($getClass as $class)
                         <option value="{{ $class->id }}" {{ ($getRecord->class_id == $class->id)? 'selected' :'' }}>
@@ -99,3 +110,23 @@
 </div>
 
 @endsection
+@section('script')
+<script>
+  $('.getSemester').change(function()
+{
+    var semester_id = $(this).val();
+    $.ajax({
+      url: "{{ url('admin/semester_class/get_semester') }}",
+      type: "POST",
+        data:{
+            "_token":"{{ csrf_token() }}",
+            semester_id:semester_id,
+        },
+        dataType:"json",
+        success:function(response){
+            $('.getClass').html(response.html);
+        },
+    });
+});
+
+</script>

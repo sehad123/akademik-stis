@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassMatkulModel;
-use App\Models\ClassModel;
-use App\Models\User;
-use Illuminate\Http\Request;
+use Str;
 use Auth;
 use Hash;
-use Str;
+use App\Models\User;
+use App\Models\ExamModel;
+use App\Models\ClassModel;
+use Illuminate\Http\Request;
+use App\Models\ClassMatkulModel;
+use App\Models\SemesterClassModel;
 
 class StudentController extends Controller
 {
@@ -18,9 +20,14 @@ class StudentController extends Controller
         $data['header_title'] = 'Student List';
         return view('admin.student.list', $data);
     }
-    public function add()
+    public function add(Request $request)
     {
-        $data['getClass'] = ClassModel::getClass();
+        $data['getSemester'] = ExamModel::getSemester();
+        $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
+        if (!empty($request->semester_id)) {
+        }
+        // $data['getClass'] = ClassModel::getClass();
+        $data['getSemester'] = ExamModel::getSemester();
         $data['header_title'] = 'Add New Student';
         return view('admin.student.add', $data);
     }
@@ -30,6 +37,7 @@ class StudentController extends Controller
 
         if (!empty($data['getRecord'])) {
             $data['getClass'] = ClassModel::getClass();
+            $data['getSemester'] = ExamModel::getSemester();
             $data['header_title'] = 'Edit Admin';
             return view('admin.student.edit', $data);
         } else {
@@ -80,6 +88,7 @@ class StudentController extends Controller
         }
         $student->admission_number = trim($request->admission_number);
         $student->class_id = trim($request->class_id);
+        $student->semester_id = trim($request->semester_id);
         // $student->roll_number = trim($request->roll_number);
         $student->password = Hash::make($request->password);
         $student->user_type = 3;
@@ -143,6 +152,8 @@ class StudentController extends Controller
 
         $student->admission_number = trim($request->admission_number);
         $student->class_id = trim($request->class_id);
+        $student->semester_id = trim($request->semester_id);
+
         // $student->roll_number = trim($request->roll_number);
         if (!empty($request->password)) {
             $student->password = Hash::make($request->password);

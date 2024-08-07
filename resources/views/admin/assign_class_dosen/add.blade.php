@@ -27,8 +27,20 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
+                    <label>Semester</label>
+                    <select name="semester_id"  class="form-control getSemester" required>
+                      <option value="">Select</option>
+                      @foreach ($getSemester as $semester)
+                          <option value="{{ $semester->id }}">{{ $semester->name }}</option>
+                      @endforeach
+                  </select>
+                  
+                  </div>
+
+
+                  <div class="form-group">
                     <label>Kelas</label>
-                    <select name="class_id" id="getClass" class="form-control">
+                    <select name="class_id" id="getClass" class="form-control getClass">
                       <option value="">Select</option>
                       @foreach ($getClass as $class)
                       <option {{ (Request::get('class_id') == $class->id)?'selected':'' }} value="{{ $class->id }}">{{ $class->name }}</option>
@@ -74,20 +86,61 @@
 
 @section('script')
 <script>
-    $('#getClass').change(function() {
-    var class_id = $(this).val();
+
+$('.getSemester').change(function()
+{
+    var semester_id = $(this).val();
     $.ajax({
-        url: "{{ url('admin/presensi/get_subjects') }}",
-        type: "POST",
-        data: {
-            "_token": "{{ csrf_token() }}",
-            class_id: class_id,
+      url: "{{ url('admin/semester_class/get_semester') }}",
+      type: "POST",
+        data:{
+            "_token":"{{ csrf_token() }}",
+            semester_id:semester_id,
         },
-        dataType: "json",
-        success: function(response) {
-            $('#getMatkul').html(response.subject_html);
+        dataType:"json",
+        success:function(response){
+            $('.getClass').html(response.html);
         },
     });
 });
+
+    // $('#getClass').change(function() {
+    // var class_id = $(this).val();
+    // $.ajax({
+    //     url: "{{ url('admin/presensi/get_subjects') }}",
+    //     type: "POST",
+    //     data: {
+    //         "_token": "{{ csrf_token() }}",
+    //         class_id: class_id,
+    //     },
+    //     dataType: "json",
+    //     success: function(response) {
+    //         $('#getMatkul').html(response.subject_html);
+    //     },
+    // });
+
+    $('.getClass').change(function()
+{
+    var semester_id = $('.getSemester').val();
+    var class_id = $('.getClass').val();
+     // Log semester_id and class_id
+     console.log("Semester ID:", semester_id);
+            console.log("Class ID:", class_id);
+    $.ajax({
+        url:"{{ url('admin/semester_class/get_semester_subject') }}",
+        type: "POST",
+        data:{
+            "_token":"{{ csrf_token() }}",
+            semester_id:semester_id,
+            class_id:class_id,
+        },
+        dataType:"json",
+        success:function(response){
+            $('.getSubject').html(response.html);
+        },
+    });
+});
+    
+
 </script>
 @endsection

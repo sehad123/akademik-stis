@@ -57,4 +57,24 @@ class ClassModel extends Model
 
         return $return;
     }
+
+    static public function MySubject($semester_id)
+    {
+        return self::select('class.*', 'semester.name as semester_name', 'semester.id as semester_id',)
+            ->join('kurikulum', 'semester.id', 'class.semester_id')
+            ->join('users', 'users.id', 'class.created_by')
+            ->where('class.semester_id', '=', $semester_id)
+            ->where('class.is_delete', '=', 0)
+            ->where('class.status', '=', 0)
+            ->orderBy('class.id', 'desc')
+            ->get();
+    }
+
+
+    static public function getFirstAlready($class_id, $semester_id)
+    {
+        return
+            self::where('id', '=', $class_id)
+            ->where('semester_id', '=', $semester_id)->first();
+    }
 }

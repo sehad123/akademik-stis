@@ -10,7 +10,7 @@
       display: flex;
       align-items: center;
   }
-  </style>
+</style>
   
 @section('content')
 
@@ -20,7 +20,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Tambah Kelas & Mata Kuliah  </h1>
+            <h1>Tambah Kelas & Mata Kuliah</h1>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -39,21 +39,33 @@
                 {{ csrf_field() }}
                 <div class="card-body">
                   <div class="form-group">
-                    <label>Nama Kelas</label>
-                    <select name="class_id" class="form-control">
-                      <option value="">Pilih Kelas</option>
-                      @foreach ($getClass as $class)
-                      <option value="{{ $class->id }}">{{ $class->name }}</option>
+                    <label>Semester</label>
+                    <select name="semester_id"  class="form-control getSemester" required>
+                      <option value="">Select</option>
+                      @foreach ($getSemester as $semester)
+                          <option value="{{ $semester->id }}">{{ $semester->name }}</option>
                       @endforeach
-                    </select>
+                  </select>
+                  
                   </div>
 
+                  <div class="form-group">
+                    <label>Kelas</label>
+                    <select required name="class_id" class="form-control getClass">
+                      <option value="">Select</option>
+                      @if (!empty($getClass))
+                      @foreach ($getClass as $class)
+                      <option {{ (Request::get('class_id') == $class->id) ? 'selected':'' }} value="{{ $class->id }}">{{ $class->name }}</option>
+                      @endforeach
+                      @endif
+                    </select>
+                  </div>
                   <div class="form-group">
                     <label>Nama Mata Kuliah</label>
                     <div class="checkbox-grid">
                       @foreach ($getSubject as $subject)
                       <label class="checkbox-item">
-                          <input type="checkbox" value="{{ $subject->id }}" name="matkul_id[]">{{ $subject->name }}
+                          <input  type="checkbox" value="{{ $subject->id }}" name="matkul_id[]">{{ $subject->name }}
                       </label>
                       @endforeach
                     </div>
@@ -71,5 +83,29 @@
     </section>
     <!-- /.content -->
 </div>
+
+@endsection
+
+@section('script')
+<script>
+  $('.getSemester').change(function()
+{
+    var semester_id = $(this).val();
+    $.ajax({
+      url: "{{ url('admin/semester_class/get_semester') }}",
+      type: "POST",
+        data:{
+            "_token":"{{ csrf_token() }}",
+            semester_id:semester_id,
+        },
+        dataType:"json",
+        success:function(response){
+            $('.getClass').html(response.html);
+        },
+    });
+});
+
+</script>
+
 
 @endsection

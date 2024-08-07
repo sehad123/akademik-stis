@@ -54,7 +54,10 @@
                   
                   <div class="form-group">
                     <label>Document<span style="color: red;">*</span></label>
-                    <input type="file" class="form-control" value="{{ old('document', $getRecord->tanggal) }}" name="document" required placeholder="Enter document">
+                    @if ($getRecord->document)
+                      <p>Current Document: <a href="{{ $getRecord->getDocument() }}" target="_blank">{{ $getRecord->document }}</a></p>
+                    @endif
+                    <input type="file" class="form-control" name="document" placeholder="Enter document">
                   </div>
                   
                   <div class="form-group">

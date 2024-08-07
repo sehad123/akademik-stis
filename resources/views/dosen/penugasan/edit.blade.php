@@ -27,6 +27,7 @@
               <form method="post" action="" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="card-body">
+
                   <div class="form-group">
                     <label>Kelas <span style="color: red;">*</span></label>
                     <select name="class_id" id="getClass" required class="form-control">
@@ -56,7 +57,10 @@
                   </div>
                   <div class="form-group">
                     <label>Document<span style="color: red;">*</span></label>
-                    <input type="file" class="form-control" value="{{ old('document', $getRecord->tanggal) }}" name="document" required placeholder="Enter document">
+                    @if ($getRecord->document)
+                      <p>Current Document: <a href="{{ $getRecord->getDocument() }}" target="_blank">{{ $getRecord->document }}</a></p>
+                    @endif
+                    <input type="file" class="form-control" name="document" placeholder="Enter document">
                   </div>
                   <div class="form-group">
                     <label>Deskripsi<span style="color: red;">*</span></label>

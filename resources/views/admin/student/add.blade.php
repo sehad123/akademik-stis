@@ -63,8 +63,22 @@
                     </div>
                     </div> --}}
                     <div class="form-group col-md-6">
+                      <label >Semester<span style="color:red;">*</span></label>
+                      <select name="semester_id" required class="form-control getSemester" id="">
+                        <option value="">Pilih Semester</option>
+                        @foreach ($getSemester as $item)
+                            <option {{ (old('semester_id') ==$item->id)?'selected':'' }} value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                      </select>
+                      <div style="color:red;">
+                        {{ $errors->first('class_id') }}
+                    
+                  </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
                       <label >Kelas<span style="color:red;">*</span></label>
-                      <select name="class_id" required class="form-control" id="">
+                      <select name="class_id" required class="form-control getClass" id="">
                         <option value="">Pilih Kelas</option>
                         @foreach ($getClass as $item)
                             <option {{ (old('class_id') ==$item->id)?'selected':'' }} value="{{ $item->id }}">{{ $item->name }}</option>
@@ -75,6 +89,7 @@
                     
                     </div>
                     </div>
+                    
                     <div class="form-group col-md-6">
                       <label >Jenis Kelamin<span style="color:red;">*</span></label>
                       <select name="gender" required class="form-control" id="">
@@ -210,4 +225,29 @@
     </section>
     <!-- /.content -->
   </div>
+@endsection
+
+
+@section('script')
+<script>
+  $('.getSemester').change(function()
+{
+    var semester_id = $(this).val();
+    $.ajax({
+      url: "{{ url('admin/semester_class/get_semester') }}",
+      type: "POST",
+        data:{
+            "_token":"{{ csrf_token() }}",
+            semester_id:semester_id,
+        },
+        dataType:"json",
+        success:function(response){
+            $('.getClass').html(response.html);
+        },
+    });
+});
+
+</script>
+
+
 @endsection

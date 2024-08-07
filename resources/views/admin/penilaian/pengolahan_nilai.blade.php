@@ -28,16 +28,16 @@
                   <div class="row">
                     <div class="form-group col-md-3">
                       <label >Semester </label>
-                      <select name="exam_id" required id="" class="form-control">
-                          <option value="">Select</option>
-                          @foreach ($getExam as $exam)
-                          <option {{ (Request::get('exam_id') == $exam->id)?'selected':'' }}  value="{{ $exam->id }}">{{ $exam->name }}</option>
-                          @endforeach
-                      </select>
+                      <select name="semester_id" required id="" class="form-control getSemester">
+                        <option value="">Select</option>
+                        @foreach ($getSemester as $semester)
+                        <option {{ (Request::get('semester_id') == $semester->id)?'selected':'' }}  value="{{ $semester->id }}">{{ $semester->name }}</option>
+                        @endforeach
+                    </select>
                     </div>
                     <div class="form-group col-md-3">
                       <label >Class </label>
-                      <select name="class_id" required id="" class="form-control">
+                      <select name="class_id" required id="" class="form-control getClass">
                           <option value="">Select</option>
                           @foreach ($getClass as $class)
                           <option {{ (Request::get('class_id') == $class->id)?'selected':''  }} value="{{ $class->id }}">{{ $class->name }}</option>
@@ -70,10 +70,10 @@
                           <th>Student Name</th>
                           @foreach ($getMatkul as $matkul)
                           <th style="font-size: 14px;">{{ $matkul->matkul_name }} 
-                            @if  (  $matkul->matkul_type  == "Teori & Praktikum")
-                            ( {{ $matkul->matkul_type }} :  {{275 }} / {{ 400}} )
+                            @if  (  $matkul->matkul_type  == "Teori")
+                            ( {{ $matkul->matkul_type }} :  {{150 }} / {{ 300}} )
                             @else
-                            ( {{ $matkul->matkul_type }} :  {{225 }} / {{ 300}} )
+                            ( {{ $matkul->matkul_type }} :  {{200 }} / {{ 400}} )
 
                             @endif
                               
@@ -88,10 +88,10 @@
                               <form class="submitForm" method="post">
                                   {{ csrf_field() }}
                                   <input type="hidden" name="student_id" id="" value="{{ $student->id }}">
-                                  <input type="hidden" name="exam_id" id="" value="{{ Request::get('exam_id') }}">
+                                  <input type="hidden" name="semester_id" id="" value="{{ Request::get('semester_id') }}">
                                   <input type="hidden" name="class_id" id="" value="{{ Request::get('class_id') }}">
                                   <tr>
-                                      <td>{{ $student->name }}  {{ $student->last_name }}</td>
+                                      <td>{{ $student->name }}</td>
                                       @php
                                           $i=1;
                                           $totalStudentMark = 0;
@@ -104,7 +104,7 @@
                                   $totalMark = 0;
                                   $totalFullMark = $totalFullMark + $matkul->full_mark;
                                   $totalPassingMark = $totalPassingMark + $matkul->passing_mark;
-                                  $getMark = $matkul->getMark($student->id,Request::get('exam_id'),Request::get('class_id'),$matkul->matkul_id);
+                                  $getMark = $matkul->getMark($student->id,Request::get('semester_id'),Request::get('class_id'),$matkul->matkul_id);
                                   if(!empty($getMark))
                                   {
                                     $totalMark = $getMark->tugas +$getMark->praktikum +$getMark->uts +$getMark->uas ;
@@ -140,7 +140,7 @@
                                           <br>
                                       </div>
                                       <div>
-                                          <button type="submit" class="btn btn-success SaveSingle" data-schedule="{{ $matkul->id }}" id="{{ $student->id }}" data-val="{{ $matkul->matkul_id }}" data-exam="{{ Request::get('exam_id') }}" data-class="{{ Request::get('class_id') }}">Save</button>
+                                          <button type="submit" class="btn btn-success SaveSingle" data-schedule="{{ $matkul->id }}" id="{{ $student->id }}" data-val="{{ $matkul->matkul_id }}" data-exam="{{ Request::get('semester_id') }}" data-class="{{ Request::get('class_id') }}">Save</button>
                                       </div>
                                       @if (!empty($getMark))
                                       <div>
@@ -227,7 +227,27 @@
 
 @section('script')
 
+
+
 <script type="text/javascript">
+
+$('.getSemester').change(function()
+{
+    var semester_id = $(this).val();
+    $.ajax({
+      url: "{{ url('admin/semester_class/get_semester') }}",
+      type: "POST",
+        data:{
+            "_token":"{{ csrf_token() }}",
+            semester_id:semester_id,
+        },
+        dataType:"json",
+        success:function(response){
+            $('.getClass').html(response.html);
+        },
+    });
+});
+
     // $('.submitForm').submit(function(e) {
     //     e.preventDefault();
 
@@ -252,13 +272,13 @@
     // e.preventDefault();
     var student_id = $(this).attr('id');
     var matkul_id = $(this).attr('data-val');
-    var exam_id = $(this).attr('data-exam');
+    var semester_id = $(this).attr('data-exam');
     var class_id = $(this).attr('data-class');
     var id = $(this).attr('data-schedule');
 
     // var student_id = $(this).attr('id');
     // var matkul_id = $(this).data('val');
-    // var exam_id = $(this).data('exam');
+    // var semester_id = $(this).data('exam');
     // var class_id = $(this).data('class');
     // var id = $(this).data('schedule');
 
@@ -274,7 +294,7 @@
             id : id,
             student_id: student_id,
             matkul_id: matkul_id,
-            exam_id: exam_id,
+            semester_id: semester_id,
             class_id: class_id,
             tugas: tugas,
             praktikum: praktikum,

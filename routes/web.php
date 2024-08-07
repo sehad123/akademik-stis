@@ -16,6 +16,7 @@ use App\Http\Controllers\ParentController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PerizinanController;
 use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\SemesterClassController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TugasController;
@@ -106,6 +107,14 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/assign_subject/delete/{id}', [ClassSubjectController::class, 'delete']);
     Route::get('admin/assign_subject/edit_single/{id}', [ClassSubjectController::class, 'edit_single']);
     Route::post('admin/assign_subject/edit_single/{id}', [ClassSubjectController::class, 'update_single']);
+    // Semester Class
+    Route::get('admin/semester_class/list', [SemesterClassController::class, 'list']);
+    Route::get('admin/semester_class/add', [SemesterClassController::class, 'add']);
+    Route::post('admin/semester_class/add', [SemesterClassController::class, 'insert']);
+    Route::get('admin/semester_class/delete/{id}', [SemesterClassController::class, 'delete']);
+    Route::post('admin/semester_class/get_semester', [ClassTimeTableController::class, 'get_semester']);
+    Route::post('admin/semester_class/get_semester_subject', [ClassTimeTableController::class, 'get_semester_subject']);
+
 
     // TimeTable
     Route::get('admin/class_timetable/list', [ClassTimeTableController::class, 'list']);
@@ -231,6 +240,10 @@ Route::group(['middleware' => 'dosen'], function () {
     Route::get('dosen/tugas/penugasan/delete/{id}', [TugasController::class, 'DeletePenugasanDosen']);
     Route::post('dosen/ajax_get_matkul', [TugasController::class, 'ajax_get_matkulDosen']);
     Route::get('dosen/tugas/penugasan/submitted/{id}', [TugasController::class, 'SubmittedPenugasanDosen']);
+    Route::post('dosen/semester_class/get_semester', [ClassTimeTableController::class, 'get_semester']);
+    Route::post('dosen/semester_class/get_semester_subject', [ClassTimeTableController::class, 'get_semester_subject']);
+
+
 
     // materi
     Route::get('dosen/tugas/materi', [TugasController::class, 'materiDosen']);

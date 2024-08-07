@@ -11,6 +11,18 @@ class ExamModel extends Model
     use HasFactory;
     protected $table = 'kurikulum';
 
+    static public function getSemester()
+    {
+        $return = self::select('kurikulum.*')
+            ->join('users', 'users.id', '=', 'kurikulum.created_by')
+            ->where('kurikulum.is_delete', '=', 0)
+            ->where('kurikulum.status', '=', 0)
+            ->orderBy('kurikulum.id', 'desc')
+            ->get();
+        return $return;
+    }
+
+
     static public function getExam()
     {
         $return = self::select('kurikulum.*', 'users.name as created_name')
@@ -63,16 +75,6 @@ class ExamModel extends Model
             ->join('users', 'users.id', '=', 'kurikulum.created_by')
             ->where('kurikulum.is_delete', '=', 0)
             ->where('kurikulum.status', '=', 1)
-            ->orderBy('kurikulum.id', 'desc')
-            ->get();
-        return $return;
-    }
-    static public function getSemester()
-    {
-        $return = self::select('kurikulum.*', 'users.name as created_name')
-            ->join('users', 'users.id', '=', 'kurikulum.created_by')
-            ->where('kurikulum.is_delete', '=', 0)
-            ->where('kurikulum.status', '=', 0)
             ->orderBy('kurikulum.id', 'desc')
             ->get();
         return $return;

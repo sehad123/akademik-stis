@@ -174,13 +174,17 @@ class User extends Authenticatable
 
     static public function getStudent()
     {
-        $return =  self::select('users.*', 'class.name as class_name', 'parent.name as parent_name')
+        $return =  self::select('users.*', 'class.name as class_name', 'parent.name as parent_name', 'kurikulum.name as semester_name')
             ->join('users as parent', 'parent.id', '=', 'users.parent_id', 'left')
             ->join('class', 'class.id', '=', 'users.class_id', 'left')
+            ->join('kurikulum', 'kurikulum.id', '=', 'users.semester_id', 'left')
             ->where('users.user_type', '=', 3)
             ->where('users.is_delete', '=', 0);
         if (!empty(Request::get('name'))) {
             $return = $return->where('users.name', 'like', '%' . Request::get('name') . '%');
+        }
+        if (!empty(Request::get('semester'))) {
+            $return = $return->where('kurikulum.name', 'like', '%' . Request::get('name') . '%');
         }
 
         if (!empty(Request::get('class'))) {

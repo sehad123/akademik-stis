@@ -31,6 +31,15 @@
                                 <div class="row">
 
                                     <div class="form-group col-md-3">
+                                        <label>Semester</label>
+                                        <select name="semester_id"  class="form-control getSemester" required>
+                                            <option value="">Select</option>
+                                            @foreach ($getSemester as $semester)
+                                            <option {{ (Request::get('semester_id') == $semester->id) ? 'selected':'' }}  value="{{ $semester->id }}">{{ $semester->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
                                         <label>Kelas</label>
                                         <select name="class_id" class="form-control getClass" required>
                                             <option value="">Select</option>
@@ -42,7 +51,6 @@
                                     <div class="form-group col-md-3">
                                         <label>Mata Kuliah</label>
                                         <select name="matkul_id" class="form-control getSubject" required>
-                                            <option value="">Select</option>
                                             @if (!empty($getSubject))
                                                 @foreach ($getSubject as $matkul)
                                                     <option {{ (Request::get('matkul_id') == $matkul->matkul_id) ? 'selected':'' }}  value="{{ $matkul->matkul_id }}">{{ $matkul->matkul_name }}</option>
@@ -66,6 +74,7 @@
                         <form id="timetableForm" action="{{ url('admin/class_timetable/add') }}" method="post">
                             {{ csrf_field() }}
                             <input type="hidden" name="matkul_id" value="{{ Request::get('matkul_id') }}">
+                            <input type="hidden" name="semester_id" value="{{ Request::get('semester_id') }}">
                             <input type="hidden" name="class_id" value="{{ Request::get('class_id') }}">
                             <div class="card">
                                 <div class="card-header">
@@ -167,14 +176,39 @@
 @section('script')
 
 <script type="text/javascript">
+
+
+$('.getSemester').change(function()
+{
+    var semester_id = $(this).val();
+    $.ajax({
+      url: "{{ url('admin/semester_class/get_semester') }}",
+      type: "POST",
+        data:{
+            "_token":"{{ csrf_token() }}",
+            semester_id:semester_id,
+        },
+        dataType:"json",
+        success:function(response){
+            $('.getClass').html(response.html);
+        },
+    });
+});
+
+
 $('.getClass').change(function()
 {
-    var class_id = $(this).val();
+    var semester_id = $('.getSemester').val();
+    var class_id = $('.getClass').val();
+     // Log semester_id and class_id
+     console.log("Semester ID:", semester_id);
+            console.log("Class ID:", class_id);
     $.ajax({
-        url:"{{ url('admin/class_timetable/get_subject') }}",
+        url:"{{ url('admin/semester_class/get_semester_subject') }}",
         type: "POST",
         data:{
             "_token":"{{ csrf_token() }}",
+            semester_id:semester_id,
             class_id:class_id,
         },
         dataType:"json",

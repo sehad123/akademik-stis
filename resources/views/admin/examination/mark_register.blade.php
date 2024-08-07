@@ -28,16 +28,16 @@
                   <div class="row">
                     <div class="form-group col-md-3">
                       <label >Semester </label>
-                      <select name="exam_id" required id="" class="form-control">
+                      <select name="exam_id" required id="" class="form-control getSemester">
                           <option value="">Select</option>
-                          @foreach ($getExam as $exam)
-                          <option {{ (Request::get('exam_id') == $exam->id)?'selected':'' }}  value="{{ $exam->id }}">{{ $exam->name }}</option>
+                          @foreach ($getSemester as $semester)
+                          <option {{ (Request::get('semester_id') == $semester->id)?'selected':'' }}  value="{{ $semester->id }}">{{ $semester->name }}</option>
                           @endforeach
                       </select>
                     </div>
                     <div class="form-group col-md-3">
                       <label >Class </label>
-                      <select name="class_id" required id="" class="form-control">
+                      <select name="class_id" required id="" class="form-control getClass">
                           <option value="">Select</option>
                           @foreach ($getClass as $class)
                           <option {{ (Request::get('class_id') == $class->id)?'selected':''  }} value="{{ $class->id }}">{{ $class->name }}</option>
@@ -286,6 +286,23 @@
         error: function(xhr, status, error) {
             console.error(xhr.responseText);
         }
+    });
+});
+
+$('.getSemester').change(function()
+{
+    var semester_id = $(this).val();
+    $.ajax({
+      url: "{{ url('admin/semester_class/get_semester') }}",
+      type: "POST",
+        data:{
+            "_token":"{{ csrf_token() }}",
+            semester_id:semester_id,
+        },
+        dataType:"json",
+        success:function(response){
+            $('.getClass').html(response.html);
+        },
     });
 });
 

@@ -33,16 +33,16 @@
                     <label >Mata Kuliah</label>
                     <input type="text" value="{{  old('name',$getRecord->name)  }}" class="form-control" name="name" required placeholder="Mata Kuliah">
                   </div>
-                  <div class="form-group">
+                  {{-- <div class="form-group">
                     <label >Status</label>
                     <select name="status" class="form-control" id="">
                       <option value="0"{{ ($getRecord->status ==0) ? 'selected' :'' }}>Active </option>
                       <option value="1"{{ ($getRecord->status ==1) ? 'selected' :'' }}>Inactive </option>
                     </select>
-                  </div>
+                  </div> --}}
                     
                   <div class="form-group">
-                    <label >type</label>
+                    <label >Type</label>
                     <select name="type" class="form-control" id="">
                       <option value="Teori"{{ ($getRecord->type =='Teori') ? 'selected' :'' }}>Teori </option>
                       <option value="Teori & Praktikum"{{ ($getRecord->type =='Teori & Praktikum') ? 'selected' :'' }}>Teori & Praktikum </option>

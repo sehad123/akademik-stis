@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Models\User;
+use App\Models\ExamModel;
 use App\Models\ClassModel;
 use App\Models\SubjectModel;
 use Illuminate\Http\Request;
 use App\Models\ClassMatkulModel;
 use App\Models\MatkulDosenModel;
+use App\Models\SemesterClassModel;
 
 class AssignClassController extends Controller
 {
@@ -20,8 +22,10 @@ class AssignClassController extends Controller
     }
     public function add(Request $request)
     {
-        $data['getClass'] = ClassModel::getClass();
-        if (!empty($request->class_id)) {
+
+        $data['getSemester'] = ExamModel::getSemester();
+        $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
+        if (!empty($request->class_id && !empty($request->semester_id))) {
             $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id);
         }
         $data['getDosen'] = User::getDosenMatkul();
@@ -35,6 +39,7 @@ class AssignClassController extends Controller
         if (!empty($request->dosen_id)) {
             $save = new MatkulDosenModel;
             $save->matkul_id = $request->matkul_id;
+            $save->semester_id = $request->semester_id;
             $save->class_id = $request->class_id;
             $save->dosen_id = $request->dosen_id;
             $save->status = "Active";
@@ -56,8 +61,9 @@ class AssignClassController extends Controller
             $data['getRecord'] = $getRecord;
             $data['getAssignDosenID'] =  MatkulDosenModel::getAssignDosenID($getRecord->matkul_id);
             $data['getDosen'] = User::getDosenMatkul();
-            $data['getClass'] = ClassModel::getClass();
-            if (!empty($request->class_id)) {
+            $data['getSemester'] = ExamModel::getSemester();
+            $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
+            if (!empty($request->class_id && !empty($request->semester_id))) {
                 $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id);
             }
             $data['header_title'] = 'Edit Dosen Matkul ';
@@ -87,6 +93,7 @@ class AssignClassController extends Controller
                 $save = new MatkulDosenModel;
                 $save->matkul_id = $request->matkul_id;
                 $save->class_id = $request->class_id;
+                $save->semester_id = $request->semester_id;
                 $save->dosen_id = $dosen_id;
                 $save->status = $request->status;
                 $save->created_by = Auth::user()->id;
@@ -114,6 +121,7 @@ class AssignClassController extends Controller
             $data['getRecord'] = $getRecord;
             $data['getDosen'] = User::getDosenMatkul();
             $data['getClass'] = ClassModel::getClass();
+            $data['getSemester'] = ExamModel::getSemester();
             $data['getSubject'] = SubjectModel::getSubject();
             $data['header_title'] = 'Edit Dosen Matkul ';
             return view('admin.assign_class_dosen.edit_single', $data);
@@ -134,6 +142,7 @@ class AssignClassController extends Controller
             $subject->matkul_id = $request->matkul_id;
             $subject->dosen_id = $request->dosen_id;
             $subject->class_id = $request->class_id;
+            $subject->semester_id = $request->semester_id;
             $subject->status = $request->status;
             $subject->save();
             return redirect('admin/assign_class_dosen/list')->with('success', "Matkul Dosen Berhasil diupdate");

@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassMatkulModel;
-use App\Models\ClassModel;
-use App\Models\ExamModel;
-use App\Models\ExamScheduleModel;
-use App\Models\GradeModel;
-use App\Models\MatkulDosenModel;
-use App\Models\NilaiModel;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Auth;
+use App\Models\User;
+use App\Models\ExamModel;
+use App\Models\ClassModel;
+use App\Models\GradeModel;
+use App\Models\NilaiModel;
+use Illuminate\Http\Request;
+use App\Models\ClassMatkulModel;
+use App\Models\MatkulDosenModel;
+use App\Models\ExamScheduleModel;
+use App\Models\SemesterClassModel;
 
 class ExaminationController extends Controller
 {
@@ -74,12 +75,15 @@ class ExaminationController extends Controller
 
     public function exam_schedule(Request $request)
     {
-        $data['getClass'] = ClassModel::getClass();
+        $data['getSemester'] = ExamModel::getSemester();
+        $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
+        if (!empty($request->semester_id)) {
+        }
         $data['getExam'] = ExamModel::getExam();
 
         $result = array();
         if (!empty($request->get('exam_id')) && !empty($request->get('class_id'))) {
-            $getMatkul = ClassMatkulModel::MySubject($request->get('class_id'));
+            $getMatkul = ClassMatkulModel::SubjectSemester($request->get('semester_id'), $request->get('class_id'));
             foreach ($getMatkul as $value) {
                 $dataS = array();
                 $dataS['matkul_id'] = $value->matkul_id;
@@ -120,6 +124,7 @@ class ExaminationController extends Controller
                     $exam = new ExamScheduleModel;
                     $exam->exam_id = $request->exam_id;
                     $exam->class_id = $request->class_id;
+                    $exam->semester_id = $request->semester_id;
                     $exam->matkul_id = $schedule['matkul_id'];
                     $exam->exam_date = $schedule['exam_date'];
                     $exam->room_number = $schedule['room_number'];
@@ -137,7 +142,8 @@ class ExaminationController extends Controller
     public function ExamStudent()
     {
         $class_id = Auth::user()->class_id;
-        $getExam =  ExamScheduleModel::getExamStudent($class_id);
+        $semester_id = Auth::user()->semester_id;
+        $getExam =  ExamScheduleModel::getExamStudent($class_id, $semester_id);
         $result = array();
         foreach ($getExam as $value) {
             $dataE = array();

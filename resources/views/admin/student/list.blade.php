@@ -43,6 +43,10 @@
                       <input type="text" class="form-control" value="{{ Request::get('class') }}" name="class" placeholder="Kelas">
                     </div>
                     <div class="form-group col-md-2">
+                      <label>Semester</label>
+                      <input type="text" class="form-control" value="{{ Request::get('semester') }}" name="semester" placeholder="Kelas">
+                    </div>
+                    <div class="form-group col-md-2">
                       <label>Jenis Kelamin</label>
                       <select name="gender" class="form-control">
                         <option value="">Select</option>
@@ -75,12 +79,13 @@
                         <th>Nama</th>
                         <th>Email</th>
                         <th>NIM</th>
+                        <th>Semester</th>
                         <th>Kelas</th>
                         <th>Jenis Kelamin</th>
                         <th>Asal</th>
                         <th>Tanggal Lahir</th>
                         <th>Nomor Hp</th>
-                        <th>Status</th>
+                        {{-- <th>Status</th> --}}
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -97,6 +102,7 @@
                         <td>{{ $value->name }}</td>
                         <td>{{ $value->email }}</td>
                         <td>{{ $value->admission_number }}</td>
+                        <td>{{ $value->semester_name }}</td>
                         <td>{{ $value->class_name }}</td>
                         <td>{{ $value->gender }}</td>
                         <td>{{ $value->caste }}</td>
@@ -106,7 +112,7 @@
                           @endif
                         </td>
                         <td>{{ $value->mobile_number }}</td>
-                        <td>{{ ($value->status == 0) ? 'Active' : 'Inactive' }}</td>
+                        {{-- <td>{{ ($value->status == 0) ? 'Active' : 'Inactive' }}</td> --}}
                         <td style="min-width: 150px;">
                           <a href="{{ url('admin/student/edit/'. $value->id) }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-edit"></i>
