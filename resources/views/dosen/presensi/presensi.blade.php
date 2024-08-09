@@ -47,12 +47,11 @@
 
             <p>Hari: {{ $getDay->name }} / {{ date('d-m-Y', strtotime($tanggal)) }}</p>
             <p>Jam: {{ date('h:i A', strtotime($start_time)) }} - {{ date('h:i A', strtotime($end_time)) }}</p>
-            <p>Ruangan: {{ $room_number }}</p>
             <p>Status: {{ $status }}</p>
             @if ($status === "Online")
             <p>Link Zoom: <a href="{{ $link }}"> {{ $link }}</a></p>
             @else
-            <p></p>                
+            <p>Ruangan: {{ $room_number }}</p>
             @endif
 
             <!-- Menampilkan Lokasi Pengguna -->

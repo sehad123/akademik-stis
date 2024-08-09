@@ -28,10 +28,10 @@
                                 <div class="row">
                                     <div class="form-group col-md-3">
                                         <label>Semester</label>
-                                        <select name="semester_id" required class="form-control">
+                                        <select name="semester_id"  class="form-control getSemester" required>
                                             <option value="">Select</option>
                                             @foreach ($getSemester as $semester)
-                                                <option {{ (Request::get('semester_id') == $semester->semester_id) ? 'selected' : '' }} value="{{ $semester->semester_id }}">{{ $semester->kurikulum_name }}</option>
+                                            <option {{ (Request::get('semester_id') == $semester->id) ? 'selected':'' }}  value="{{ $semester->id }}">{{ $semester->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>

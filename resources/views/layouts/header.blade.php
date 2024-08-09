@@ -135,7 +135,7 @@
                 </a>
               </li>
               <li class="nav-item ">
-                <a href="{{ url('admin/semester_class/list') }}" class="nav-link @if(Request::segment(2) == 'class_semester') active @endif" >
+                <a href="{{ url('admin/semester_class/list') }}" class="nav-link @if(Request::segment(2) == 'semester_class') active @endif" >
                   <i class="far fa-circle nav-icon"></i>
                   <p>Semester & Kelas</p>
                 </a>
@@ -243,6 +243,12 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item ">
+            <a href="{{ url('admin/komunikasi/pengumuman') }}" class="nav-link @if(Request::segment(3) == 'pengumuman') active @endif" >
+              <i class="nav-icon fa-regular fa-newspaper"></i>
+              <p>Papan Pengumuman</p>
+            </a>
+          </li>
        
           <li class="nav-item">
             <a href="{{ url('admin/account') }}" class="nav-link @if(Request::segment(2) == 'account') active @endif">
@@ -252,12 +258,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a href="{{ url('admin/komunikasi/pengumuman') }}" class="nav-link @if(Request::segment(3) == 'pengumuman') active @endif" >
-              <i class="nav-icon fa-regular fa-comment"></i>
-              <p>Papan Pengumuman</p>
-            </a>
-          </li>
+        
 
           <li class="nav-item">
             <a href="{{ url('admin/change_password') }}" class="nav-link @if(Request::segment(2) == 'change_password') active @endif">
@@ -390,6 +391,7 @@
               </p>
             </a>
           </li>
+          
           <li class="nav-item">
             <a href="{{ url('student/my_tugas') }}" class="nav-link @if(Request::segment(2) == 'my_tugas') active @endif">
               <i class=" nav-icon fa-solid fa-book-open"></i>
@@ -397,7 +399,21 @@
                 Penugasan
               </p>
             </a>
-          </li>
+          </li> 
+
+
+          {{-- <li class="nav-item">
+    <a href="{{ url('student/my_tugas') }}" class="nav-link @if(Request::segment(2) == 'my_tugas') active @endif">
+        <i class="nav-icon fa-solid fa-book-open"></i>
+        <p>
+            Penugasan
+            @if($unfinishedTasksCount > 0)
+                <span class="badge badge-warning">{{ $unfinishedTasksCount }}</span>
+            @endif
+        </p>
+    </a>
+</li> --}}
+
           <li class="nav-item">
             <a href="{{ url('student/my_materi') }}" class="nav-link @if(Request::segment(2) == 'my_materi') active @endif">
               <i class="nav-icon fa-solid fa-receipt"></i>

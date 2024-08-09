@@ -40,7 +40,6 @@ class DosenController extends Controller
         request()->validate([
             'email' => 'required|email|unique:users',
             'mobile_number' => 'max:12|min:8',
-            'material_status' => 'max:50',
         ]);
         $dosen = new User;
         $dosen->name = trim($request->name);
@@ -48,11 +47,7 @@ class DosenController extends Controller
         $dosen->email = trim($request->email);
         $dosen->status = trim($request->status);
         $dosen->qualification = trim($request->qualification);
-        $dosen->material_status = trim($request->material_status);
         $dosen->gender = trim($request->gender);
-        $dosen->permanent_address = trim($request->permanent_address);
-        $dosen->height = trim($request->height);
-        $dosen->note = trim($request->note);
         $dosen->address = trim($request->address);
         $dosen->work_experience = trim($request->work_experience);
         $dosen->mobile_number = trim($request->mobile_number);
@@ -90,13 +85,9 @@ class DosenController extends Controller
         $dosen->name = trim($request->name);
         // $dosen->last_name = trim($request->last_name);
         $dosen->email = trim($request->email);
-        $dosen->material_status = trim($request->material_status);
         $dosen->status = trim($request->status);
         $dosen->qualification = trim($request->qualification);
         $dosen->gender = trim($request->gender);
-        $dosen->permanent_address = trim($request->permanent_address);
-        $dosen->height = trim($request->height);
-        $dosen->note = trim($request->note);
         $dosen->address = trim($request->address);
         $dosen->work_experience = trim($request->work_experience);
         $dosen->mobile_number = trim($request->mobile_number);

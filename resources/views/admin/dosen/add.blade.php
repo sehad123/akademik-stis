@@ -69,16 +69,6 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                      <label>Mata Kuliah<span style="color:red;">*</span></label>
-                      <input type="text" class="form-control" required value="{{ old('material_status') }}" name="material_status" required placeholder=" Material Status">
-                      <div style="color:red;">
-                        {{ $errors->first('material_status') }}
-                    
-                    </div>
-                    </div>
-
-                   
-                    <div class="form-group col-md-6">
                       <label>No Hp<span style="color:red;">*</span></label>
                       <input type="number" class="form-control" required value="{{ old('mobile_number') }}" name="mobile_number" required placeholder=" Nomor HP">
                       <div style="color:red;">
@@ -97,21 +87,14 @@
                     </div>
                     </div>
                     <div class="form-group col-md-6">
-                      <label >Alamat Saat ini<span style="color:red;">*</span></label>
+                      <label >Alamat Domisili<span style="color:red;">*</span></label>
                       <textarea name="address" class="form-control" >{{ old('address') }}</textarea>
                       <div style="color:red;">
                         {{ $errors->first('address') }}
                     </div>
                     </div>
                     <div class="form-group col-md-6">
-                      <label >Asal Domisili<span style="color:red;">*</span></label>
-                      <textarea name="permanent_address" class="form-control" >{{ old('permanent_address') }}</textarea>
-                      <div style="color:red;">
-                        {{ $errors->first('permanent_address') }}
-                    </div>
-                    </div>
-                    <div class="form-group col-md-6">
-                      <label >qualification<span style="color:red;">*</span></label>
+                      <label >Qualification<span style="color:red;">*</span></label>
                       <textarea name="qualification" class="form-control" >{{ old('qualification') }}</textarea>
                       <div style="color:red;">
                         {{ $errors->first('qualification') }}
@@ -122,13 +105,6 @@
                       <textarea name="work_experience" class="form-control" >{{ old('work_experience') }}</textarea>
                       <div style="color:red;">
                         {{ $errors->first('work_experience') }}
-                    </div>
-                    </div>
-                    <div class="form-group col-md-6">
-                      <label >Catatan<span style="color:red;">*</span></label>
-                      <textarea name="note" class="form-control" >{{ old('note') }}</textarea>
-                      <div style="color:red;">
-                        {{ $errors->first('note') }}
                     </div>
                     </div>
                   

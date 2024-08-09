@@ -46,7 +46,7 @@
                                         <input type="text" class="form-control" value="{{ Request::get('email') }}" name="email" placeholder="Email">
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>Asal Domisili</label>
+                                        <label>Domisili</label>
                                         <input type="text" class="form-control" value="{{ Request::get('permanent_address') }}" name="permanent_address" placeholder="Asal Domisili">
                                     </div>
                                     <div class="form-group col-md-2">
@@ -79,8 +79,7 @@
                                             <th>Jenis Kelamin</th>
                                             <th>Tanggal Gabung</th>
                                             <th>Nomer Hp</th>
-                                            <th>Mata Kuliah</th>
-                                            <th>Asal Domisili</th>
+                                            <th>Domisili</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -102,8 +101,7 @@
                                             <td>{{ $value->gender }}</td>
                                             <td>{{ $value->admission_date }}</td>
                                             <td>{{ $value->mobile_number }}</td>
-                                            <td>{{ $value->material_status }}</td>
-                                            <td>{{ $value->permanent_address }}</td>
+                                            <td>{{ $value->address }}</td>
                                             <td>{{ ($value->status == 0) ? 'Active' : 'Inactive' }}</td>
                                             <td style="min-width: 180px;">
                                                 <a href="{{ url('admin/dosen/edit/'. $value->id) }}" class="btn btn-primary btn-sm">

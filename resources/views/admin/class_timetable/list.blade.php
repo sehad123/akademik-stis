@@ -87,14 +87,14 @@
                                             <thead>
                                                 <tr>
                                                     <th>Hari</th>
+                                                    <th>Status</th>
                                                     <th>Ruangan</th>
+                                                    <th>Link Zoom</th>
                                                     <th>Tanggal</th>
                                                     <th>Jam Mulai</th>
                                                     <th>Menit Mulai</th>
                                                     <th>Jam Akhir</th>
                                                     <th>Menit Akhir</th>
-                                                    <th>Status</th>
-                                                    <th>Link Zoom</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -108,8 +108,18 @@
                                                             {{ $item['week_name'] }}
                                                         </th>
                                                         <td>
-                                                            <input  name="timetable[{{ $i }}][room_number]" type="number" style="width: 100px;" class="form-control text-center" id=""
+                                                            <select name="timetable[{{ $i }}][status]" class="form-control statusSelect" data-index="{{ $i }}">
+                                                            <option value="">Select</option>
+                                                                <option value="Offline" {{ $item['status'] == 'Offline' ? 'selected' : '' }}>Offline</option>
+                                                                <option value="Online" {{ $item['status'] == 'Online' ? 'selected' : '' }}>Online</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <input  name="timetable[{{ $i }}][room_number]" type="number"style="width: 100px; display: {{ $item['status'] == 'Offline' ? 'block' : 'none' }};" class="form-control text-center roominput" data-index="{{ $i }}"  id=""
                                                             value="{{ $item['room_number'] }}">
+                                                        </td>
+                                                        <td>
+                                                            <textarea name="timetable[{{ $i }}][link]" class="form-control linkInput" data-index="{{ $i }}" style="display: {{ $item['status'] == 'Online' ? 'block' : 'none' }};">{{ $item['link'] }}</textarea>
                                                         </td>
                                                         <td>
                                                             <input  name="timetable[{{ $i }}][tanggal]" type="date" style="width: 150px;" class="form-control text-center" id=""
@@ -127,15 +137,8 @@
                                                         <td>
                                                             <input  name="timetable[{{ $i }}][menit_akhir]" max="60" min="0" type="number" style="width: 100px;" class="form-control text-center menit_akhir" data-index="{{ $i }}" value="{{ $item['menit_akhir'] }}">
                                                         </td>
-                                                        <td>
-                                                            <select name="timetable[{{ $i }}][status]" class="form-control statusSelect" data-index="{{ $i }}">
-                                                                <option value="Offline" {{ $item['status'] == 'Offline' ? 'selected' : '' }}>Offline</option>
-                                                                <option value="Online" {{ $item['status'] == 'Online' ? 'selected' : '' }}>Online</option>
-                                                            </select>
-                                                        </td>
-                                                        <td>
-                                                            <textarea name="timetable[{{ $i }}][link]" class="form-control linkInput" data-index="{{ $i }}" style="display: {{ $item['status'] == 'Online' ? 'block' : 'none' }};">{{ $item['link'] }}</textarea>
-                                                        </td>
+                                                       
+                                                        
                                                         <!-- Hidden start_time and end_time inputs -->
                                                         <input  name="timetable[{{ $i }}][start_time]" type="hidden" class="form-control text-center" id="start_time_{{ $i }}" value="">
                                                         <input  name="timetable[{{ $i }}][end_time]" type="hidden" class="form-control text-center" id="end_time_{{ $i }}" value="">
@@ -176,7 +179,17 @@
 @section('script')
 
 <script type="text/javascript">
-
+ // Set initial visibility of input fields based on status
+ $('.statusSelect').each(function() {
+        var index = $(this).data('index');
+        if ($(this).val() === 'Online') {
+            $('.linkInput[data-index="'+index+'"]').show();
+            $('.roominput[data-index="'+index+'"]').hide();
+        } else {
+            $('.roominput[data-index="'+index+'"]').show();
+            $('.linkInput[data-index="'+index+'"]').hide();
+        }
+    });
 
 $('.getSemester').change(function()
 {
@@ -228,10 +241,13 @@ $('.statusSelect').change(function() {
     var index = $(this).data('index');
     if ($(this).val() === 'Online') {
         $('.linkInput[data-index="'+index+'"]').show();
+        $('.roominput[data-index="'+index+'"]').hide();
     } else {
+        $('.roominput[data-index="'+index+'"]').show();
         $('.linkInput[data-index="'+index+'"]').hide();
     }
 });
+
 
 $('.jam_mulai, .menit_mulai, .jam_akhir, .menit_akhir').on('input', function() {
     var index = $(this).data('index');

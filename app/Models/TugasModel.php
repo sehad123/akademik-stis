@@ -192,4 +192,17 @@ class TugasModel extends Model
             return "";
         }
     }
+
+
+    static public function countUnfinishedTasks($student_id)
+    {
+        return self::where('status', 0)
+            ->where('is_delete', 0)
+            ->whereNotIn('id', function ($query) use ($student_id) {
+                $query->select('tugas_id')
+                    ->from('submit_tugas')
+                    ->where('student_id', $student_id);
+            })
+            ->count();
+    }
 }

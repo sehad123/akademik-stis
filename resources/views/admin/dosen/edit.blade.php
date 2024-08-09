@@ -38,14 +38,7 @@
                     
                     </div>
                     </div>
-                    {{-- <div class="form-group col-md-6">
-                      <label >Last Name<span style="color:red;">*</span></label>
-                      <input type="text" class="form-control" required value="{{ old('last_name',$getRecord->last_name) }}" name="last_name" required placeholder="last name">
-                      <div style="color:red;">
-                        {{ $errors->first('last_name') }}
-                    
-                    </div>
-                    </div> --}}
+                 
                     <div class="form-group col-md-6">
                       <label >Jenis Kelamin<span style="color:red;">*</span></label>
                       <select name="gender" required class="form-control" id="">
@@ -78,16 +71,6 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                      <label>Mata Kuliah<span style="color:red;">*</span></label>
-                      <input type="text" class="form-control" required value="{{ old('material_status',$getRecord->material_status) }}" name="material_status" required placeholder="Material Status">
-                      <div style="color:red;">
-                        {{ $errors->first('material_status') }}
-                    
-                    </div>
-                    </div>
-
-                   
-                    <div class="form-group col-md-6">
                       <label>No Hp<span style="color:red;">*</span></label>
                       <input type="number" class="form-control" required value="{{ old('mobile_number',$getRecord->mobile_number) }}" name="mobile_number" required placeholder="Mobile Number">
                       <div style="color:red;">
@@ -97,21 +80,15 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                      <label >Alamat Saat ini<span style="color:red;">*</span></label>
+                      <label >Alamat Domisili<span style="color:red;">*</span></label>
                       <textarea name="address" class="form-control" >{{ old('address',$getRecord->address) }}</textarea>
                       <div style="color:red;">
                         {{ $errors->first('address') }}
                     </div>
                     </div>
+                 
                     <div class="form-group col-md-6">
-                      <label >Asal Domisili<span style="color:red;">*</span></label>
-                      <textarea name="permanent_address" class="form-control" >{{ old('permanent_address',$getRecord->permanent_address) }}</textarea>
-                      <div style="color:red;">
-                        {{ $errors->first('permanent_address') }}
-                    </div>
-                    </div>
-                    <div class="form-group col-md-6">
-                      <label >qualification<span style="color:red;">*</span></label>
+                      <label >Qualification<span style="color:red;">*</span></label>
                       <textarea name="qualification" class="form-control" >{{ old('qualification',$getRecord->qualification) }}</textarea>
                       <div style="color:red;">
                         {{ $errors->first('qualification') }}
@@ -124,15 +101,6 @@
                         {{ $errors->first('work_experience') }}
                     </div>
                     </div>
-                    <div class="form-group col-md-6">
-                      <label >Catatan<span style="color:red;">*</span></label>
-                      <textarea name="note" class="form-control" >{{ old('note',$getRecord->note) }}</textarea>
-                      <div style="color:red;">
-                        {{ $errors->first('note') }}
-                    </div>
-                    </div>
-                   
-
                     <div class="form-group col-md-6">
                       <label >Profile picture<span style="color:red;">*</span></label>
                       <input type="file" class="form-control mb-3" name="profile_pic" >
@@ -160,7 +128,6 @@
                     </div>
                     </div>
                   </div>
-
                 
 <hr>
                   <div class="form-group">

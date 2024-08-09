@@ -81,7 +81,7 @@
                     <b>${matkulName}</b><br>
                     ${className}<br>
                     ${startTime} - ${endTime}<br>
-                    Ruangan : ${roomNumber}<br>
+                    ${status === 'Online' ? '' : 'Ruangan : ' + roomNumber + '<br>'}
                     <b>${status}</b>
                 </div>
             `;

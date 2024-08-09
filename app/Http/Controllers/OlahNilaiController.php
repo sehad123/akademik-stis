@@ -93,8 +93,9 @@ class OlahNilaiController extends Controller
     }
     public function mark_register_dosen(Request $request)
     {
+        $data['getSemester'] = ExamModel::getSemester();
         $data['getClass'] = MatkulDosenModel::getMyClassSubjectGroup(Auth::user()->id);
-        $data['getSemester'] = OlahNilaiModel::getExamDosen(Auth::user()->id);
+        // $data['getSemester'] = OlahNilaiModel::getExamDosen(Auth::user()->id);
 
 
         if (!empty($request->get('semester_id')) && !empty($request->get('class_id'))) {

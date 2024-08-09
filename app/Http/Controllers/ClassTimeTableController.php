@@ -145,9 +145,26 @@ class ClassTimeTableController extends Controller
 
     public function insert_update(Request $request)
     {
-        ClassTimeTableModel::where('class_id', '=', $request->class_id)->where('matkul_id', '=', $request->matkul_id)->where('semester_id', '=', $request->semester_id)->delete();
+        // Log request input
+        \Log::info($request->all());
+
+        ClassTimeTableModel::where('class_id', '=', $request->class_id)
+            ->where('matkul_id', '=', $request->matkul_id)
+            ->where('semester_id', '=', $request->semester_id)
+            ->delete();
+
         foreach ($request->timetable as $timetable) {
-            if (!empty($timetable['week_id']) && !empty($timetable['start_time']) && !empty($timetable['end_time']) && !empty($timetable['room_number']) && !empty($timetable['tanggal']) && !empty($timetable['jam_mulai']) && !empty($timetable['status']) && !empty($timetable['menit_mulai'])  && !empty($timetable['jam_akhir']) && !empty($timetable['menit_akhir'])) {
+            $isOffline = $timetable['status'] == 'Offline';
+
+            // Pengecekan kondisi untuk memastikan semua field tidak kosong, kecuali room_number jika status Online
+            if (
+                !empty($timetable['week_id']) && !empty($timetable['start_time']) && !empty($timetable['end_time']) &&
+                ($isOffline ? !empty($timetable['room_number']) : true) &&
+                !empty($timetable['tanggal']) && !empty($timetable['jam_mulai']) &&
+                !empty($timetable['status']) && !empty($timetable['menit_mulai']) &&
+                !empty($timetable['jam_akhir']) && !empty($timetable['menit_akhir'])
+            ) {
+
                 $save = new ClassTimeTableModel;
                 $save->class_id = $request->class_id;
                 $save->matkul_id = $request->matkul_id;
@@ -155,7 +172,7 @@ class ClassTimeTableController extends Controller
                 $save->week_id = $timetable['week_id'];
                 $save->start_time = $timetable['start_time'];
                 $save->end_time = $timetable['end_time'];
-                $save->room_number = $timetable['room_number'];
+                $save->room_number = $isOffline ? $timetable['room_number'] : 0; // Atur room_number ke null jika Online
                 $save->tanggal = $timetable['tanggal'];
                 $save->jam_mulai = $timetable['jam_mulai'];
                 $save->menit_mulai = $timetable['menit_mulai'];
@@ -166,6 +183,7 @@ class ClassTimeTableController extends Controller
                 $save->save();
             }
         }
+
         return redirect()->back()->with('success', 'Jadwal berhasil disimpan');
     }
 

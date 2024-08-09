@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Daftar Orang Tua (Total: {{ $getRecord->total() }})</h1>
+            <h1>Daftar Orang Tua Mahasiswa (Total: {{ $getRecord->total() }})</h1>
           </div>
           <div class="col-sm-6 text-right">
             <a href="{{ url('admin/parent/add') }}" class="btn btn-primary">
