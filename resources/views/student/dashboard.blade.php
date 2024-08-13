@@ -34,7 +34,7 @@
         </div>
         
         <!-- ./col -->
-        <div class="col-lg-4 col-6">
+        {{-- <div class="col-lg-4 col-6">
           <!-- small box -->
           <div class="small-box bg-warning">
             <div class="inner">
@@ -47,7 +47,7 @@
             </div>
             <a href="{{ url('student/my_exam') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
-        </div>
+        </div> --}}
       
         <div class="col-lg-4 col-6">
           <div class="small-box bg-primary">

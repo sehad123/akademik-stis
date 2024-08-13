@@ -10,6 +10,10 @@
       display: flex;
       align-items: center;
   }
+
+  .search-input {
+      margin-bottom: 10px;
+  }
 </style>
   
 @section('content')
@@ -60,12 +64,14 @@
                       @endif
                     </select>
                   </div>
+
                   <div class="form-group">
                     <label>Nama Mata Kuliah</label>
-                    <div class="checkbox-grid">
+                    <input type="text" id="search" class="form-control search-input" placeholder="Cari Mata Kuliah...">
+                    <div class="checkbox-grid" id="subjectList">
                       @foreach ($getSubject as $subject)
                       <label class="checkbox-item">
-                          <input  type="checkbox" value="{{ $subject->id }}" name="matkul_id[]">{{ $subject->name }}
+                          <input type="checkbox" value="{{ $subject->id }}" name="matkul_id[]">{{ $subject->name }}
                       </label>
                       @endforeach
                     </div>
@@ -88,8 +94,22 @@
 
 @section('script')
 <script>
-  $('.getSemester').change(function()
-{
+  // Filter mata kuliah berdasarkan input pencarian
+  document.getElementById('search').addEventListener('input', function() {
+    var query = this.value.toLowerCase();
+    var subjects = document.querySelectorAll('#subjectList .checkbox-item');
+
+    subjects.forEach(function(subject) {
+      var subjectName = subject.textContent.toLowerCase();
+      if (subjectName.includes(query)) {
+        subject.style.display = '';
+      } else {
+        subject.style.display = 'none';
+      }
+    });
+  });
+
+  $('.getSemester').change(function() {
     var semester_id = $(this).val();
     $.ajax({
       url: "{{ url('admin/semester_class/get_semester') }}",
@@ -103,9 +123,6 @@
             $('.getClass').html(response.html);
         },
     });
-});
-
+  });
 </script>
-
-
 @endsection

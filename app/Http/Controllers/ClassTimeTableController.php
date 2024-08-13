@@ -146,44 +146,86 @@ class ClassTimeTableController extends Controller
     public function insert_update(Request $request)
     {
         // Log request input
-        \Log::info($request->all());
 
-        ClassTimeTableModel::where('class_id', '=', $request->class_id)
-            ->where('matkul_id', '=', $request->matkul_id)
-            ->where('semester_id', '=', $request->semester_id)
-            ->delete();
+        $messages = [];
+        $hasConflict = false;
 
         foreach ($request->timetable as $timetable) {
             $isOffline = $timetable['status'] == 'Offline';
 
-            // Pengecekan kondisi untuk memastikan semua field tidak kosong, kecuali room_number jika status Online
-            if (
-                !empty($timetable['week_id']) && !empty($timetable['start_time']) && !empty($timetable['end_time']) &&
-                ($isOffline ? !empty($timetable['room_number']) : true) &&
-                !empty($timetable['tanggal']) && !empty($timetable['jam_mulai']) &&
-                !empty($timetable['status']) && !empty($timetable['menit_mulai']) &&
-                !empty($timetable['jam_akhir']) && !empty($timetable['menit_akhir'])
-            ) {
+            // Mengatur nilai default jika kolom kosong dengan NULL
+            $menit_mulai = !empty($timetable['menit_mulai']) ? $timetable['menit_mulai'] : null;
+            $menit_akhir = !empty($timetable['menit_akhir']) ? $timetable['menit_akhir'] : null;
+            $room_number = $isOffline ? (!empty($timetable['room_number']) ? $timetable['room_number'] : null) : null;
 
-                $save = new ClassTimeTableModel;
-                $save->class_id = $request->class_id;
-                $save->matkul_id = $request->matkul_id;
-                $save->semester_id = $request->semester_id;
-                $save->week_id = $timetable['week_id'];
-                $save->start_time = $timetable['start_time'];
-                $save->end_time = $timetable['end_time'];
-                $save->room_number = $isOffline ? $timetable['room_number'] : 0; // Atur room_number ke null jika Online
-                $save->tanggal = $timetable['tanggal'];
-                $save->jam_mulai = $timetable['jam_mulai'];
-                $save->menit_mulai = $timetable['menit_mulai'];
-                $save->jam_akhir = $timetable['jam_akhir'];
-                $save->menit_akhir = $timetable['menit_akhir'];
-                $save->status = $timetable['status'];
-                $save->link = $timetable['link'];
-                $save->save();
+            // Cek apakah ada entri dengan waktu yang sama
+            $conflict = ClassTimeTableModel::where('class_id', '=', $request->class_id)
+                ->where('week_id', '=', $timetable['week_id'])
+                ->where('tanggal', '=', $timetable['tanggal'])
+                ->where('jam_mulai', '=', $timetable['jam_mulai'])
+                ->where('menit_mulai', '=', $menit_mulai)
+                ->where('jam_akhir', '=', $timetable['jam_akhir'])
+                ->where('menit_akhir', '=', $menit_akhir)
+                ->where(function ($query) use ($request) {
+                    // Tidak memeriksa jadwal untuk mata kuliah yang sama
+                    $query->where('matkul_id', '!=', $request->matkul_id);
+                })
+                ->exists();
+
+            if ($conflict) {
+                $messages[] = "Conflict detected for Week ID: {$timetable['week_id']} on {$timetable['tanggal']} from {$timetable['jam_mulai']}:{$menit_mulai} to {$timetable['jam_akhir']}:{$menit_akhir}.";
+                $hasConflict = true;
+            } else {
+                // Validasi entri yang ada atau buat entri baru
+                $existing = ClassTimeTableModel::where('class_id', '=', $request->class_id)
+                    ->where('matkul_id', '=', $request->matkul_id)
+                    ->where('semester_id', '=', $request->semester_id)
+                    ->where('week_id', '=', $timetable['week_id'])
+                    ->first();
+
+                if ($existing) {
+                    // Update existing entry
+                    $existing->start_time = $timetable['start_time'] ?? null;
+                    $existing->end_time = $timetable['end_time'] ?? null;
+                    $existing->room_number = $room_number;
+                    $existing->tanggal = $timetable['tanggal'] ?? null;
+                    $existing->jam_mulai = $timetable['jam_mulai'] ?? null;
+                    $existing->menit_mulai = $menit_mulai;
+                    $existing->jam_akhir = $timetable['jam_akhir'] ?? null;
+                    $existing->menit_akhir = $menit_akhir;
+                    $existing->status = $timetable['status'] ?? null;
+                    $existing->link = $timetable['link'] ?? null;
+                    $existing->save();
+                } else {
+                    // Insert new entry
+                    $save = new ClassTimeTableModel;
+                    $save->class_id = $request->class_id;
+                    $save->matkul_id = $request->matkul_id;
+                    $save->semester_id = $request->semester_id;
+                    $save->week_id = $timetable['week_id'];
+                    $save->start_time = $timetable['start_time'] ?? null;
+                    $save->end_time = $timetable['end_time'] ?? null;
+                    $save->room_number = $room_number;
+                    $save->tanggal = $timetable['tanggal'] ?? null;
+                    $save->jam_mulai = $timetable['jam_mulai'] ?? null;
+                    $save->menit_mulai = $menit_mulai;
+                    $save->jam_akhir = $timetable['jam_akhir'] ?? null;
+                    $save->menit_akhir = $menit_akhir;
+                    $save->status = $timetable['status'] ?? null;
+                    $save->link = $timetable['link'] ?? null;
+                    $save->save();
+                }
             }
         }
 
+        // Menetapkan pesan ke session berdasarkan apakah ada konflik
+        if ($hasConflict) {
+            // $message = implode(' ', $messages); // Gabungkan semua pesan error
+            // return redirect()->back()->with('info', "maaf jadwal diisi dengan mata kuliah lain");
+            return redirect()->back()->with('success', 'Jadwal berhasil disimpan');
+        }
+
+        // Menetapkan pesan sukses jika tidak ada konflik
         return redirect()->back()->with('success', 'Jadwal berhasil disimpan');
     }
 

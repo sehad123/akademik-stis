@@ -14,6 +14,16 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         //
         'forgot-password',
+        'api/*',
+        'login',  // or your specific route path
+        'verify-face',
+        'logout',
+        'csrf-token', // tambahkan route csrf-token di sini
+        'student/*', // tambahkan route csrf-token di sini
+        'dosen/*', // tambahkan route csrf-token di sini
+
+
+
 
     ];
 }

@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['login', 'AuthLogin', 'forgotpassword', 'PostForgotPassword']);
+    }
+
     public function login()
     {
         if (Auth::check()) {
@@ -22,13 +27,20 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    public function getToken(Request $request)
+    {
+        return response()->json(['csrf_token' => csrf_token()]);
+    }
+
     public function AuthLogin(Request $request)
     {
-        $remember = !empty($request->remember) ? true : false;
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
-            return response()->json(['status' => 'success', 'message' => 'Berhasil Login. silahkan lakukan verifikasi wajah', 'user_id' => Auth::id()]);
+        $credentials = $request->only('email', 'password');
+        $remember = !empty($request->remember);
+
+        if (Auth::attempt($credentials, $remember)) {
+            return response()->json(['status' => 'success', 'message' => 'Berhasil Login. Silahkan lakukan verifikasi wajah', 'user_id' => Auth::id()]);
         } else {
-            return response()->json(['status' => 'error', 'message' => 'Email atau Password anda salah']);
+            return response()->json(['status' => 'error', 'message' => 'Email atau Password anda salah'], 401);
         }
     }
 
@@ -42,45 +54,34 @@ class AuthController extends Controller
 
     public function verifyFace(Request $request)
     {
-        Log::info('Received image for face verification');
-        $request->validate([
-            'image' => 'required|string'
-        ]);
+        if (!Auth::check()) {
+            return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
+        }
 
-        $image = $request->input('image');
+        $request->validate(['image' => 'required|string']);
+
         $user = Auth::user();
-
-        Log::info('Verifying face for user: ' . $user->email);
-
         if (empty($user->profile_pic)) {
-            Log::error('No face data available for user: ' . $user->email);
-            Auth::logout();
             return response()->json(['status' => 'error', 'message' => 'Wajah Pengguna Belum Terdaftar'], 401);
         }
 
-        // Send data to the Python API for comparison
+        $image = $request->input('image');
         $response = Http::post('http://127.0.0.1:5000/compare_faces', [
             'user_id' => $user->id,
             'uploaded_image' => $image,
         ]);
 
-        Log::info('Response from Python API: ' . $response->body());
-
         if ($response->successful() && $response->json('status') === 'success') {
-            Log::info('Face verification success');
-            $redirectUrl = $this->getRedirectUrl($user->user_type);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Berhasil Melakukan Verifikasi Wajah',
-                'redirect_url' => url($redirectUrl)
+                'redirect_url' => url($this->getRedirectUrl($user->user_type))
             ]);
         }
 
-        Log::error('Face verification failed');
-        // Auth::logout();
-
         return response()->json(['status' => 'error', 'message' => 'Gagal Melakukan Verifikasi Wajah'], 401);
     }
+
 
     private function getRedirectUrl($userType)
     {
@@ -105,12 +106,14 @@ class AuthController extends Controller
 
     public function PostForgotPassword(Request $request)
     {
-        $user  = User::where('email', $request->email)->first();
+        $request->validate(['email' => 'required|email']);
+
+        $user = User::where('email', $request->email)->first();
         if ($user) {
             $user->remember_token = Str::random(30);
             $user->save();
             Mail::to($user->email)->send(new ForgotPasswordMail($user));
-            return redirect()->back()->with('error', "Please check your email for password reset instructions.");
+            return redirect()->back()->with('success', "Please check your email for password reset instructions.");
         } else {
             return redirect()->back()->with('error', "Email tidak ditemukan");
         }

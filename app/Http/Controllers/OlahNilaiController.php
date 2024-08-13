@@ -85,7 +85,8 @@ class OlahNilaiController extends Controller
 
         if (!empty($request->get('semester_id')) && !empty($request->get('class_id'))) {
             $data['getMatkul'] =  OlahNilaiModel::getSubject($request->get('semester_id'), $request->get('class_id'));
-            $data['getStudent'] =  User::getStudentClass($request->get('class_id'));
+            // $data['getStudent'] =  User::getStudentClass($request->get('class_id'));
+            $data['getStudent'] =  User::getClassStudent($request->get('class_id'));
         }
 
         $data['header_title'] = "Mark Register";
@@ -100,7 +101,8 @@ class OlahNilaiController extends Controller
 
         if (!empty($request->get('semester_id')) && !empty($request->get('class_id'))) {
             $data['getMatkul'] =  OlahNilaiModel::getSubject($request->get('semester_id'), $request->get('class_id'));
-            $data['getStudent'] =  User::getStudentClass($request->get('class_id'));
+            // $data['getStudent'] =  User::getStudentClass($request->get('class_id'));
+            $data['getStudent'] =  User::getClassStudent($request->get('class_id'));
             // dd($data['getStudent']);
         }
 

@@ -48,11 +48,9 @@
           </div>
         </div>
       </form>
-      {{-- <p class="mb-1">
-        <a href="{{ url('forgot-password') }}">I forgot my password</a>
-      </p> --}}
     </div>
   </div>
+
   <div class="card card-outline card-primary mt-3" id="face-verification-card" style="display: none;">
     <div class="card-header text-center">
       <a href="#" class="h1"><b>Face Verification</b></a>
@@ -100,14 +98,13 @@
     .then(response => response.json())
     .then(data => {
       if (data.status === 'success') {
-    window.location.href = data.redirect_url;
-} else {
-    showAlert(data.message);
-    setTimeout(() => {
-        location.reload();
-    }, 2000); // Timeout selama 3 detik (3000 milidetik)
-}
-
+        window.location.href = data.redirect_url;
+      } else {
+        showAlert(data.message);
+        setTimeout(() => {
+          captureAndVerifyFace(userId); // Capture and verify face again
+        }, 2000); // Delay before retrying
+      }
     })
     .catch(error => console.error('Error:', error));
   }
@@ -124,16 +121,15 @@
       if (data.status === 'success') {
         document.getElementById('login-form').style.display = 'none';
         document.getElementById('face-verification-card').style.display = 'block';
-        captureAndVerifyFace(data.user_id); // Capture and verify face immediately
+        captureAndVerifyFace(data.user_id); // Start capturing and verifying face
       } else {
         showAlert(data.message);
-        
-
       }
     })
     .catch(error => console.error('Error:', error));
   });
 </script>
+
 <script src="{{ asset('public/plugins/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('public/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('public/dist/js/adminlte.min.js') }}"></script>

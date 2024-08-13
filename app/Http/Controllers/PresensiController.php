@@ -97,7 +97,7 @@ class PresensiController extends Controller
         $data['getMatkul'] =  SubjectModel::getSingle($matkul_id);
         $data['getMahasiswa'] =  User::getSingle($student_id);
         $data['getDay'] =  WeekModel::getSingle($week_id);
-        $data['getStudent'] = User::getStudentClass($class_id);
+        $data['getStudent'] = User::getStudentClass($class_id, $student_id);
         // $data['getMyJadwal'] = $this->getJadwalStudent(Auth::user()->class_id);
         $c = ClassModel::getSingle($class_id);
         $m = SubjectModel::getSingle($matkul_id);
@@ -153,7 +153,8 @@ class PresensiController extends Controller
         $data['getMatkul'] =  SubjectModel::getSingle($matkul_id);
         $data['getDosen'] =  User::getSingle($dosen_id);
         $data['getDay'] =  WeekModel::getSingle($week_id);
-        $data['getStudent'] = User::getStudentClass($class_id);
+        $data['getStudent'] = User::getDosenClass($dosen_id);
+
         // $data['getMyJadwal'] = $this->getJadwalStudent(Auth::user()->class_id);
         $c = ClassModel::getSingle($class_id);
         $m = SubjectModel::getSingle($matkul_id);

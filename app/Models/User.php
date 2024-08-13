@@ -300,7 +300,18 @@ class User extends Authenticatable
     }
 
 
-    static public function getStudentClass($class_id)
+    static public function getStudentClass($class_id, $student_id)
+    {
+        $return =  self::select('users.*', 'users.name')
+            ->where('users.user_type', '=', 3)
+            ->where('users.is_delete', '=', 0)
+            ->where('users.id', '=', $student_id)
+            ->where('users.class_id', '=', $class_id)
+            ->orderBy('users.id', 'desc')
+            ->get();
+        return $return;
+    }
+    static public function getClassStudent($class_id)
     {
         $return =  self::select('users.*', 'users.name')
             ->where('users.user_type', '=', 3)
@@ -310,11 +321,12 @@ class User extends Authenticatable
             ->get();
         return $return;
     }
-    static public function getDosenClass()
+    static public function getDosenClass($dosen_id)
     {
         $return =  self::select('users.*', 'users.name')
             ->where('users.user_type', '=', 2)
             ->where('users.is_delete', '=', 0)
+            ->where('users.id', '=', $dosen_id)
             ->orderBy('users.id', 'desc')
             ->get();
         return $return;

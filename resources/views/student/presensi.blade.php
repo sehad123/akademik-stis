@@ -34,6 +34,7 @@
             $room_number = '';
             $status = '';
             $link = '';
+            $current_date = \Carbon\Carbon::now()->toDateString();
             if (!empty($getMyJadwal)) {
                 $week = $getMyJadwal[0]['week'][0];
                 $tanggal = $week['tanggal'];
@@ -77,7 +78,7 @@
                             $class_end_time = \Carbon\Carbon::parse($end_time)->format('H:i:s');
                             @endphp
 
-                            @if ($current_time >= $class_start_time && $current_time <= $class_end_time)
+                            @if ($current_date == $tanggal && $current_time >= $class_start_time && $current_time <= $class_end_time)
                             <table class="table table-striped">
                                 <thead>
                                     <tr>

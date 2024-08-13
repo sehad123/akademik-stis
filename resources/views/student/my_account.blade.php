@@ -39,16 +39,6 @@
                     
                     </div>
                     </div>
-                    {{-- <div class="form-group col-md-6">
-                      <label >Last Name<span style="color:red;">*</span></label>
-                      <input type="text" class="form-control" required value="{{ old('last_name',$getRecord->last_name) }}" name="last_name" required placeholder="Enter last name">
-                      <div style="color:red;">
-                        {{ $errors->first('last_name') }}
-                    
-                    </div>
-                    </div>
-                   --}}
-                 
                     <div class="form-group col-md-6">
                       <label >Jenis Kelamin<span style="color:red;">*</span></label>
                       <select name="gender" required class="form-control" id="">
@@ -111,14 +101,7 @@
                         
                     @endif
                     </div>
-                    {{-- <div class="form-group col-md-6">
-                      <label >Golongan Darah<span style="color:red;">*</span></label>
-                      <input type="text" class="form-control" required value="{{ old('blood_group',$getRecord->blood_group) }}" name="blood_group" required placeholder="Enter golongan dara">
-                      <div style="color:red;">
-                        {{ $errors->first('blood_group') }}
-                    
-                    </div>
-                    </div> --}}
+                  
                      <div class="form-group col-md-6">
                       <label >Class<span style="color:red;">*</span></label>
                       <select name="class_id" required class="form-control" id="" >
@@ -132,23 +115,6 @@
                     
                     </div>
                     </div>
-                    {{-- <div class="form-group col-md-6">
-                      <label >Tinggi Badan (cm)<span style="color:red;">*</span></label>
-                      <input type="number" class="form-control" required value="{{ old('height',$getRecord->height) }}" name="height" required placeholder="Enter Tinggi badan">
-                      <div style="color:red;">
-                        {{ $errors->first('height') }}
-                    
-                    </div>
-                    </div>
-                    <div class="form-group col-md-6">
-                      <label >Berat Badan (kg)<span style="color:red;">*</span></label>
-                      <input type="number" class="form-control" required value="{{ old('weight',$getRecord->weight) }}" name="weight" required placeholder="Enter Berat Badan">
-                      <div style="color:red;">
-                        {{ $errors->first('weight') }}
-                    
-                    </div>
-                    </div> --}}
-                    
                   </div>
 <hr>
                   <div class="form-group">

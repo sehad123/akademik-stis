@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssignClassController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AuthControllerHP;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ClassController;
@@ -25,6 +26,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'login']);
 Route::post('/login', [AuthController::class, 'AuthLogin']);
+// Route::get('/', [AuthControllerHP::class, 'login']);
+// Route::post('/login', [AuthControllerHP::class, 'AuthLogin']);
 Route::post('/verify-face', [AuthController::class, 'verifyFace']);
 Route::get('/verify-face', [AuthController::class, 'showVerifyFace']);
 Route::get('/logout', [AuthController::class, 'logout']);

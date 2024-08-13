@@ -114,9 +114,11 @@
                                                 <i class="fas fa-edit edit-icon" style="cursor: pointer;"></i>
                                             </td>
                                             <td>{{ date('d-m-Y', strtotime($value->tgl_presensi)) }}</td>
+                                            @if ($value->presensi_type == 4 || $value->presensi_type == 5)
                                             <td>
-                                                <a href="{{ url('admin/perizinan/'.$value->id.'/'. $value->class_id.'/'.$value->matkul_id ) }}" class="btn btn-primary">Detail Izin</a>
+                                                <a href="{{ url('admin/perizinan/'.$value->id.'/'. $value->class_id.'/'.$value->matkul_id ) }}" class="btn btn-primary">Detail Perizinan</a>
                                             </td>
+                                            @endif
                                         </tr>
                                         @empty
                                         <tr>

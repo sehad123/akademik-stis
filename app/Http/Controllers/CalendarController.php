@@ -17,23 +17,21 @@ class CalendarController extends Controller
 {
     public function CalendarStudent()
     {
-        // $user = Auth::user()->id;
-        // $data['getUser'] = $user;
-        // $data['getRecord'] = ClassMatkulModel::MySubject($user->class_id);
         $data['getMyJadwal'] = $this->getJadwalStudent(Auth::user()->class_id);
         $data['getJadwalUjian'] = $this->jadwalUjian(Auth::user()->class_id);
-        // dd($data['getJadwalUjian']);
         $data['header_title'] = "My Class";
         return view('student.my_calendar', $data);
     }
 
-    public function CalendarStudenGet()
+    public function CalendarStudentHP()
     {
-        // $data['getMyJadwal'] = $this->getJadwalStudentID(Auth::user()->class_id);
-        $data['getJadwalUjian'] = $this->jadwalUjian(Auth::user()->class_id);
-        // dd($data['getJadwalUjian']);
-        $data['header_title'] = "My Class";
-        return view('student.my_calendar', $data);
+        $jadwal = $this->getJadwalStudent(Auth::user()->class_id);
+
+        $data = [
+            'jadwal' => $jadwal,
+        ];
+
+        return response()->json($data);
     }
 
     public function getJadwalStudent()

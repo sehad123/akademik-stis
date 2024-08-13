@@ -63,13 +63,13 @@ class TugasModel extends Model
 
         return $return;
     }
-    static public function getRecordPenugasanDosen($class_id)
+    static public function getRecordPenugasanDosen()
     {
         $return = TugasModel::select('tugas.*', 'class.name as class_name', 'matkul.name as matkul_name', 'users.name as created_name')
             ->join('users', 'users.id', '=', 'tugas.created_by')
             ->join('class', 'class.id', '=', 'tugas.class_id')
             ->join('matkul', 'matkul.id', '=', 'tugas.matkul_id')
-            ->where('tugas.class_id', '=', $class_id)
+            // ->where('tugas.class_id', '=', $class_id)
             ->where('tugas.created_by', '=', Auth::user()->id)
             ->where('tugas.status', '=', 0);
         if (!empty(Request::get('class_name'))) {
@@ -91,13 +91,13 @@ class TugasModel extends Model
         return $return;
     }
 
-    static public function getRecordMateriDosen($class_id)
+    static public function getRecordMateriDosen()
     {
         $return = TugasModel::select('tugas.*', 'class.name as class_name', 'matkul.name as matkul_name', 'users.name as created_name')
             ->join('users', 'users.id', '=', 'tugas.created_by')
             ->join('class', 'class.id', '=', 'tugas.class_id')
             ->join('matkul', 'matkul.id', '=', 'tugas.matkul_id')
-            ->where('tugas.class_id', '=', $class_id)
+            // ->where('tugas.class_id', '=', $class_id)
             ->where('tugas.created_by', '=', Auth::user()->id)
             ->where('tugas.status', '=', 1);
         if (!empty(Request::get('class_name'))) {

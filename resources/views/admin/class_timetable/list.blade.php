@@ -115,11 +115,11 @@
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            <input  name="timetable[{{ $i }}][room_number]" type="number"style="width: 100px; display: {{ $item['status'] == 'Offline' ? 'block' : 'none' }};" class="form-control text-center roominput" data-index="{{ $i }}"  id=""
+                                                            <input  name="timetable[{{ $i }}][room_number]" type="number" style="width: 100px; display: none;" class="form-control text-center roominput" data-index="{{ $i }}" id=""
                                                             value="{{ $item['room_number'] }}">
                                                         </td>
                                                         <td>
-                                                            <textarea name="timetable[{{ $i }}][link]" class="form-control linkInput" data-index="{{ $i }}" style="display: {{ $item['status'] == 'Online' ? 'block' : 'none' }};">{{ $item['link'] }}</textarea>
+                                                            <textarea name="timetable[{{ $i }}][link]" class="form-control linkInput" data-index="{{ $i }}" style="display: none;">{{ $item['link'] }}</textarea>
                                                         </td>
                                                         <td>
                                                             <input  name="timetable[{{ $i }}][tanggal]" type="date" style="width: 150px;" class="form-control text-center" id=""
@@ -179,86 +179,137 @@
 @section('script')
 
 <script type="text/javascript">
- // Set initial visibility of input fields based on status
- $('.statusSelect').each(function() {
-        var index = $(this).data('index');
-        if ($(this).val() === 'Online') {
-            $('.linkInput[data-index="'+index+'"]').show();
-            $('.roominput[data-index="'+index+'"]').hide();
-        } else {
-            $('.roominput[data-index="'+index+'"]').show();
-            $('.linkInput[data-index="'+index+'"]').hide();
-        }
-    });
+ $(document).ready(function() {
+     // Initialize the visibility of inputs based on the current status value
+     $('.statusSelect').each(function() {
+         var index = $(this).data('index');
+         var status = $(this).val();
+         toggleFields(status, index);
+     });
 
-$('.getSemester').change(function()
-{
+     // Toggle fields based on status change
+     $('.statusSelect').change(function() {
+         var index = $(this).data('index');
+         var status = $(this).val();
+         toggleFields(status, index);
+     });
+
+     function toggleFields(status, index) {
+         if (status === 'Online') {
+             $('.linkInput[data-index="'+index+'"]').show();
+             $('.roominput[data-index="'+index+'"]').hide();
+         } else if (status === 'Offline') {
+             $('.roominput[data-index="'+index+'"]').show();
+             $('.linkInput[data-index="'+index+'"]').hide();
+         } else {
+             $('.linkInput[data-index="'+index+'"]').hide();
+             $('.roominput[data-index="'+index+'"]').hide();
+         }
+     }
+
+ $('.getSemester').change(function() {
     var semester_id = $(this).val();
+    var class_id = $('.getClass').val(); // Debugging class_id
+    console.log("Semester ID:", semester_id);
+    console.log("Class ID:", class_id);
     $.ajax({
-      url: "{{ url('admin/semester_class/get_semester') }}",
-      type: "POST",
-        data:{
-            "_token":"{{ csrf_token() }}",
-            semester_id:semester_id,
+        url: "{{ url('admin/semester_class/get_semester') }}",
+        type: "POST",
+        data: {
+            "_token": "{{ csrf_token() }}",
+            semester_id: semester_id,
+            class_id: class_id // kirim class_id untuk diproses di server
         },
-        dataType:"json",
-        success:function(response){
+        dataType: "json",
+        success: function(response) {
             $('.getClass').html(response.html);
         },
     });
 });
 
+     $('.getClass').change(function() {
+         var semester_id = $('.getSemester').val();
+         var class_id = $('.getClass').val();
+         // Log semester_id and class_id
+         console.log("Semester ID:", semester_id);
+         console.log("Class ID:", class_id);
+         $.ajax({
+             url:"{{ url('admin/semester_class/get_semester_subject') }}",
+             type: "POST",
+             data:{
+                 "_token":"{{ csrf_token() }}",
+                 semester_id:semester_id,
+                 class_id:class_id,
+             },
+             dataType:"json",
+             success:function(response){
+                 $('.getSubject').html(response.html);
+             },
+         });
+     });
 
-$('.getClass').change(function()
-{
-    var semester_id = $('.getSemester').val();
-    var class_id = $('.getClass').val();
-     // Log semester_id and class_id
-     console.log("Semester ID:", semester_id);
-            console.log("Class ID:", class_id);
-    $.ajax({
-        url:"{{ url('admin/semester_class/get_semester_subject') }}",
-        type: "POST",
-        data:{
-            "_token":"{{ csrf_token() }}",
-            semester_id:semester_id,
-            class_id:class_id,
-        },
-        dataType:"json",
-        success:function(response){
-            $('.getSubject').html(response.html);
-        },
-    });
-});
+     $('#deleteButton').click(function() {
+         if(confirm('Are you sure you want to delete all entries?')) {
+             $('#timetableForm').attr('action', '{{ url('admin/class_timetable/delete') }}').submit();
+         }
+     });
 
-$('#deleteButton').click(function() {
-    if(confirm('Are you sure you want to delete all entries?')) {
-        $('#timetableForm').attr('action', '{{ url('admin/class_timetable/delete') }}').submit();
-    }
-});
+     $('.jam_mulai, .menit_mulai, .jam_akhir, .menit_akhir').on('input', function() {
+         var index = $(this).data('index');
+         var jam_mulai = $('.jam_mulai[data-index="'+index+'"]').val().padStart(2, '0');
+         var menit_mulai = $('.menit_mulai[data-index="'+index+'"]').val().padStart(2, '0');
+         var jam_akhir = $('.jam_akhir[data-index="'+index+'"]').val().padStart(2, '0');
+         var menit_akhir = $('.menit_akhir[data-index="'+index+'"]').val().padStart(2, '0');
+         
+         menit_mulai = menit_mulai === '0' ? '00' : menit_mulai;
+         menit_akhir = menit_akhir === '0' ? '00' : menit_akhir;
+         
+         $('#start_time_' + index).val(jam_mulai + ':' + menit_mulai);
+         $('#end_time_' + index).val(jam_akhir + ':' + menit_akhir);
+     });
 
-$('.statusSelect').change(function() {
-    var index = $(this).data('index');
-    if ($(this).val() === 'Online') {
-        $('.linkInput[data-index="'+index+'"]').show();
-        $('.roominput[data-index="'+index+'"]').hide();
-    } else {
-        $('.roominput[data-index="'+index+'"]').show();
-        $('.linkInput[data-index="'+index+'"]').hide();
-    }
-});
+   // Form submission validation
+   $('#timetableForm').submit(function(e) {
+         var valid = true;
+         
+         $('.menit_mulai, .menit_akhir').each(function() {
+             var menit = $(this).val();
+             if (menit === '0') {
+                 alert('Menit harus diisi dengan format 00, bukan 0.');
+                 valid = false;
+                 return false; // break out of each loop
+             }
+         });
 
+         // Function to convert time to minutes
+         function timeToMinutes(jam, menit) {
+             return parseInt(jam) * 60 + parseInt(menit);
+         }
+         
+         // Iterate through each row to validate time
+         $('tr').each(function() {
+             var index = $(this).find('.jam_mulai').data('index');
+             var jam_mulai = parseInt($('.jam_mulai[data-index="'+index+'"]').val()) || 0;
+             var menit_mulai = parseInt($('.menit_mulai[data-index="'+index+'"]').val()) || 0;
+             var jam_akhir = parseInt($('.jam_akhir[data-index="'+index+'"]').val()) || 0;
+             var menit_akhir = parseInt($('.menit_akhir[data-index="'+index+'"]').val()) || 0;
 
-$('.jam_mulai, .menit_mulai, .jam_akhir, .menit_akhir').on('input', function() {
-    var index = $(this).data('index');
-    var jam_mulai = $('.jam_mulai[data-index="'+index+'"]').val().padStart(2, '0');
-    var menit_mulai = $('.menit_mulai[data-index="'+index+'"]').val().padStart(2, '0');
-    var jam_akhir = $('.jam_akhir[data-index="'+index+'"]').val().padStart(2, '0');
-    var menit_akhir = $('.menit_akhir[data-index="'+index+'"]').val().padStart(2, '0');
-    
-    $('#start_time_' + index).val(jam_mulai + ':' + menit_mulai);
-    $('#end_time_' + index).val(jam_akhir + ':' + menit_akhir);
-});
-</script>
+             var startTime = timeToMinutes(jam_mulai, menit_mulai);
+             var endTime = timeToMinutes(jam_akhir, menit_akhir);
+
+             if (startTime > endTime) {
+                 alert('Jam mulai tidak boleh lebih besar dari jam akhir pada baris ' + index + '.');
+                 valid = false;
+                 return false; // break out of each loop
+             }
+             
+         });
+
+         if (!valid) {
+             e.preventDefault(); // prevent form submission
+         }
+     });
+ });
+ </script>
 
 @endsection

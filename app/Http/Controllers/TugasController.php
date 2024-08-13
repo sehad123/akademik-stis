@@ -22,7 +22,7 @@ class TugasController extends Controller
         foreach ($getClass as $class) {
             $c[] = $class->class_id;
         }
-        $data['getRecord'] = TugasModel::getRecordPenugasanDosen($c);
+        $data['getRecord'] = TugasModel::getRecordPenugasanDosen();
         $data['header_title'] = "Penugasan  ";
         return view('dosen.penugasan.list', $data);
     }
@@ -207,7 +207,7 @@ class TugasController extends Controller
         foreach ($getClass as $class) {
             $c[] = $class->class_id;
         }
-        $data['getRecord'] = TugasModel::getRecordMateriDosen($c);
+        $data['getRecord'] = TugasModel::getRecordMateriDosen();
         $data['header_title'] = "materi  ";
         return view('dosen.materi.list', $data);
     }

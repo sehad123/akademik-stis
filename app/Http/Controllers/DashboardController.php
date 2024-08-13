@@ -37,8 +37,8 @@ class DashboardController extends Controller
             return view('dosen.dashboard', $data);
         } else if (Auth::user()->user_type == 3) {
             $data['totalPengumuman'] = PengumumanModel::getTotalPengumumanDosen(Auth::user()->user_type);
-            $data['totalMatkul'] = ClassMatkulModel::getTotalMatkulStudent(Auth::user()->class_id);
-            $data['totalTugas'] = TugasModel::getTotalTugasStudent(Auth::user()->class_id, Auth::user()->id);
+            $data['totalMatkul'] = ClassMatkulModel::getTotalMatkulStudent(Auth::user()->class_id, Auth::user()->semester_id);
+            $data['totalTugas'] = TugasModel::getTotalTugasStudent(Auth::user()->class_id, Auth::user()->id,);
             $data['totalSubmitted'] = SubmitTugasModel::getTotalSubmittedStudent(Auth::user()->id);
             $data['totalKehadiran'] = presensiModel::getTotalPresensiStudent(Auth::user()->id);
             return view('student.dashboard', $data);
