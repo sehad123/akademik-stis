@@ -56,10 +56,10 @@
             @endif
 
             <!-- Menampilkan Lokasi Pengguna -->
-            <p>Lokasi Anda saat ini:</p>
-            <p id="location">Mendeteksi lokasi...</p>
+            <p>Lokasi Anda saat ini: <span id="locationName">Mendeteksi lokasi...</span></p>
             <p class="lat">Latitude: <span id="latitude"></span></p>
             <p class="long">Longitude: <span id="longitude"></span></p>
+            
         </div>
 
         <div id="map" style="height: 300px; width: 100%;"></div>
@@ -148,62 +148,92 @@
 @section('script')
 
 <script type="text/javascript">
-  // Fungsi untuk mereset lokasi
-  function resetLocation() {
-      document.getElementById("latitude").innerHTML = "";
-      document.getElementById("longitude").innerHTML = "";
-      document.getElementById("location").innerHTML = "Mendeteksi lokasi...";
-  }
+var locationDetected = false; // Flag untuk mencegah deteksi lokasi berulang
 
-  // Fungsi untuk mendapatkan lokasi pengguna
-  function getLocation() {
-      resetLocation(); // Reset lokasi saat halaman dimuat
+// Fungsi untuk mereset lokasi
+function resetLocation() {
+    document.getElementById("latitude").innerHTML = "";
+    document.getElementById("longitude").innerHTML = "";
+    document.getElementById("locationName").innerHTML = "Mendeteksi lokasi...";
+    locationDetected = false; // Reset flag saat reset lokasi
+}
 
-      if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(showPosition, showError, {
-              enableHighAccuracy: true, 
-              timeout: 5000, 
-              maximumAge: 0
-          });
-      } else {
-          document.getElementById("location").innerHTML = "Geolocation tidak didukung oleh browser ini.";
-      }
-  }
+// Fungsi untuk mendapatkan lokasi pengguna
+function getLocation() {
+    if (locationDetected) return; // Jika lokasi sudah dideteksi, keluar dari fungsi
+    resetLocation(); // Reset lokasi saat halaman dimuat
 
-  function showPosition(position) {
-      var latitude = position.coords.latitude;
-      var longitude = position.coords.longitude;
-      document.getElementById("latitude").innerHTML = latitude;
-      document.getElementById("longitude").innerHTML = longitude;
-      document.getElementById("location").innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError, {
+            enableHighAccuracy: true, 
+            timeout: 5000, 
+            maximumAge: 0
+        });
+    } else {
+        document.getElementById("locationName").innerHTML = "Geolocation tidak didukung oleh browser ini.";
+    }
+}
 
-      // Tampilkan peta dengan Leaflet.js
-      var map = L.map('map').setView([latitude, longitude], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
-      L.marker([latitude, longitude]).addTo(map)
-          .bindPopup('Lokasi Anda saat ini')
-          .openPopup();
-  }
+function getLocationName(latitude, longitude) {
+    var url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&addressdetails=1`;
 
-  function showError(error) {
-      switch(error.code) {
-          case error.PERMISSION_DENIED:
-              document.getElementById("location").innerHTML = "Pengguna menolak permintaan Geolocation.";
-              break;
-          case error.POSITION_UNAVAILABLE:
-              document.getElementById("location").innerHTML = "Informasi lokasi tidak tersedia.";
-              break;
-          case error.TIMEOUT:
-              document.getElementById("location").innerHTML = "Permintaan untuk mendapatkan lokasi pengguna habis waktu.";
-              break;
-          case error.UNKNOWN_ERROR:
-              document.getElementById("location").innerHTML = "Terjadi kesalahan yang tidak diketahui.";
-              break;
-      }
-      resetLocation();
-  }
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            var address = data.address;
+            var jalan = address.road || '';
+            var desa = address.village || address.hamlet || address.suburb || '';
+            var kecamatan = address.town || address.city_district || address.district || '';
+            var kabupaten = address.city || address.county || address.state_district || '';
+            var negara = address.country || '';
+
+            // Format alamat lengkap
+            var fullAddress = ` ${desa},  ${kabupaten}, ${negara}`;
+            document.getElementById("locationName").innerText = fullAddress;
+        })
+        .catch(error => {
+            document.getElementById("locationName").innerText = "Nama lokasi tidak tersedia";
+            console.error('Error retrieving location name:', error);
+        });
+}
+
+
+function showPosition(position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    document.getElementById("latitude").innerText = latitude;
+    document.getElementById("longitude").innerText = longitude;
+
+    // Panggil fungsi geocoding untuk mendapatkan nama lokasi
+    getLocationName(latitude, longitude);
+
+    // Tampilkan peta dengan Leaflet.js
+    var map = L.map('map').setView([latitude, longitude], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    L.marker([latitude, longitude]).addTo(map)
+        .bindPopup('Lokasi Anda saat ini')
+        .openPopup();
+}
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            document.getElementById("locationName").innerHTML = "Pengguna menolak permintaan Geolocation.";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            document.getElementById("locationName").innerHTML = "Informasi lokasi tidak tersedia.";
+            break;
+        case error.TIMEOUT:
+            document.getElementById("locationName").innerHTML = "Permintaan untuk mendapatkan lokasi pengguna habis waktu.";
+            break;
+        case error.UNKNOWN_ERROR:
+            document.getElementById("locationName").innerHTML = "Terjadi kesalahan yang tidak diketahui.";
+            break;
+    }
+    resetLocation();
+}
 
   // Panggil fungsi getLocation saat halaman dimuat
   window.onload = getLocation;

@@ -15,13 +15,7 @@ use Auth;
 
 class CalendarController extends Controller
 {
-    public function CalendarStudent()
-    {
-        $data['getMyJadwal'] = $this->getJadwalStudent(Auth::user()->class_id);
-        $data['getJadwalUjian'] = $this->jadwalUjian(Auth::user()->class_id);
-        $data['header_title'] = "My Class";
-        return view('student.my_calendar', $data);
-    }
+
 
     public function CalendarStudentHP()
     {
@@ -34,6 +28,14 @@ class CalendarController extends Controller
         return response()->json($data);
     }
 
+
+    public function CalendarStudent()
+    {
+        $data['getMyJadwal'] = $this->getJadwalStudent(Auth::user()->class_id);
+        $data['getJadwalUjian'] = $this->jadwalUjian(Auth::user()->class_id);
+        $data['header_title'] = "My Class";
+        return view('student.my_calendar', $data);
+    }
     public function getJadwalStudent()
     {
         $result = array();
