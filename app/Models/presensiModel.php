@@ -37,6 +37,10 @@ class presensiModel extends Model
             ->first();
     }
 
+
+
+    // Method untuk menghitung total mahasiswa berdasarkan class_id
+
     static public function checkPresensiDosen($dosen_id, $class_id, $tgl_presensi, $matkul_id, $week_id)
     {
         return self::where('dosen_id', $dosen_id)
@@ -72,6 +76,45 @@ class presensiModel extends Model
 
         $return = $return->orderBy('presensi_mahasiswa.id', 'desc')->paginate(20);
         return $return;
+    }
+    static public function getRecordMahasiswa($dosen_id, $class_id, $matkul_id, $tanggal)
+    {
+        $return = presensiModel::select('presensi_mahasiswa.*', 'matkul.name as matkul_name', 'class.name as class_name', 'student.name as student_name', 'student.id as student_id', 'matkul.id as matkul_id', 'class.id as class_id')
+            ->join('matkul', 'matkul.id', '=', 'presensi_mahasiswa.matkul_id')
+            ->join('class', 'class.id', '=', 'presensi_mahasiswa.class_id')
+            ->join('users as student', 'student.id', '=', 'presensi_mahasiswa.student_id')
+            ->where('presensi_mahasiswa.id_dosen', '=', $dosen_id) // Filter by logged-in user ID
+            ->where('presensi_mahasiswa.class_id', '=', $class_id) // Filter by logged-in user ID
+            ->where('presensi_mahasiswa.matkul_id', '=', $matkul_id) // Filter by logged-in user ID
+            ->where('presensi_mahasiswa.tgl_presensi', '=', $tanggal); // Filter by logged-in user ID
+
+
+        if (!empty(Request::get('class_id'))) {
+            $return = $return->where('presensi_mahasiswa.class_id', '=', Request::get('class_id'));
+        }
+        if (!empty(Request::get('matkul_id'))) {
+            $return = $return->where('presensi_mahasiswa.matkul_id', '=', Request::get('matkul_id'));
+        }
+
+        if (!empty(Request::get('tgl_presensi'))) {
+            $return = $return->where('presensi_mahasiswa.tgl_presensi', '=', Request::get('tgl_presensi'));
+        }
+
+        if (!empty(Request::get('student_name'))) {
+            $return = $return->where('student.name', 'like', '%' . Request::get('student_name') . '%');
+        }
+
+        $return = $return->orderBy('presensi_mahasiswa.id', 'desc')->paginate(20);
+        return $return;
+    }
+
+    public static function countTotalPresensi($dosen_id, $class_id, $matkul_id, $tgl_presensi)
+    {
+        return self::where('id_dosen', $dosen_id)
+            ->where('class_id', $class_id)
+            ->where('matkul_id', $matkul_id)
+            ->where('tgl_presensi', $tgl_presensi)
+            ->count();
     }
 
     static public function getRecordDosenn()

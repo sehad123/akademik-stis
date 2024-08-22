@@ -66,6 +66,11 @@ class User extends Authenticatable
         return self::select('users.id')->where('user_type', '=', $user_type)->where('is_delete', '=', 0)->count();
     }
 
+    static public function getTotalMahasiswa($semester_id, $class_id)
+    {
+        return self::select('users.id')->where('user_type', '=', 3)->where('semester_id', '=', $semester_id)->where('class_id', '=', $class_id)->where('is_delete', '=', 0)->count();
+    }
+
 
 
     // method forget password

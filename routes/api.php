@@ -10,6 +10,8 @@ use App\Http\Controllers\ClassTimeTableController;
 use App\Http\Controllers\PerizinanController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
+
 
 
 // Route untuk mengambil data user yang terautentikasi
@@ -24,6 +26,16 @@ Route::get('/csrf-token', [AuthController::class, 'getToken']);
 Route::get('/logout', [AuthControllerHP::class, 'logout']);
 Route::get('/forgot-password', [AuthController::class, 'forgotpassword']);
 Route::post('/forgot-password', [AuthController::class, 'PostForgotPassword']);
+
+Route::get('student/dashboard', [DashboardController::class, 'dashboard']);
+Route::get('dosen/dashboard', [DashboardController::class, 'dashboard']);
+Route::get('admin/dashboard', [DashboardController::class, 'dashboard']);
+Route::get('admin/account', [UserController::class, 'MyAccount']);
+
+
+
+Route::get('admin/presensi/report', [PresensiController::class, 'laporan_presensi']);
+Route::get('admin/presensi/report_dosen', [PresensiController::class, 'laporan_presensiDosen']);
 
 // Route untuk dosen
 Route::get('dosen/change_password', [UserController::class, 'change_password']);
@@ -40,6 +52,7 @@ Route::get('dosen/presensi/{class_id}/{matkul_id}/{dosen_id}/{week_id}', [Presen
 Route::post('dosen/presensi/save', [PresensiController::class, 'PresensiDosenSave']);
 
 // Route untuk mahasiswa
+
 Route::get('student/change_password', [UserController::class, 'change_password']);
 Route::post('student/change_password', [UserController::class, 'update_change_password']);
 Route::get('student/account', [UserController::class, 'MyAccount']);

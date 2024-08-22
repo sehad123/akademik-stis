@@ -26,7 +26,7 @@ class AssignClassController extends Controller
         $data['getSemester'] = ExamModel::getSemester();
         $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
         if (!empty($request->class_id && !empty($request->semester_id))) {
-            $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id);
+            $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id, $request->semester_id);
         }
         $data['getDosen'] = User::getDosenMatkul();
         $data['header_title'] = 'Add New Dosen Matkul ';

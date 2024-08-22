@@ -19,12 +19,17 @@ class ClassTimeTableController extends Controller
     public function list(Request $request)
     {
         $data['getSemester'] = ExamModel::getSemester();
+        $data['getDosen'] = ExamModel::getSemester();
 
         // $data['getClass'] = ClassModel::getClass();
         $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
         if (!empty($request->class_id && !empty($request->semester_id))) {
             $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id, $request->semester_id);
             // $data['getSubject'] =  ClassMatkulModel::SubjectSemester($request->semester_id, $request->class_id);;
+        }
+
+        if (!empty($request->class_id && !empty($request->semester_id)) && !empty($request->matkul_id)) {
+            $data['getDosen'] = MatkulDosenModel::getDosenMatkul($request->class_id, $request->semester_id, $request->matkul_id);
         }
         $getWeek = WeekModel::getRecord();
         $week = array();
@@ -121,6 +126,16 @@ class ClassTimeTableController extends Controller
         $json['html'] = $html;
         return response()->json($json); // gunakan response()->json() untuk mengembalikan JSON
     }
+    public function get_dosen_subject(Request $request)
+    {
+        $dosen = MatkulDosenModel::getDosenMatkul($request->class_id, $request->semester_id, $request->matkul_id);
+        $html = "<option value=''>Select </option>";
+        foreach ($dosen as $value) {
+            $html .= '<option value="' . $value->dosen_id . '">' . $value->dosen_name . '</option>';
+        }
+        $json['html'] = $html;
+        return response()->json($json); // gunakan response()->json() untuk mengembalikan JSON
+    }
 
 
 
@@ -161,6 +176,7 @@ class ClassTimeTableController extends Controller
             // Cek apakah ada entri dengan waktu yang sama
             $conflict = ClassTimeTableModel::where('class_id', '=', $request->class_id)
                 ->where('week_id', '=', $timetable['week_id'])
+                // ->where('dosen_id', '=', $timetable['dosen_id'])
                 ->where('tanggal', '=', $timetable['tanggal'])
                 ->where('jam_mulai', '=', $timetable['jam_mulai'])
                 ->where('menit_mulai', '=', $menit_mulai)
@@ -180,6 +196,7 @@ class ClassTimeTableController extends Controller
                 $existing = ClassTimeTableModel::where('class_id', '=', $request->class_id)
                     ->where('matkul_id', '=', $request->matkul_id)
                     ->where('semester_id', '=', $request->semester_id)
+                    ->where('dosen_id', '=', $request->dosen_id)
                     ->where('week_id', '=', $timetable['week_id'])
                     ->first();
 
@@ -202,6 +219,7 @@ class ClassTimeTableController extends Controller
                     $save->class_id = $request->class_id;
                     $save->matkul_id = $request->matkul_id;
                     $save->semester_id = $request->semester_id;
+                    $save->dosen_id = $timetable['dosen_id'] ?? $request->dosen_id; // Menggunakan dosen_id dari timetable atau request
                     $save->week_id = $timetable['week_id'];
                     $save->start_time = $timetable['start_time'] ?? null;
                     $save->end_time = $timetable['end_time'] ?? null;

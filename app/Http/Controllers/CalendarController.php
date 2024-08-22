@@ -17,16 +17,16 @@ class CalendarController extends Controller
 {
 
 
-    public function CalendarStudentHP()
-    {
-        $jadwal = $this->getJadwalStudent(Auth::user()->class_id);
+    // public function CalendarStudentHP()
+    // {
+    //     $jadwal = $this->getJadwalStudent(Auth::user()->class_id);
 
-        $data = [
-            'jadwal' => $jadwal,
-        ];
+    //     $data = [
+    //         'jadwal' => $jadwal,
+    //     ];
 
-        return response()->json($data);
-    }
+    //     return response()->json($data);
+    // }
 
 
     public function CalendarStudent()
@@ -59,6 +59,7 @@ class CalendarController extends Controller
                     $dataW['student_id'] = Auth::user()->id;
                     $dataW['class_id'] = $classSubject->class_id;
                     $dataW['matkul_id'] = $classSubject->matkul_id;
+                    $dataW['dosen_name'] = $classSubject->dosen_name; // Add dosen_name
                     $dataW['week_id'] = $classSubject->week_id;
                     $dataW['status'] = $classSubject->status;
                     $week[] = $dataW;
@@ -69,6 +70,7 @@ class CalendarController extends Controller
         }
         return $result;
     }
+
     public function jadwalUjian($class_id)
     {
         $getExam =  ExamScheduleModel::getExam($class_id);

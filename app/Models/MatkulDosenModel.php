@@ -55,6 +55,25 @@ class MatkulDosenModel extends Model
             ->get();
     }
 
+
+    static public function getDosenMatkul($class_id, $semester_id, $matkul_id)
+    {
+        return self::select('matkul_dosen.*', 'matkul.name as matkul_name', 'matkul_id as matkul_id', 'matkul.type as matkul_type', 'class.name as class_name', 'kurikulum.name as semester_name', 'users.name as dosen_name')
+            ->join('matkul', 'matkul.id', 'matkul_dosen.matkul_id')
+            ->join('kurikulum', 'kurikulum.id', 'matkul_dosen.semester_id')
+            ->join('class', 'class.id', 'matkul_dosen.class_id')
+            ->join('users', 'users.id', 'matkul_dosen.dosen_id')
+            ->where('matkul_dosen.class_id', '=', $class_id)
+            ->where('matkul_dosen.matkul_id', '=', $matkul_id)
+            ->where('matkul_dosen.semester_id', '=', $semester_id)
+            ->where('matkul_dosen.is_delete', '=', 0)
+            ->where('matkul_dosen.status', '=', 0)
+            ->orderBy('matkul_dosen.id', 'desc')
+            ->get();
+    }
+
+
+
     static public function getTotalMatkulDosen($dosen_id)
     {
         return MatkulDosenModel::select('matkul_dosen.id*')

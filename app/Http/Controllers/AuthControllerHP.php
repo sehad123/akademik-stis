@@ -38,10 +38,12 @@ class AuthControllerHP extends Controller
         $remember = !empty($request->remember);
 
         if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Berhasil Login.',
-                'redirect_url' => url($this->getRedirectUrl(Auth::user()->user_type))
+                'redirect_url' => url($this->getRedirectUrl($user->user_type)),
+                'user_type' => $user->user_type,  // Make sure user_type is included
             ]);
         } else {
             return response()->json(['status' => 'error', 'message' => 'Email atau Password anda salah'], 401);

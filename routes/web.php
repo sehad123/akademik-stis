@@ -117,6 +117,7 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/semester_class/delete/{id}', [SemesterClassController::class, 'delete']);
     Route::post('admin/semester_class/get_semester', [ClassTimeTableController::class, 'get_semester']);
     Route::post('admin/semester_class/get_semester_subject', [ClassTimeTableController::class, 'get_semester_subject']);
+    Route::post('admin/semester_class/get_dosen_subject', [ClassTimeTableController::class, 'get_dosen_subject']);
 
 
     // TimeTable
@@ -226,6 +227,12 @@ Route::group(['middleware' => 'dosen'], function () {
 
     // presensi 
     Route::get('dosen/presensi/my_presensi', [PresensiController::class, 'MyPresensiDosen']);
+    Route::get('dosen/presensi/mahasiswa', [PresensiController::class, 'laporan_presensi_mahasiswa']);
+    Route::get('dosen/perizinan_detail/{presensi_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'dosen_perizinan_studentID']);
+    Route::post('dosen/perizinan_detail/{presensi_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'SubmitPerizinanUpdate']);
+
+
+
     Route::get('dosen/perizinan/{presensi_id}/{dosen_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'perizinan_dosen']);
     Route::post('dosen/perizinan/{presensi_id}/{dosen_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'SubmitPerizinanInsertDosen']);
     Route::get('dosen/detail_perizinan/{presensi_id}/{dosen_id}/{class_id}/{matkul_id}', [PerizinanController::class, 'perizinan_dosenID']);

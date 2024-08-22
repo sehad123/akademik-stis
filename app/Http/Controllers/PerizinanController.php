@@ -85,6 +85,13 @@ class PerizinanController extends Controller
         $data['header_title'] = "Perizinan  ";
         return view('admin.perizinan.detail', $data);
     }
+    public function dosen_perizinan_studentID($presensi_id, $class_id, $matkul_id)
+    {
+        $classSubject =   PerizinanModel::getRecordClassMatkul($presensi_id, $class_id, $matkul_id);
+        $data['getIzin'] = $classSubject;
+        $data['header_title'] = "Perizinan  ";
+        return view('dosen.presensi.perizinan_detail', $data);
+    }
     public function SubmitPerizinanUpdate($presensi_id, $class_id, $matkul_id, Request $request)
     {
         $getIzin = PerizinanModel::getRecordClassMatkul($presensi_id, $class_id, $matkul_id);
@@ -96,7 +103,7 @@ class PerizinanController extends Controller
 
         $getIzin->save();
 
-        return redirect('admin/presensi/report')->with('success', 'Perizinan Berhasil Diupdate');
+        return redirect('dosen/presensi/mahasiswa')->with('success', 'Perizinan Berhasil Diupdate');
     }
 
     public function SubmitPerizinanUpdateDosen($presensi_id, $class_id, $matkul_id, Request $request)

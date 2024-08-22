@@ -305,11 +305,29 @@
           
 
        
-          <li class="nav-item ">
-            <a href="{{ url('dosen/presensi/my_presensi') }}" class="nav-link @if(Request::segment(3) == 'my_presensi') active @endif" >
+          
+          <li class="nav-item @if(Request::segment(2) == 'presensi') menu-is-opening menu-open @endif ">
+            <a href="#" class="nav-link @if(Request::segment(2) == 'presensi') active @endif">
               <i class="nav-icon fas fa-table"></i>
-              <p>Presensi</p>
+              <p>
+                Presensi
+                <i class="fas fa-angle-left right"></i>
+              </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item ">
+                <a href="{{ url('dosen/presensi/my_presensi') }}" class="nav-link @if(Request::segment(3) == 'my_presensi') active @endif" >
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Saya</p>
+                </a>
+              </li> 
+              <li class="nav-item ">
+                <a href="{{ url('dosen/presensi/mahasiswa') }}" class="nav-link @if(Request::segment(3) == 'mahasiswa') active @endif" >
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Mahasiswa</p>
+                </a>
+              </li>
+            </ul>
           </li>
 
           <li class="nav-item ">

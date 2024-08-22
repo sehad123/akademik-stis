@@ -13,6 +13,7 @@ use App\Models\PerizinanModel;
 use App\Models\ClassMatkulModel;
 use App\Models\ClassTimeTableModel;
 use App\Models\ExamModel;
+use App\Models\SemesterClassModel;
 
 class PresensiController extends Controller
 {
@@ -23,6 +24,29 @@ class PresensiController extends Controller
         $data['getRecord'] = presensiModel::getRecord();
         $data['header_title'] = "Laporan Presensi Mahasiswa ";
         return view('admin.presensi.laporan', $data);
+    }
+
+    public function laporan_presensi_mahasiswa(Request $request)
+    {
+        $data['getSemester'] = ExamModel::getSemester();
+        $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
+
+        if (!empty($request->class_id && !empty($request->semester_id))) {
+            $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id, $request->semester_id);
+        }
+
+        $data['totalMahasiswa'] = User::getTotalMahasiswa($request->semester_id, $request->class_id);
+        $data['totalPresensi'] = presensiModel::countTotalPresensi(Auth::user()->id, $request->class_id, $request->matkul_id, $request->tgl_presensi);
+
+        // Only fetch records if the search button is clicked (i.e., request parameters exist)
+        if ($request->filled(['class_id', 'semester_id', 'matkul_id', 'tgl_presensi'])) {
+            $data['getRecord'] = presensiModel::getRecordMahasiswa(Auth::user()->id, $request->class_id, $request->matkul_id, $request->tgl_presensi);
+        } else {
+            $data['getRecord'] = collect(); // Empty collection if no search performed
+        }
+
+        $data['header_title'] = "Laporan Presensi Mahasiswa";
+        return view('dosen.presensi.laporan_presensi_mahasiswa', $data);
     }
 
     public function laporan_presensiDosen()
@@ -123,6 +147,8 @@ class PresensiController extends Controller
                     $dataW['student_id'] = Auth::user()->id;
                     $dataW['class_id'] = $classSubject->class_id;
                     $dataW['matkul_id'] = $classSubject->matkul_id;
+                    $dataW['dosen_name'] = $classSubject->dosen_name; // Add dosen_name
+                    $dataW['dosen_id'] = $classSubject->dosen_id; // Add dosen_name
                     $dataW['week_id'] = $classSubject->week_id;
                     $dataW['tanggal'] = $classSubject->tanggal;
                     $dataW['jam_mulai'] = $classSubject->jam_mulai;
@@ -217,6 +243,7 @@ class PresensiController extends Controller
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
         $status = $request->input('status'); // Ambil status dari request
+        $dosen_id = $request->input('dosen_id'); // Ambil status dari request
 
         $face_image_name = $request->input('face_image');
 
@@ -284,6 +311,8 @@ class PresensiController extends Controller
                     $dataW['week_id'] = $classSubject->week_id;
                     $dataW['tanggal'] = $classSubject->tanggal;
                     $dataW['jam_mulai'] = $classSubject->jam_mulai;
+                    $dataW['dosen_id'] = $classSubject->dosen_id; // Add dosen_name
+                    $dataW['dosen_name'] = $classSubject->dosen_name; // Add dosen_name
                     $dataW['menit_mulai'] = $classSubject->menit_mulai;
                     $dataW['jam_akhir'] = $classSubject->jam_akhir;
                     $dataW['menit_akhir'] = $classSubject->menit_akhir;
@@ -334,6 +363,7 @@ class PresensiController extends Controller
                     $presensi->matkul_id = $getMatkul->id;
                     $presensi->class_id = $getClass->id;
                     $presensi->week_id = $getDay->id;
+                    $presensi->id_dosen = $dosen_id;
                     $presensi->tgl_presensi = $tgl_presensi;
                     $presensi->created_by = $getMahasiswa->name;
                     $presensi->latitude = $latitude;

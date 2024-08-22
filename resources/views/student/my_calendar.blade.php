@@ -36,59 +36,63 @@
 @section('script')
 <script src="{{ url('public/dist/fullcalendar/index.global.js') }}"></script>
 <script type="text/javascript">
-    var events = [];
+  var events = [];
 
-    // jadwal harian
-    @foreach($getMyJadwal as $value)
-        @foreach($value['week'] as $week)
-            events.push({
-                title: '{{ $value['name'] }}',
-                daysOfWeek: [{{ $week['fullcalendar_day'] }}],
-                startTime: '{{ $week['start_time'] }}',
-                endTime: '{{ $week['end_time'] }}',
-                extendedProps: {
-                    className: '{{ $value['class_name'] }}',
-                    roomNumber: '{{ $week['room_number'] }}',
-                    status: '{{ $week['status'] }}'
-                },
-                url: "{{ url('http://localhost:85/akademik.stis/student/presensi') }}" + '/' + {{ $week['class_id'] }} + '/' + {{ $week['matkul_id'] }} + '/' + {{ $week['student_id'] }} + '/' + {{ $week['week_id'] }},
-            });
-        @endforeach
+// jadwal harian
+@foreach($getMyJadwal as $value)
+    @foreach($value['week'] as $week)
+        events.push({
+            title: '{{ $value['name'] }}',
+            daysOfWeek: [{{ $week['fullcalendar_day'] }}],
+            startTime: '{{ $week['start_time'] }}',
+            endTime: '{{ $week['end_time'] }}',
+            extendedProps: {
+                className: '{{ $value['class_name'] }}',
+                dosenName: '{{ $week['dosen_name'] }}', // Use dosen_name
+                roomNumber: '{{ $week['room_number'] }}',
+                status: '{{ $week['status'] }}'
+            },
+            url: "{{ url('http://localhost:85/akademik.stis/student/presensi') }}" + '/' + {{ $week['class_id'] }} + '/' + {{ $week['matkul_id'] }} + '/' + {{ $week['student_id'] }} + '/' + {{ $week['week_id'] }},
+        });
     @endforeach
+@endforeach
 
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-        },
-        initialDate: new Date(),
-        navLinks: true,
-        editable: false,
-        events: events,
-        initialView: 'timeGridWeek',
-        eventContent: function(arg) {
-            var matkulName = arg.event.title;
-            var className = arg.event.extendedProps.className;
-            var startTime = arg.event.startStr.split('T')[1].slice(0, 5);
-            var endTime = arg.event.endStr.split('T')[1].slice(0, 5);
-            var roomNumber = arg.event.extendedProps.roomNumber;
-            var status = arg.event.extendedProps.status;
+var calendarEl = document.getElementById('calendar');
+var calendar = new FullCalendar.Calendar(calendarEl, {
+    headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+    },
+    initialDate: new Date(),
+    navLinks: true,
+    editable: false,
+    events: events,
+    initialView: 'timeGridWeek',
+    eventContent: function(arg) {
+        var matkulName = arg.event.title;
+        var className = arg.event.extendedProps.className;
+        var startTime = arg.event.startStr.split('T')[1].slice(0, 5);
+        var endTime = arg.event.endStr.split('T')[1].slice(0, 5);
+        var roomNumber = arg.event.extendedProps.roomNumber;
+        var dosenName = arg.event.extendedProps.dosenName;
+        var status = arg.event.extendedProps.status;
 
-            var customHtml = `
-                <div>
-                    <b>${matkulName}</b><br>
-                    ${className}<br>
-                    ${startTime} - ${endTime}<br>
-                    ${status === 'Online' ? '' : 'Ruangan : ' + roomNumber + '<br>'}
-                    <b>${status}</b>
-                </div>
-            `;
-            return { html: customHtml };
-        }
-    });
+        var customHtml = `
+            <div>
+                <b>${matkulName}</b><br>
+                ${className}<br>
+                ${dosenName}<br> <!-- Display dosen_name -->
+                ${startTime} - ${endTime}<br>
+                ${status === 'Online' ? '' : 'Ruangan : ' + roomNumber + '<br>'}
+                <b>${status}</b>
+            </div>
+        `;
+        return { html: customHtml };
+    }
+});
 
-    calendar.render();
+calendar.render();
+
 </script>
 @endsection

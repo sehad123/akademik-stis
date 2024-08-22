@@ -43,8 +43,11 @@
                 $room_number = $week['room_number'];
                 $status = $week['status'];
                 $link = $week['link'];
+                $dosen_name = $week['dosen_name'];
+                $dosen_id = $week['dosen_id'];
             }
             @endphp
+            <p>dosen: {{ $dosen_name }}</p>
 
             <p>Hari: {{ $getDay->name }} / {{ date('d-m-Y', strtotime($tanggal)) }}</p>
             <p>Jam: {{ date('h:i A', strtotime($start_time)) }} - {{ date('h:i A', strtotime($end_time)) }}</p>
@@ -243,6 +246,7 @@ function showError(error) {
     var class_id = {{ $getClass->id }};
     var matkul_id = {{ $getMatkul->id }};
     var week_id = {{ $getDay->id }};
+    var dosen_id = "{{$dosen_id  }}";
     var status = "{{ $status }}";
     var presensi_type = $(this).data('value');
     var tgl_presensi = "{{ now()->toDateString() }}";
@@ -310,10 +314,12 @@ function showError(error) {
                         presensi_type: presensi_type,
                         class_id: class_id,
                         matkul_id: matkul_id,
+                        dosen_id:dosen_id,
                         week_id: week_id,
                         tgl_presensi: tgl_presensi,
                         latitude: latitude,
                         longitude: longitude,
+                        
                         face_image:face_image_name
                     },
                     dataType: "json",

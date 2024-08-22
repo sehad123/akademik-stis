@@ -65,7 +65,7 @@
                     <select name="dosen_id" class="form-control">
                       <option value="">Pilih Dosen</option>
                       @foreach ($getDosen as $dosen)
-                      <option value="{{ $dosen->id }}">{{ $dosen->name }} {{ $dosen->last_name }}</option>
+                      <option value="{{ $dosen->id }}">{{ $dosen->name }}</option>
                       @endforeach
                     </select>
                   </div>

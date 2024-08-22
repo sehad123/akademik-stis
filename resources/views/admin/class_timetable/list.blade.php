@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label>Kelas</label>
-                                        <select name="class_id" class="form-control getClass" required>
+                                        <select name="class_id" id="getClass" class="form-control getClass" required>
                                             <option value="">Select</option>
                                             @foreach ($getClass as $class)
                                                 <option {{ (Request::get('class_id') == $class->id) ? 'selected':'' }}  value="{{ $class->id }}">{{ $class->name }}</option>
@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label>Mata Kuliah</label>
-                                        <select name="matkul_id" class="form-control getSubject" required>
+                                        <select id="getMatkul" name="matkul_id" class="form-control getSubject" required>
                                             @if (!empty($getSubject))
                                                 @foreach ($getSubject as $matkul)
                                                     <option {{ (Request::get('matkul_id') == $matkul->matkul_id) ? 'selected':'' }}  value="{{ $matkul->matkul_id }}">{{ $matkul->matkul_name }}</option>
@@ -58,6 +58,17 @@
                                             @endif
                                         </select>
                                     </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Dosen</label>
+                                        <select name="dosen_id" class="form-control getDosen" required>
+                                            @if (!empty($getDosen))
+                                                @foreach ($getDosen as $dosen)
+                                                    <option {{ (Request::get('dosen_id') == $dosen->dosen_id) ? 'selected':'' }} value="{{ $dosen->dosen_id }}">{{ $dosen->dosen_name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    
 
                                     <div class="form-group col-md-3">
                                         <button class="btn btn-primary mt-4" type="submit">Search</button>
@@ -76,6 +87,7 @@
                             <input type="hidden" name="matkul_id" value="{{ Request::get('matkul_id') }}">
                             <input type="hidden" name="semester_id" value="{{ Request::get('semester_id') }}">
                             <input type="hidden" name="class_id" value="{{ Request::get('class_id') }}">
+                            <input type="hidden" name="dosen_id" value="{{ Request::get('dosen_id') }}">
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">Class TimeTable </h3>
@@ -227,26 +239,46 @@
     });
 });
 
-     $('.getClass').change(function() {
-         var semester_id = $('.getSemester').val();
-         var class_id = $('.getClass').val();
-         // Log semester_id and class_id
-         console.log("Semester ID:", semester_id);
-         console.log("Class ID:", class_id);
-         $.ajax({
-             url:"{{ url('admin/semester_class/get_semester_subject') }}",
-             type: "POST",
-             data:{
-                 "_token":"{{ csrf_token() }}",
-                 semester_id:semester_id,
-                 class_id:class_id,
-             },
-             dataType:"json",
-             success:function(response){
-                 $('.getSubject').html(response.html);
-             },
-         });
-     });
+       // Get Subjects based on selected Class
+       $('#getClass').change(function() {
+        var semester_id = $('.getSemester').val();
+        var class_id = $(this).val();
+        $.ajax({
+            url: "{{ url('admin/semester_class/get_semester_subject') }}",
+            type: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                semester_id: semester_id,
+                class_id: class_id,
+            },
+            dataType: "json",
+            success: function(response) {
+                $('#getMatkul').html(response.html);
+                $('.getDosen').html('<option value="">Pilih Dosen</option>');
+            },
+        });
+    });
+
+    // Get Dosen based on selected Subject
+    $('#getMatkul').change(function() {
+        var semester_id = $('.getSemester').val();
+        var class_id = $('#getClass').val();
+        var matkul_id = $(this).val();
+        $.ajax({
+            url: "{{ url('admin/semester_class/get_dosen_subject') }}",
+            type: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                semester_id: semester_id,
+                class_id: class_id,
+                matkul_id: matkul_id,
+            },
+            dataType: "json",
+            success: function(response) {
+                $('.getDosen').html(response.html);
+            },
+        });
+    });
 
      $('#deleteButton').click(function() {
          if(confirm('Are you sure you want to delete all entries?')) {
