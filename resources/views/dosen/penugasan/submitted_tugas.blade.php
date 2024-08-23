@@ -65,6 +65,7 @@
                                             <th>No</th>
                                             <th>Nama Mahasiswa</th>
                                             <th>Document</th>
+                                            <th>Status</th>
                                             <th>Submited At</th>
                                             <th>Deskripsi</th>
                                         </tr>
@@ -82,6 +83,7 @@
                                                         <a href="{{ $item->getDocument() }}" download="" class="btn btn-warning">Download</a>
                                                     @endif
                                                 </td>
+                                                <td>{{ $item->status }}</td>
                                                 <td>{{ date('d-m-Y / h:i A', strtotime($item->created_at)) }}</td>
                                                 <td>
                                                     @if (!empty($item->description))

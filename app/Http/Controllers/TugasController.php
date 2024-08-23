@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Str;
 use Auth;
+use Carbon\Carbon;
 use App\Models\ExamModel;
 use App\Models\ClassModel;
 use App\Models\TugasModel;
@@ -59,11 +60,13 @@ class TugasController extends Controller
 
     public function InsertPenugasanDosen(Request $request)
     {
+
         $save = new TugasModel;
         $save->class_id = $request->class_id;
         $save->matkul_id = $request->matkul_id;
         $save->tanggal = $request->tanggal;
         $save->deadline = $request->deadline;
+        $save->jam_deadline = $request->jam_deadline;
         $save->description = $request->description;
         $save->status = 0;
         $save->created_by = Auth::user()->id;
@@ -102,6 +105,7 @@ class TugasController extends Controller
         $save = TugasModel::getSingle($id);
         $save->class_id = $request->class_id;
         $save->matkul_id = $request->matkul_id;
+        $save->jam_deadline = $request->jam_deadline;
         $save->tanggal = $request->tanggal;
         $save->deadline = $request->deadline;
         $save->status = 0;
@@ -150,22 +154,46 @@ class TugasController extends Controller
     }
     public function SubmitTugasInsert(Request $request, $tugas_id)
     {
+        // Ambil data tugas berdasarkan tugas_id
+        $tugas = TugasModel::find($tugas_id);
+
+
+        // Buat instance baru untuk submit tugas
         $save = new SubmitTugasModel;
         $save->tugas_id = $tugas_id;
         $save->student_id = Auth::user()->id;
         $save->description = $request->description;
+
+        // Ambil waktu sekarang
+        $now = now();
+
+        // Gabungkan tanggal deadline dan jam_deadline menjadi satu objek DateTime
+        $deadline = Carbon::createFromFormat('Y-m-d H:i:s', $tugas->deadline . ' ' . $tugas->jam_deadline . ':00');
+
+        // Cek apakah waktu submit melewati deadline
+        if ($now->greaterThan($deadline)) {
+            $save->status = 'Terlambat';
+        } else {
+            $save->status = 'tepat waktu';
+        }
+
+        // Handle file upload jika ada
         if (!empty($request->file('document'))) {
             $ext = $request->file('document')->getClientOriginalExtension();
-            $file =  $request->file('document');
+            $file = $request->file('document');
             $randomStr = date('Ymdhis') . Str::random(20);
             $filename = strtolower($randomStr) . '.' . $ext;
             $file->move('upload/tugas/', $filename);
             $save->document = $filename;
         }
 
+        // Simpan data submit tugas ke database
         $save->save();
+
+        // Redirect dengan pesan sukses
         return redirect('student/my_tugas')->with('success', "Tugas Berhasil Disubmit");
     }
+
     public function SubmitedTugasStudent()
     {
         $data['getRecord'] = SubmitTugasModel::getRecordStudent(Auth::user()->id);

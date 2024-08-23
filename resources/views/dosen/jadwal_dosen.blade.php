@@ -114,8 +114,8 @@
                                                     $i = 1;
                                                 @endphp
                                                 @foreach ($week as $item)
-                                                <tr data-week-name="{{ $item['week_name'] }}">
-                                                    <th>
+                                                    <tr>
+                                                        <th>
                                                             <input type="hidden" name="timetable[{{ $i }}][week_id]" value="{{ $item['week_id'] }}">
                                                             {{ $item['week_name'] }}
                                                         </th>
@@ -192,10 +192,9 @@
 
 <script type="text/javascript">
  $(document).ready(function() {
-    if (Notification.permission !== "granted") {
+     if (Notification.permission !== "granted") {
         Notification.requestPermission();
     }
-
      // Initialize the visibility of inputs based on the current status value
      $('.statusSelect').each(function() {
          var index = $(this).data('index');
@@ -305,61 +304,8 @@
      });
 
    // Form submission validation
-  // Validasi waktu sebelum submit
-  $('#timetableForm').on('submit', function(e) {
-        var isValid = true;
-        var errorMsg = "";
-
-        $('.jam_mulai').each(function() {
-            var index = $(this).data('index');
-            var jamMulai = parseInt($(this).val());
-            var menitMulai = parseInt($('.menit_mulai[data-index="' + index + '"]').val());
-            var jamAkhir = parseInt($('.jam_akhir[data-index="' + index + '"]').val());
-            var menitAkhir = parseInt($('.menit_akhir[data-index="' + index + '"]').val());
-
-            var startTime = (jamMulai * 60) + menitMulai;
-            var endTime = (jamAkhir * 60) + menitAkhir;
-
-            // Validasi logika waktu
-            if (startTime >= endTime) {
-                isValid = false;
-                errorMsg = "Waktu mulai harus lebih awal dari waktu akhir pada baris ke-" + index;
-            }
-
-            // Set hidden fields
-            $('#start_time_' + index).val(jamMulai.toString().padStart(2, '0') + ":" + menitMulai.toString().padStart(2, '0'));
-            $('#end_time_' + index).val(jamAkhir.toString().padStart(2, '0') + ":" + menitAkhir.toString().padStart(2, '0'));
-        });
-
-        if (!isValid) {
-            alert(errorMsg);
-            e.preventDefault(); // Mencegah form submit jika tidak valid
-        } else {
-
-            var weekNames = {
-    2: "Senin",
-    3: "Selasa",
-    4: "Rabu",
-    5: "Kamis",
-    6: "Jumat",
-};
-            // Tampilkan notifikasi
-            var matkulName = $("#getMatkul option:selected").text();
-            var weekId = $("input[name='timetable[1][week_id]']").val();
-            var weekName = weekNames[weekId];
-            var startTime = $("input[name='timetable[1][start_time]']").val();
-            var endTime = $("input[name='timetable[1][end_time]']").val();
-
-            if (Notification.permission === "granted") {
-
-                new Notification("Perubahan Jadwal", {
-                    body: "Perubahan jadwal pada " + matkulName + " menjadi hari " + weekName + " jam " + startTime + " - " + endTime,
-                    icon: "https://cdn-icons-png.flaticon.com/512/2922/2922506.png"
-                });
-            }
-        }
-    });
-
+   $('#timetableForm').submit(function(e) {
+         var valid = true;
          
          $('.menit_mulai, .menit_akhir').each(function() {
              var menit = $(this).val();
@@ -378,13 +324,32 @@
          // Iterate through each row to validate time
          $('tr').each(function() {
              var index = $(this).find('.jam_mulai').data('index');
+             var matkulName = $("#getMatkul option:selected").text();
+            var weekId = $("input[name='timetable[1][week_id]']").val();
+            var weekName = weekNames[weekId];
              var jam_mulai = parseInt($('.jam_mulai[data-index="'+index+'"]').val()) || 0;
              var menit_mulai = parseInt($('.menit_mulai[data-index="'+index+'"]').val()) || 0;
              var jam_akhir = parseInt($('.jam_akhir[data-index="'+index+'"]').val()) || 0;
              var menit_akhir = parseInt($('.menit_akhir[data-index="'+index+'"]').val()) || 0;
 
+             var weekNames = {
+    2: "Senin",
+    3: "Selasa",
+    4: "Rabu",
+    5: "Kamis",
+    6: "Jumat",
+};
+
              var startTime = timeToMinutes(jam_mulai, menit_mulai);
              var endTime = timeToMinutes(jam_akhir, menit_akhir);
+
+             if (Notification.permission === "granted") {
+
+new Notification("Perubahan Jadwal", {
+    body: "Perubahan jadwal pada " + matkulName + " menjadi hari " + weekName + " jam " + startTime + " - " + endTime,
+    icon: "https://cdn-icons-png.flaticon.com/512/2922/2922506.png"
+});
+}
 
              if (startTime > endTime) {
                  alert('Jam mulai tidak boleh lebih besar dari jam akhir pada baris ' + index + '.');
@@ -397,7 +362,16 @@
          if (!valid) {
              e.preventDefault(); // prevent form submission
          }
+
+   
+            // // Tampilkan notifikasi
+  
+            // var startTime = $("input[name='timetable[1][start_time]']").val();
+            // var endTime = $("input[name='timetable[1][end_time]']").val();
+
+           
      });
+ });
  </script>
 
 @endsection

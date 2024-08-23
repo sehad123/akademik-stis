@@ -67,6 +67,10 @@
                     <input type="date" class="form-control" value="{{ old('deadline') }}" name="deadline" required placeholder="Enter deadline">
                   </div>
                   <div class="form-group">
+                    <label>Jam Deadline<span style="color: red;">*</span></label>
+                    <input type="time" class="form-control" value="{{ old('jam_deadline') }}" name="jam_deadline" required placeholder="Enter Jam Deadlin">
+                  </div>
+                  <div class="form-group">
                     <label>Document<span style="color: red;">*</span></label>
                     <input type="file" class="form-control" value="{{ old('document') }}" name="document" required placeholder="Enter document">
                   </div>
@@ -108,24 +112,6 @@
     });
 });
 
-    // $('#getClass').change(function(){
-    //     var class_id = $(this).val();
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "{{ url('dosen/ajax_get_matkul') }}",
-    //         data: {
-    //             '_token': "{{ csrf_token() }}",
-    //             class_id: class_id,
-    //         },
-    //         dataType: "json",
-    //         success: function(data) {
-    //             $('#getMatkul').html(data.success);
-    //         },
-    //         error: function(xhr, status, error) {
-    //             console.error(xhr.responseText);
-    //         }
-    //     });
-    // });
 
     $('.getClass').change(function()
 {

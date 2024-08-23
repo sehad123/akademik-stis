@@ -68,7 +68,7 @@
                                             <th>Tanggal</th>
                                             <th>Deadline</th>
                                             <th>Document</th>
-                                            <th>Deskripsi</th>
+                                            <th>Status</th>
                                             <th>Submitted At</th>
                                         </tr>
                                     </thead>
@@ -90,7 +90,8 @@
                                                         </a>
                                                     @endif
                                                 </td>
-                                                <td>{!! $item->description !!}</td>
+                                                {{-- <td>{!! $item->description !!}</td> --}}
+                                                <td>{!! $item->status !!}</td>
                                                 <td>{{ date('d-m-Y / h:i A', strtotime($item->created_at)) }}</td>
                                             </tr>
                                         @empty

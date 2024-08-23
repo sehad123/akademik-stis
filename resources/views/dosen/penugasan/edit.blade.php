@@ -56,6 +56,10 @@
                     <input type="date" class="form-control" value="{{ old('deadline', $getRecord->deadline) }}" name="deadline" required placeholder="Enter deadline">
                   </div>
                   <div class="form-group">
+                    <label>Jam Deadline<span style="color: red;">*</span></label>
+                    <input type="time" class="form-control" value="{{ old('jam_deadline', $getRecord->jam_deadline) }}" name="jam_deadline" required placeholder="Enter jam_deadline">
+                  </div>
+                  <div class="form-group">
                     <label>Document<span style="color: red;">*</span></label>
                     @if ($getRecord->document)
                       <p>Current Document: <a href="{{ $getRecord->getDocument() }}" target="_blank">{{ $getRecord->document }}</a></p>

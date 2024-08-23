@@ -89,7 +89,7 @@
                                                 <td>{{ $item->class_name }}</td>
                                                 <td>{{ $item->matkul_name }}</td>
                                                 <td>{{ date('d-m-Y',strtotime($item->tanggal)) }}</td>
-                                                <td>{{ date('d-m-Y',strtotime($item->deadline)) }}</td>
+                                                <td>{{ date('d-m-Y',strtotime($item->deadline)) }} / {{ $item->jam_deadline }}</td>
                                                 <td>
                                                     @if (!empty($item->getDocument()))
                                                         <a href="{{ $item->getDocument() }}" download="" class="btn btn-primary">Download</a>
