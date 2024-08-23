@@ -133,6 +133,11 @@
                             </table>
                             @else
                             <p class="text-center">Presensi akan dibuka saat memasuki waktu kelas.</p>
+                            <div class="countdown-container text-center">
+                                {{-- <h4>Presensi akan dimulai dalam:</h4> --}}
+                                <h4 id="countdown-timer"></h4>
+                            </div>
+                            
                             @endif
                         </div>
                     </div>
@@ -148,8 +153,48 @@
 
 <script type="text/javascript">
 var locationDetected = false; // Flag untuk mencegah deteksi lokasi berulang
+function requestNotificationPermission() {
+    if (Notification.permission !== 'granted') {
+        Notification.requestPermission().then(permission => {
+            if (permission !== 'granted') {
+                alert('Izin notifikasi diperlukan agar Anda mendapatkan pemberitahuan presensi.');
+            }
+        });
+    }
+}
 
-// Fungsi untuk mereset lokasi
+function startCountdown(targetTime) {
+    var countdownTimer = setInterval(function() {
+        var now = new Date().getTime();
+        var distance = targetTime - now;
+
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown-timer").innerHTML = hours + "h " +
+            minutes + "m " + seconds + "s ";
+
+        // Jika countdown selesai
+        if (distance < 0) {
+            clearInterval(countdownTimer);
+            document.getElementById("countdown-timer").innerHTML = "Waktu presensi telah dimulai";
+
+            // Tampilkan notifikasi kepada user
+            if (Notification.permission === 'granted') {
+                new Notification("Waktunya untuk melakukan presensi!");
+            } else {
+                alert("Waktunya untuk melakukan presensi!"); // Fallback jika notifikasi tidak diizinkan
+            }
+
+            // Tambahkan pesan di halaman selain menggunakan alert
+            var presensiNotification = document.createElement("div");
+            presensiNotification.innerHTML = "<h4 style='color: green;'>Waktunya untuk melakukan presensi!</h4>";
+            presensiNotification.className = "text-center";
+            document.querySelector(".countdown-container").appendChild(presensiNotification);
+        }
+    }, 1000);
+}
 function resetLocation() {
     document.getElementById("latitude").innerHTML = "";
     document.getElementById("longitude").innerHTML = "";
@@ -234,10 +279,18 @@ function showError(error) {
     resetLocation();
 }
 
-  // Panggil fungsi getLocation saat halaman dimuat
-  window.onload = getLocation;
-  
+   // Tentukan waktu mulai presensi dari jadwal
+   var startTime = "{{ \Carbon\Carbon::parse($start_time)->format('Y-m-d H:i:s') }}";
+    var targetTime = new Date(startTime).getTime();
 
+    // Panggil fungsi startCountdown saat halaman dimuat
+    window.onload = function() {
+    requestNotificationPermission(); // Minta izin notifikasi terlebih dahulu
+    if ("{{ $current_date }}" === "{{ $tanggal }}") {
+        startCountdown(targetTime);  // Jalankan countdown jika tanggal sesuai
+    }
+    getLocation();  // Tetap jalankan fungsi getLocation
+};
   $('.SavePresensi').click(function(e) {
     var dosen_id = {{ $getDosen->id }};
     var class_id = {{ $getClass->id }};
@@ -248,6 +301,28 @@ function showError(error) {
     var tgl_presensi = "{{ now()->toDateString() }}";
     var latitude = document.getElementById("latitude").innerText;
     var longitude = document.getElementById("longitude").innerText;
+
+    var expectedLatitude = -7.538284413323129; // Contoh latitude lokasi yang diharapkan
+var expectedLongitude = 110.62490576687038; // Contoh longitude lokasi yang diharapkan
+var allowedRadius = 1000; // Radius yang diizinkan dalam meter
+
+
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+    var R = 6371e3; // Radius bumi dalam meter
+    var φ1 = lat1 * Math.PI/180;
+    var φ2 = lat2 * Math.PI/180;
+    var Δφ = (lat2-lat1) * Math.PI/180;
+    var Δλ = (lon2-lon1) * Math.PI/180;
+
+    var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    var d = R * c; // Jarak dalam meter
+    return d;
+}
     
     if (status === "Offline" && presensi_type === 1) 
         {
@@ -255,6 +330,15 @@ function showError(error) {
         alert("Anda harus menghidupkan GPS untuk melakukan presensi.");
         return;
     }
+    var distance = calculateDistance(latitude, longitude, expectedLatitude, expectedLongitude);
+
+// Tampilkan jarak dalam bentuk alert
+alert("Jarak Anda dari lokasi yang diharapkan: " + distance.toFixed(2) + " meter.");
+
+if (distance > allowedRadius) {
+    alert("Anda berada di luar radius yang diizinkan untuk presensi.");
+    return;
+}
 }
     if (presensi_type === 1 || presensi_type === 4 || presensi_type === 5) { // Hanya verifikasi wajah untuk presensi hadir
         document.getElementById('camera-container').style.display = 'block';

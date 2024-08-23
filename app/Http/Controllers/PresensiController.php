@@ -426,6 +426,16 @@ class PresensiController extends Controller
         $status = $request->input('status'); // Ambil status dari request
         $face_image_name = $request->input('face_image');
 
+
+        $classTimeTable = ClassTimeTableModel::where('class_id', $class_id)
+            ->where('matkul_id', $matkul_id)
+            ->where('week_id', $week_id)
+            ->first();
+
+        if ($classTimeTable) {
+            $classTimeTable->tanggal = now()->addDays(7)->toDateString();
+            $classTimeTable->save();
+        }
         // Titik koordinat target
         $target_latitude = -7.538284413323129;
         $target_longitude = 110.62490576687038;

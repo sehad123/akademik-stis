@@ -84,7 +84,73 @@ class ClassTimeTableController extends Controller
         return view('admin.class_timetable.list', $data);
     }
 
+    public function jadwal_dosen(Request $request)
+    {
+        $data['getSemester'] = ExamModel::getSemester();
+        $data['getDosen'] = ExamModel::getSemester();
 
+        // $data['getClass'] = ClassModel::getClass();
+        $data['getClass'] =  SemesterClassModel::MySubjectSemester($request->semester_id);
+        if (!empty($request->class_id && !empty($request->semester_id))) {
+            $data['getSubject'] =  ClassMatkulModel::MySubject($request->class_id, $request->semester_id);
+            // $data['getSubject'] =  ClassMatkulModel::SubjectSemester($request->semester_id, $request->class_id);;
+        }
+
+        if (!empty($request->class_id && !empty($request->semester_id)) && !empty($request->matkul_id)) {
+            $data['getDosen'] = MatkulDosenModel::getDosenMatkul($request->class_id, $request->semester_id, $request->matkul_id);
+        }
+        $getWeek = WeekModel::getRecord();
+        $week = array();
+        foreach ($getWeek as $value) {
+            $dataW = array();
+            $dataW['week_id'] = $value->id;
+            $dataW['week_name'] = $value->name;
+
+            if (!empty($request->class_id) && !empty($request->matkul_id)) {
+                $classSubject =   ClassTimeTableModel::getRecordClassMatkul($request->class_id, $request->matkul_id, $value->id);
+                if (!empty($classSubject)) {
+                    $dataW['start_time'] = $classSubject->start_time;
+                    $dataW['end_time'] = $classSubject->end_time;
+                    $dataW['room_number'] = $classSubject->room_number;
+                    $dataW['tanggal'] = $classSubject->tanggal;
+                    $dataW['jam_mulai'] = $classSubject->jam_mulai;
+                    $dataW['menit_mulai'] = $classSubject->menit_mulai;
+                    $dataW['jam_akhir'] = $classSubject->jam_akhir;
+                    $dataW['menit_akhir'] = $classSubject->menit_akhir;
+                    $dataW['status'] = $classSubject->status;
+                    $dataW['link'] = $classSubject->link;
+                } else {
+                    $dataW['start_time'] = '';
+                    $dataW['end_time'] = '';
+                    $dataW['room_number'] = '';
+                    $dataW['tanggal'] = '';
+                    $dataW['jam_mulai'] = '';
+                    $dataW['menit_mulai'] = '';
+                    $dataW['jam_akhir'] = '';
+                    $dataW['menit_akhir'] = '';
+                    $dataW['status'] = '';
+                    $dataW['link'] = '';
+                }
+            } else {
+
+                $dataW['start_time'] = '';
+                $dataW['end_time'] = '';
+                $dataW['room_number'] = '';
+                $dataW['tanggal'] = '';
+                $dataW['jam_mulai'] = '';
+                $dataW['menit_mulai'] = '';
+                $dataW['jam_akhir'] = '';
+                $dataW['menit_akhir'] = '';
+                $dataW['status'] = '';
+                $dataW['link'] = '';
+            }
+            $week[] = $dataW;
+        }
+        $data['week'] = $week;
+
+        $data['header_title'] = "CLass Timetable";
+        return view('dosen.jadwal_dosen', $data);
+    }
 
     public function get_subject(Request $request)
     {

@@ -56,7 +56,6 @@
         });
     @endforeach
 @endforeach
-
 var calendarEl = document.getElementById('calendar');
 var calendar = new FullCalendar.Calendar(calendarEl, {
     headerToolbar: {
@@ -70,6 +69,11 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     events: events,
     initialView: 'timeGridWeek',
     eventContent: function(arg) {
+        // Cek apakah semua data yang dibutuhkan tersedia
+        if (!arg.event.extendedProps.className || !arg.event.startStr || !arg.event.endStr) {
+            return;
+        }
+
         var matkulName = arg.event.title;
         var className = arg.event.extendedProps.className;
         var startTime = arg.event.startStr.split('T')[1].slice(0, 5);
@@ -93,6 +97,7 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
 });
 
 calendar.render();
+
 
 </script>
 @endsection

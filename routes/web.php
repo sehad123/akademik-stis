@@ -253,6 +253,14 @@ Route::group(['middleware' => 'dosen'], function () {
     Route::post('dosen/semester_class/get_semester', [ClassTimeTableController::class, 'get_semester']);
     Route::post('dosen/semester_class/get_semester_subject', [ClassTimeTableController::class, 'get_semester_subject']);
 
+    // jadwal
+    // TimeTable
+    Route::get('dosen/class_timetable', [ClassTimeTableController::class, 'jadwal_dosen']);
+    Route::post('dosen/class_timetable/delete', [ClassTimeTableController::class, 'delete'])->name('class-timetable.delete');
+    Route::post('dosen/class_timetable/get_subject', [ClassTimeTableController::class, 'get_subject']);
+    Route::post('dosen/class_timetable/add', [ClassTimeTableController::class, 'insert_update']);
+    Route::post('dosen/semester_class/get_dosen_subject', [ClassTimeTableController::class, 'get_dosen_subject']);
+
 
 
     // materi

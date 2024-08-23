@@ -152,16 +152,17 @@
                   <p>Kelas & Mata Kuliah</p>
                 </a>
               </li>
+             
+              <li class="nav-item">
+                <a href="{{ url('admin/assign_class_dosen/list') }}" class="nav-link @if(Request::segment(2) == 'assign_class_dosen') active @endif">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p> Mata Kuliah & Dosen</p>
+                </a>
+              </li>
               <li class="nav-item">
                 <a href="{{ url('admin/class_timetable/list') }}" class="nav-link @if(Request::segment(2) == 'class_timetable') active @endif">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Jadwal Kelas</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('admin/assign_class_dosen/list') }}" class="nav-link @if(Request::segment(2) == 'assign_class_dosen') active @endif">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p> Kelas & Dosen</p>
                 </a>
               </li>
             </ul>
@@ -331,11 +332,18 @@
           </li>
 
           <li class="nav-item ">
+            <a href="{{ url('dosen/class_timetable') }}" class="nav-link @if(Request::segment(2) == 'class_timetable') active @endif" >
+              <i class=" nav-icon far fa-calendar"></i>
+              <p>Jadwal Kelas</p>
+            </a>
+          </li>
+          <li class="nav-item ">
             <a href="{{ url('dosen/tugas/penugasan') }}" class="nav-link @if(Request::segment(3) == 'penugasan') active @endif" >
               <i class=" nav-icon fa fa-book"></i>
               <p>Penugasan Mahasiswa</p>
             </a>
           </li>
+          
           <li class="nav-item ">
             <a href="{{ url('dosen/tugas/materi') }}" class="nav-link @if(Request::segment(3) == 'materi') active @endif" >
               <i class="nav-icon fa-solid fa-receipt"></i>
